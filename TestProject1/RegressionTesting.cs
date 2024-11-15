@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using ApiTesting_Calimatic.AppLoginClass;
 
-namespace ApiTests
+namespace TestProject1
 {
     [TestClass]
     public class login_Testscripts
@@ -13,30 +13,23 @@ namespace ApiTests
         public void ValidLoginCredential()
         {
             var login = new Api_AppLogin();
-                Assert.AreEqual(false, true);
-            //var student = new ApiStudents();
-            //var data = login.GetTestCaseData();
-            //// Check if the file exists
-            //foreach (var entry in data)
-            //{
-            //    // Console.WriteLine(entry);
-            //    Console.WriteLine($"userName: {entry.userName}, password: {entry.password}");
-            //    var response = student.TestLogin(entry);
-            //    if (response.IsSuccessful)
-            //    {
-            //        Assert.AreEqual(true, response.IsSuccessful);
-            //    }
-            //    else {
-                
-            //    }     
-            //}
+            var student = new ApiStudents();
+            var data = login.GetTestCaseData();
+            // Check if the file exists
+            foreach (var entry in data)
+            {
+                // Console.WriteLine(entry);
+                Console.WriteLine($"userName: {entry.userName}, password: {entry.password}");
+                var response = student.TestLogin(entry);
+                Assert.AreEqual(true, response.IsSuccessful);
+            }
         }
         [TestMethod]
         public void InvalidLoginCredential()
         {
-            var obj2 = new Api_AppLogin();
-            obj2.MainAppLogin();
-          //  Assert.AreEqual(false, response.IsSuccessful);
+           // var obj2 = new Api_AppLogin();
+          //  obj2.MainAppLogin();
+            Assert.AreEqual(false, true);
         }
     }
     //GET Method (/api/Student/students)
