@@ -1,5 +1,4 @@
 ﻿using ApiTesting_Calimatic.AppLoginFolder;
-using ApiTests;
 using ApiTtesting_Calimatic;
 using CsvHelper;
 using Newtonsoft.Json;
@@ -12,6 +11,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using Commons.DTO_s.Auth;
 
 namespace ApiTesting_Calimatic
 {
@@ -23,7 +23,7 @@ namespace ApiTesting_Calimatic
         public bool Login()
         {
             var restClient = new RestClient("https://angular-api.calibermatrix.com");
-            var restRequest = new RestRequest("/api/Auth/AppLogin", Method.Post); // Adjust the endpoint as needed
+            var restRequest = new RestRequest("/api/Auth/AppLogin", Method.Post);
             restRequest.AddHeader("Accept", "application/json");
             restRequest.RequestFormat = DataFormat.Json;
 
@@ -39,12 +39,13 @@ namespace ApiTesting_Calimatic
             if (responsedata.IsSuccessful)
             {
                 var responseData = JsonConvert.DeserializeObject<ApiTesting_Calimatic.AppLoginFolder.AppLogin>(responsedata.Content);
-                bearerToken = responseData.Response; // Assuming 'Token' is the property containing the token
+                bearerToken = responseData.Response;
                 return true;
             }
             return false;
         }
 
+        //------------->Auth
         //AppLogin Endpoint Check
         public AppLogin TestLogin(csvData requestdata)
         {
@@ -61,18 +62,37 @@ namespace ApiTesting_Calimatic
             if (DataLogin.IsSuccessful == true)
             {
                 Console.WriteLine($"Response: Valid Login Credential");
-          //      var Check_TestScripts = new login_Testscripts();
-               // Check_TestScripts.ValidLoginCredential(DataLogin);
             }
             else
             {
                 Console.WriteLine($"Response: Invalid Login Attempt");
-            //    var Check_TestScripts1 = new login_Testscripts();
-//Check_TestScripts1.InvalidLoginCredential(DataLogin);
             }
             return DataLogin;
         }
 
+        //Forgot Password
+        public ForgotPassword_Class ForgotPassword(csv_FP_Data request)
+        {
+            Login();
+            var restClient = new RestClient("https://angular-api.calibermatrix.com");
+            var restRequest_FP = new RestRequest("/api/Auth/ForgotPassword", Method.Post);
+            restRequest_FP.AddHeader("Accept", "application/json");
+            restRequest_FP.AddHeader("Authorization", $"Bearer {bearerToken}");
+            restRequest_FP.RequestFormat = DataFormat.Json;
+          //  restRequest_FP.AddJsonBody();
+            var response_ForgotData = restClient.Execute(restRequest_FP);
+            var Forgot_request = JsonConvert.DeserializeObject<Commons.DTO_s.Auth.ForgotPassword_Class>(response_ForgotData.Content);
+            if (Forgot_request.IsSuccessful == true)
+            {
+                Console.WriteLine($"Response: Forgot password Successfully");
+            }
+            else
+            {
+                Console.WriteLine($"Response: Username or email is invalid!");
+            }
+            return Forgot_request;
+        }
+        
         //GET Students Record
         //public StudentResponse GetStudents()
         //{
@@ -112,5 +132,6 @@ namespace ApiTesting_Calimatic
         //       var username = JsonConvert.DeserializeObject<duplusername>(content);
         //       return username;
         //   }
+
     }
 }

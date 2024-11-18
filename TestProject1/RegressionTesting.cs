@@ -15,7 +15,6 @@ namespace TestProject1
             var login = new Api_AppLogin();
             var student = new ApiStudents();
             var data = login.GetTestCaseData();
-            // Check if the file exists
             foreach (var entry in data)
             {
                 // Console.WriteLine(entry);
@@ -24,13 +23,13 @@ namespace TestProject1
                 Assert.AreEqual(true, response.IsSuccessful);
             }
         }
-        [TestMethod]
-        public void InvalidLoginCredential()
-        {
-           // var obj2 = new Api_AppLogin();
-          //  obj2.MainAppLogin();
-            Assert.AreEqual(false, true);
-        }
+    //    [TestMethod]
+    //    public void InvalidLoginCredential()
+    //    {
+    //       // var obj2 = new Api_AppLogin();
+    //      //  obj2.MainAppLogin();
+    //        Assert.AreEqual(false, true);
+    //    }
     }
     //GET Method (/api/Student/students)
     //Test Script 1

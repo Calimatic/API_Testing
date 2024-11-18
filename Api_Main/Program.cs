@@ -1,10 +1,16 @@
 ﻿using ApiTesting_Calimatic.AppLoginClass;
+using ApiTesting_Calimatic.Forgot_PasswordAttempt;
 
 
 
-
+//AppLogin
 Api_AppLogin appLogin = new Api_AppLogin();
 appLogin.MainAppLogin();
+
+//Forgot Password
+Forgot_Password_Dataget FP = new Forgot_Password_Dataget();
+FP.ForgotGetData();
+
 
 
 
