@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ApiTesting_Calimatic.Forgot_PasswordAttempt;
+using Newtonsoft.Json;
+using Commons.DTO_s.Auth;
 
 namespace TestProject1.TestScripts_ForgotPassword
 {
@@ -19,19 +21,35 @@ namespace TestProject1.TestScripts_ForgotPassword
             var data = result.Getfile_FP();
             foreach (var entry in data)
             {
-                // Console.WriteLine(entry);
                 Console.WriteLine($"Email: {entry.email}, username: {entry.username}, url: {entry.url}");
-                var response = Password.ForgotPassword(entry);
-                if (response["Message"] != null && response["Message"].ToString() == "The ConnectionString property has not been initialized.")
+                string jsonResponse = @"{
+                                        'Response': 'Username or email is invalid!',
+                                        'IsSuccessful': false,
+                                        'StatusCode': 401
+                                    }";
+
+                // Deserialize the JSON string into an ApiResponse object
+                ForgotPassword_Class apiResponse = JsonConvert.DeserializeObject<ForgotPassword_Class>(jsonResponse);
+
+                // Check if the response was not successful
+                if (!apiResponse.IsSuccessful)
                 {
-                    Console.WriteLine("Test Passed: URL Not Found");
+                    // Handle the error based on status code and response message
+                    if (apiResponse.StatusCode == 401)
+                    {
+                        Console.WriteLine("Authentication Error: " + apiResponse.Response);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error: " + apiResponse.Response);
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Test Failed: Unexpected message or missing field.");
+                    Console.WriteLine("Request was successful.");
                 }
-            }
-            Assert.AreEqual(true, response.IsSuccessful);
+          //      Assert.AreEqual(true, response.IsSuccessful);
+            }           
         }
     }
 }

@@ -12,6 +12,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using Commons.DTO_s.Auth;
+using ApiTesting_Calimatic.Forgot_PasswordAttempt;
 
 namespace ApiTesting_Calimatic
 {
@@ -31,9 +32,9 @@ namespace ApiTesting_Calimatic
             var loginBody = new
             {
                 userName = "admin",
-                 password = "admin1"
+                password = "admin1"
             };
-              restRequest.AddJsonBody(loginBody);
+            restRequest.AddJsonBody(loginBody);
 
             var responsedata = restClient.Execute(restRequest);
             if (responsedata.IsSuccessful)
@@ -74,25 +75,39 @@ namespace ApiTesting_Calimatic
         public ForgotPassword_Class ForgotPassword(csv_FP_Data request)
         {
             Login();
-            var restClient = new RestClient("https://angular-api.calibermatrix.com");
-            var restRequest_FP = new RestRequest("/api/Auth/ForgotPassword", Method.Post);
-            restRequest_FP.AddHeader("Accept", "application/json");
-            restRequest_FP.AddHeader("Authorization", $"Bearer {bearerToken}");
-            restRequest_FP.RequestFormat = DataFormat.Json;
-          //  restRequest_FP.AddJsonBody();
-            var response_ForgotData = restClient.Execute(restRequest_FP);
-            var Forgot_request = JsonConvert.DeserializeObject<Commons.DTO_s.Auth.ForgotPassword_Class>(response_ForgotData.Content);
-            if (Forgot_request.IsSuccessful == true)
+            var data = new Forgot_Password_Dataget();
+            var dataFP = data.Getfile_FP();
+            ForgotPassword_Class finalResult = null; // Store the result, initially null
+
+            // If no records in dataFP, you may want to handle that case.
+            if (dataFP == null || !dataFP.Any())
             {
-                Console.WriteLine($"Response: Forgot password Successfully");
+                Console.WriteLine("No records found.");
+                return finalResult; // Return null or handle as appropriate
             }
-            else
+            foreach (var record in dataFP)
             {
-                Console.WriteLine($"Response: Username or email is invalid!");
+                string queryString = $"Email={record.email}&username={record.username}&url={record.url}";
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/Auth/ForgotPassword?{queryString}", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_ForgotData = restClient.Get(restRequest);
+                var Forgot_request = JsonConvert.DeserializeObject<Commons.DTO_s.Auth.ForgotPassword_Class>(response_ForgotData.Content);
+                if (Forgot_request.IsSuccessful == true)
+                {
+                    Console.WriteLine($"Response: Forgot password Successfully\n");
+                }
+                else
+                {
+                    Console.WriteLine($"Response: Username or email is invalid!\n");
+                }
+                finalResult = Forgot_request;
             }
-            return Forgot_request;
+             return finalResult;
+
         }
-        
         //GET Students Record
         //public StudentResponse GetStudents()
         //{

@@ -17,8 +17,7 @@ namespace ApiTesting_Calimatic.Forgot_PasswordAttempt
             // Check if the file exists
             foreach (var entry in data)
             {
-                // Console.WriteLine(entry);
-                Console.WriteLine($"Email: {entry.email}, username: {entry.username}, url: {entry.url}");
+                Console.WriteLine($"\nEmail: {entry.email}, \nusername: {entry.username}, \nurl: {entry.url}");
                 var ApiStudents = new ApiStudents();
                 ApiStudents.ForgotPassword(entry);
             }
