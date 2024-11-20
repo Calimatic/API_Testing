@@ -14,6 +14,7 @@ namespace TestProject1
         {
             if (IsSuccessful == true)
             {
+                Console.WriteLine("Test Script Result : Valid Entries");
                 Assert.AreEqual(true, true);
             }
         }
@@ -22,6 +23,7 @@ namespace TestProject1
         {
             if (IsSuccessful == false)
             {
+                Console.WriteLine("Test Script Result : Invalid Entries");
                 Assert.AreEqual(true, true);
             }
         }

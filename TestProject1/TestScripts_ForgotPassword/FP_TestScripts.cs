@@ -17,6 +17,7 @@ namespace TestProject1.TestScripts_ForgotPassword
         {
             if (IsSuccessful == true)
             {
+                Console.WriteLine("Test SCript Result : Valid Entries");
                 Assert.AreEqual(true, true);
             }
         }
@@ -26,6 +27,7 @@ namespace TestProject1.TestScripts_ForgotPassword
         {
             if (IsSuccessful == false)
             {
+                Console.WriteLine("Test SCript Result : InValid Entries");
                 Assert.AreEqual(true, true);
             }
         }
