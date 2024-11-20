@@ -1,18 +1,10 @@
 ﻿using ApiTesting_Calimatic.AppLoginFolder;
-using ApiTtesting_Calimatic;
-using CsvHelper;
 using Newtonsoft.Json;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Formats.Asn1;
-using System.Globalization;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 using Commons.DTO_s.Auth;
 using ApiTesting_Calimatic.Forgot_PasswordAttempt;
+using TestProject1.TestScripts_ForgotPassword;
+using TestProject1;
 
 namespace ApiTesting_Calimatic
 {
@@ -41,9 +33,12 @@ namespace ApiTesting_Calimatic
             {
                 var responseData = JsonConvert.DeserializeObject<ApiTesting_Calimatic.AppLoginFolder.AppLogin>(responsedata.Content);
                 bearerToken = responseData.Response;
+              //  Console.WriteLine("Bearer Token generated Successfully");
                 return true;
+                
             }
             return false;
+            
         }
 
         //------------->Auth
@@ -60,19 +55,23 @@ namespace ApiTesting_Calimatic
             restRequest.AddJsonBody(requestdata);
             var responsedata = restClient.Execute(restRequest);
             var DataLogin = JsonConvert.DeserializeObject<ApiTesting_Calimatic.AppLoginFolder.AppLogin>(responsedata.Content);
+            var LoginScriptcall = new login_Testscripts();
             if (DataLogin.IsSuccessful == true)
             {
-                Console.WriteLine($"Response: Valid Login Credential");
+                Console.WriteLine($"Response: Valid Login Credential");           
+                LoginScriptcall.ValidLoginCredential(DataLogin.IsSuccessful);
             }
             else
             {
                 Console.WriteLine($"Response: Invalid Login Attempt");
+                LoginScriptcall.inValidLoginCredential(DataLogin.IsSuccessful);
             }
+           
             return DataLogin;
         }
 
         //Forgot Password
-        public ForgotPassword_Class ForgotPassword(csv_FP_Data request)
+        public ForgotPassword_Class ForgotPassword()
         {
             Login();
             var data = new Forgot_Password_Dataget();
@@ -83,30 +82,40 @@ namespace ApiTesting_Calimatic
             if (dataFP == null || !dataFP.Any())
             {
                 Console.WriteLine("No records found.");
-                return finalResult; // Return null or handle as appropriate
+                // Return null or handle as appropriate
+                return finalResult;
             }
             foreach (var record in dataFP)
             {
-                string queryString = $"Email={record.email}&username={record.username}&url={record.url}";
-                var restClient = new RestClient("https://angular-api.calibermatrix.com");
-                var restRequest = new RestRequest($"/api/Auth/ForgotPassword?{queryString}", Method.Get);
-                restRequest.AddHeader("Accept", "application/json");
-                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
-                restRequest.RequestFormat = DataFormat.Json;
-                var response_ForgotData = restClient.Get(restRequest);
-                var Forgot_request = JsonConvert.DeserializeObject<Commons.DTO_s.Auth.ForgotPassword_Class>(response_ForgotData.Content);
-                if (Forgot_request.IsSuccessful == true)
+                try
                 {
-                    Console.WriteLine($"Response: Forgot password Successfully\n");
+                    string queryString = $"Email={record.email}&username={record.username}&url={record.url}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/Auth/ForgotPassword?{queryString}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_ForgotData = restClient.Get(restRequest);
+                    var Forgot_request = JsonConvert.DeserializeObject<Commons.DTO_s.Auth.ForgotPassword_Class>(response_ForgotData.Content);
+                    var ForgotScriptcall = new FP_TestScripts();
+                    if (Forgot_request.IsSuccessful == true)
+                    {
+                        Console.WriteLine($"API Response: Forgot password Successfully\n");
+                        ForgotScriptcall.ForgotPassword_Script(Forgot_request.IsSuccessful);
+
+                    }
+                    else
+                    {
+                        Console.WriteLine($"API Response: Username or email is invalid!\n");
+                        ForgotScriptcall.ForgotPassword_Script2(Forgot_request.IsSuccessful);
+                    }
+                    finalResult = Forgot_request;
                 }
-                else
-                {
-                    Console.WriteLine($"Response: Username or email is invalid!\n");
+                catch (Exception ex) {
+                    Console.WriteLine(ex.Message);
                 }
-                finalResult = Forgot_request;
             }
              return finalResult;
-
         }
         //GET Students Record
         //public StudentResponse GetStudents()

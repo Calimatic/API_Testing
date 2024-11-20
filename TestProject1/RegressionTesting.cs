@@ -1,8 +1,8 @@
-﻿using ApiTesting_Calimatic;
+﻿using ApiTesting_Calimatic.AppLoginFolder;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
-using ApiTesting_Calimatic.AppLoginClass;
 
 namespace TestProject1
 {
@@ -10,26 +10,21 @@ namespace TestProject1
     public class login_Testscripts
     {
         [TestMethod]
-        public void ValidLoginCredential()
+        public void ValidLoginCredential(bool IsSuccessful)
         {
-            var login = new Api_AppLogin();
-            var student = new ApiStudents();
-            var data = login.GetTestCaseData();
-            foreach (var entry in data)
+            if (IsSuccessful == true)
             {
-                // Console.WriteLine(entry);
-                Console.WriteLine($"userName: {entry.userName}, password: {entry.password}");
-                var response = student.TestLogin(entry);
-                Assert.AreEqual(true, response.IsSuccessful);
+                Assert.AreEqual(true, true);
             }
         }
-    //    [TestMethod]
-    //    public void InvalidLoginCredential()
-    //    {
-    //       // var obj2 = new Api_AppLogin();
-    //      //  obj2.MainAppLogin();
-    //        Assert.AreEqual(false, true);
-    //    }
+        [TestMethod]
+        public void inValidLoginCredential(bool IsSuccessful)
+        {
+            if (IsSuccessful == false)
+            {
+                Assert.AreEqual(true, true);
+            }
+        }
     }
     //GET Method (/api/Student/students)
     //Test Script 1

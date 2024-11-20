@@ -19,7 +19,7 @@ namespace ApiTesting_Calimatic.Forgot_PasswordAttempt
             {
                 Console.WriteLine($"\nEmail: {entry.email}, \nusername: {entry.username}, \nurl: {entry.url}");
                 var ApiStudents = new ApiStudents();
-                ApiStudents.ForgotPassword(entry);
+              //  ApiStudents.ForgotPassword(entry);
             }
         }
         public List<csv_FP_Data> Getfile_FP()
