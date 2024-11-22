@@ -11,17 +11,19 @@ namespace ApiTesting_Calimatic.Forgot_PasswordAttempt
 {
     public class Forgot_Password_Dataget
     {
-        public void ForgotGetData()
-        {
-            var data = Getfile_FP();
-            // Check if the file exists
-            foreach (var entry in data)
-            {
-                Console.WriteLine($"\nEmail: {entry.email}, \nusername: {entry.username}, \nurl: {entry.url}");
-                var ApiStudents = new ApiStudents();
-              //  ApiStudents.ForgotPassword(entry);
-            }
-        }
+        //public void ForgotGetData()
+        //{
+        //    var data = Getfile_FP();
+        //    // Check if the file exists
+        //    foreach (var entry in data)
+        //    {
+        //        Console.WriteLine("Input Value");
+        //        Console.WriteLine($"\nEmail: {entry.email}, \nusername: {entry.username}, \nurl: {entry.url}");
+        //        var ApiStudents = new ApiStudents();
+        //  //      ApiStudents.ForgotPassword(entry);
+        //    }
+        //}
+
         public List<csv_FP_Data> Getfile_FP()
         {
             string baseDirectory = AppContext.BaseDirectory;

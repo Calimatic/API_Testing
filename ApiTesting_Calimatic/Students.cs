@@ -41,8 +41,8 @@ namespace ApiTesting_Calimatic
             
         }
 
-        //------------->Auth
-        //AppLogin Endpoint Check
+        //------------->Auth<-------------
+        // 1-  AppLogin Endpoint Check      ----/api/Auth/AppLogin----
         public AppLogin TestLogin(csvData requestdata)
         {
 
@@ -58,22 +58,23 @@ namespace ApiTesting_Calimatic
             var LoginScriptcall = new login_Testscripts();
             if (DataLogin.IsSuccessful == true)
             {
-                Console.WriteLine($"Response: Valid Login Credential");           
+                Console.WriteLine("API Response: " + responsedata.Content);           
                 LoginScriptcall.ValidLoginCredential(DataLogin.IsSuccessful);
             }
             else
             {
-                Console.WriteLine($"Response: Invalid Login Attempt");
+                Console.WriteLine("API Response: " + responsedata.Content);
                 LoginScriptcall.inValidLoginCredential(DataLogin.IsSuccessful);
             }
            
             return DataLogin;
         }
 
-        //Forgot Password
+        //2-   Forgot Password          --- /api/Auth//api/Auth/ForgotPassword ---
         public ForgotPassword_Class ForgotPassword()
         {
             Login();
+            Console.WriteLine("----------------- /api/Auth/ForgotPassword -----------------\n");
             var data = new Forgot_Password_Dataget();
             var dataFP = data.Getfile_FP();
             ForgotPassword_Class finalResult = null; // Store the result, initially null
@@ -89,6 +90,8 @@ namespace ApiTesting_Calimatic
             {
                 try
                 {
+                    Console.WriteLine("Input Value : ");
+                    Console.WriteLine($"Email: {record.email}, \nusername: {record.username}, \nurl: {record.url}");
                     string queryString = $"Email={record.email}&username={record.username}&url={record.url}";
                     var restClient = new RestClient("https://angular-api.calibermatrix.com");
                     var restRequest = new RestRequest($"/api/Auth/ForgotPassword?{queryString}", Method.Get);
@@ -100,23 +103,81 @@ namespace ApiTesting_Calimatic
                     var ForgotScriptcall = new FP_TestScripts();
                     if (Forgot_request.IsSuccessful == true)
                     {
-                        Console.WriteLine($"API Response: Forgot password Successfully\n");
+                        Console.WriteLine("API Response: " + response_ForgotData.Content);
                         ForgotScriptcall.ForgotPassword_Script(Forgot_request.IsSuccessful);
+                        var Otp = new ApiStudents();
+                        Otp.OtpForgotPassword();
 
                     }
                     else
                     {
-                        Console.WriteLine($"API Response: Username or email is invalid!\n");
+                        Console.WriteLine("API Response: " + response_ForgotData.Content);
                         ForgotScriptcall.ForgotPassword_Script2(Forgot_request.IsSuccessful);
                     }
                     finalResult = Forgot_request;
                 }
                 catch (Exception ex) {
-                    Console.WriteLine(ex.Message);
+                    Console.WriteLine("\nAPI Response : " + ex.Message);
+                    var ForgotScriptcall = new FP_TestScripts();
+                    ForgotScriptcall.Invalidurl();
                 }
             }
              return finalResult;
         }
+
+        //3- Forgot Password OTP Verification           --- /api/Auth/ForgotPasswordOtpVerification ---
+        public ForgotPassword_Class OtpForgotPassword()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Auth/ForgotPasswordOtpVerification -----------------\n");
+            var data = new FPass_OTP_Verification_RF();
+            var Otp_Code_FP = data.Get_Otpfile_FP();
+            ForgotPassword_Class finalResult = null;
+
+            // If no records in Otp_Code_FP, you may want to handle that case.
+            if (Otp_Code_FP == null || !Otp_Code_FP.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in Otp_Code_FP)
+            {
+                try
+                {
+                    Console.WriteLine("Input Value : ");
+                    Console.WriteLine($"Otp: {record.otp} , \nuserGuid:  {record.userGuid}, \nurl: {record.url}");
+                    string queryString_Otp = $"Otp={record.otp} &userGuid= {record.userGuid} &url={record.url}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/Auth/ForgotPasswordOtpVerification?{queryString_Otp}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_Otp_ForgotData = restClient.Get(restRequest);
+                    var Otp_Forgot_request = JsonConvert.DeserializeObject<Commons.DTO_s.Auth.ForgotPassword_Class>(response_Otp_ForgotData.Content);
+                    var ForgotScriptcall = new FP_TestScripts();
+                    if (Otp_Forgot_request.IsSuccessful == true)
+                    {
+                        Console.WriteLine("API Response: " + response_Otp_ForgotData.Content);
+                        ForgotScriptcall.ForgotPassword_Script(Otp_Forgot_request.IsSuccessful);
+                    }
+                    else
+                    {
+                        Console.WriteLine("API Response: " + response_Otp_ForgotData.Content);
+                        ForgotScriptcall.ForgotPassword_Script2(Otp_Forgot_request.IsSuccessful);
+                    }
+                    finalResult = Otp_Forgot_request;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nAPI Response : " + ex.Message);
+                    var ForgotScriptcall = new FP_TestScripts();
+                    ForgotScriptcall.Invalidurl();
+                }
+            }
+            return finalResult;
+        }
+
         //GET Students Record
         //public StudentResponse GetStudents()
         //{

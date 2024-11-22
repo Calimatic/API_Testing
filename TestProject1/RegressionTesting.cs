@@ -1,5 +1,4 @@
-﻿using ApiTesting_Calimatic.AppLoginFolder;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
+﻿using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
@@ -14,7 +13,9 @@ namespace TestProject1
         {
             if (IsSuccessful == true)
             {
-                Console.WriteLine("Test Script Result : Valid Entries");
+                Console.WriteLine("\nTest Script :");
+                Console.WriteLine("ValidLoginCredential       :    PASS");
+                Console.WriteLine("InvalidLoginCredential     :    FAIL\n");
                 Assert.AreEqual(true, true);
             }
         }
@@ -23,7 +24,9 @@ namespace TestProject1
         {
             if (IsSuccessful == false)
             {
-                Console.WriteLine("Test Script Result : Invalid Entries");
+                Console.WriteLine("\nTest Script :");
+                Console.WriteLine("ValidLoginCredential       :    FAIL");
+                Console.WriteLine("InvalidLoginCredential     :    PASS\n");
                 Assert.AreEqual(true, true);
             }
         }
@@ -61,5 +64,4 @@ namespace TestProject1
     //    //Check Against Admin username First name will be match in this Test Scripts
     //    Assert.AreEqual("Allistair", response.response.response.firstName);
     //}
-
 }

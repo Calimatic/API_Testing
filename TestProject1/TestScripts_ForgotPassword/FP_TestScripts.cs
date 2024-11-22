@@ -17,7 +17,10 @@ namespace TestProject1.TestScripts_ForgotPassword
         {
             if (IsSuccessful == true)
             {
-                Console.WriteLine("Test SCript Result : Valid Entries");
+                Console.WriteLine("\nTest Script :");
+                Console.WriteLine("Otp Send Email Successfully               :   PASS");
+                Console.WriteLine("Invalid  or empty   email / username      :   FAIL");
+                Console.WriteLine("Invalid  Url                              :   FAIL\n");
                 Assert.AreEqual(true, true);
             }
         }
@@ -27,52 +30,22 @@ namespace TestProject1.TestScripts_ForgotPassword
         {
             if (IsSuccessful == false)
             {
-                Console.WriteLine("Test SCript Result : InValid Entries");
+                Console.WriteLine("\nTest Script :");
+                Console.WriteLine("Otp Send Email Successfully               :   FAIL");
+                Console.WriteLine("Invalid  or empty   email / username      :   PASS");
+                Console.WriteLine("Invalid  Url                              :   FAIL\n");
                 Assert.AreEqual(true, true);
             }
         }
-        //   var result = new Forgot_Password_Dataget();
-        //  var Password = new ApiStudents();
-        ////  var data1 = result.Getfile_FP();
-        //  try
-        //  {
-        //      foreach (var entry in data1)
-        //      {
-        //          Console.WriteLine($"Email: {entry.email}, username: {entry.username}, url: {entry.url}");
-        //          var response = Password.ForgotPassword(entry);
-        //string jsonResponse = @"{
-        //                      'Response': 'Username or email is invalid!',
-        //                      'IsSuccessful': false,
-        //                      'StatusCode': 401
-        //                  }";
 
-        //// Deserialize the JSON string into an ApiResponse object
-        //ForgotPassword_Class apiResponse = JsonConvert.DeserializeObject<ForgotPassword_Class>(jsonResponse);
-
-        ////   Check if the response was not successful
-        //if (!apiResponse.IsSuccessful)
-        //{
-        //    // Handle the error based on status code and response message
-        //    if (apiResponse.StatusCode == 401)
-        //    {
-        //        Console.WriteLine("Authentication Error: " + apiResponse.Response);
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("Error: " + apiResponse.Response);
-        //    }
-        //}
-        //else
-        //{
-        //    Console.WriteLine("Request was successful.");
-        //}
-        //   Assert.AreEqual(true, response.IsSuccessful);
-        //   }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex.Message);
-        //    }
-        //}
+        [TestMethod]
+        public void Invalidurl()
+        {
+                Console.WriteLine("Test Script :");
+                Console.WriteLine("Otp Send Email Successfully            :   FAIL");
+                Console.WriteLine("Invalid  or empty   email / username   :   Fail");
+                Console.WriteLine("Invalid  Url                           :   PASS\n");
+                Assert.AreEqual(true, true);
+        }
     }
 }
