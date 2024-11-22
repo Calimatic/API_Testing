@@ -19,6 +19,7 @@ namespace TestProject1.TestScripts_Otp_Verification
                 Console.WriteLine("Invalid OTP or userGuid             :     FAIL");
                 Console.WriteLine("Invalid  Url                        :     FAIL\n");
                 Assert.AreEqual(true, true);
+                
             }
         }
         [TestMethod]
