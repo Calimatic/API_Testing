@@ -39,7 +39,7 @@ namespace TestProject1.TestScripts_Otp_Verification
         {
             Console.WriteLine("Test Script :");
             Console.WriteLine("OTP Matched Successfully               :     FAIL");
-            Console.WriteLine("Invalid  or empty   email / username   :     Fail");
+            Console.WriteLine("Invalid  or empty   email / username   :     FAIL");
             Console.WriteLine("Invalid  Url                           :     PASS\n");
             Assert.AreEqual(true, true);
         }
