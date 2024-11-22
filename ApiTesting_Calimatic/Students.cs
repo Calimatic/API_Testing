@@ -5,6 +5,7 @@ using Commons.DTO_s.Auth;
 using ApiTesting_Calimatic.Forgot_PasswordAttempt;
 using TestProject1.TestScripts_ForgotPassword;
 using TestProject1;
+using TestProject1.TestScripts_Otp_Verification;
 
 namespace ApiTesting_Calimatic
 {
@@ -106,7 +107,7 @@ namespace ApiTesting_Calimatic
                         Console.WriteLine("API Response: " + response_ForgotData.Content);
                         ForgotScriptcall.ForgotPassword_Script(Forgot_request.IsSuccessful);
                         var Otp = new ApiStudents();
-                        Otp.OtpForgotPassword();
+                    //    Otp.OtpForgotPassword();
 
                     }
                     else
@@ -155,24 +156,24 @@ namespace ApiTesting_Calimatic
                     restRequest.RequestFormat = DataFormat.Json;
                     var response_Otp_ForgotData = restClient.Get(restRequest);
                     var Otp_Forgot_request = JsonConvert.DeserializeObject<Commons.DTO_s.Auth.ForgotPassword_Class>(response_Otp_ForgotData.Content);
-                    var ForgotScriptcall = new FP_TestScripts();
+                    var OTP_Scriptcall = new Otp_Verification_TestScript();
                     if (Otp_Forgot_request.IsSuccessful == true)
                     {
                         Console.WriteLine("API Response: " + response_Otp_ForgotData.Content);
-                        ForgotScriptcall.ForgotPassword_Script(Otp_Forgot_request.IsSuccessful);
+                        OTP_Scriptcall.OTP_Matched(Otp_Forgot_request.IsSuccessful);
                     }
                     else
                     {
                         Console.WriteLine("API Response: " + response_Otp_ForgotData.Content);
-                        ForgotScriptcall.ForgotPassword_Script2(Otp_Forgot_request.IsSuccessful);
+                        OTP_Scriptcall.Invalid_OTP(Otp_Forgot_request.IsSuccessful);
                     }
                     finalResult = Otp_Forgot_request;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("\nAPI Response : " + ex.Message);
-                    var ForgotScriptcall = new FP_TestScripts();
-                    ForgotScriptcall.Invalidurl();
+                    var OTP_Scriptcall = new Otp_Verification_TestScript();
+                    OTP_Scriptcall.Otp_Invalidurl();
                 }
             }
             return finalResult;
