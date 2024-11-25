@@ -6,6 +6,8 @@ using ApiTesting_Calimatic.Forgot_PasswordAttempt;
 using TestProject1.TestScripts_ForgotPassword;
 using TestProject1;
 using TestProject1.TestScripts_Otp_Verification;
+using ApiTesting_Calimatic.GetCompany;
+using TestProject1.TestScripts_GetCompanyUrl;
 
 namespace ApiTesting_Calimatic
 {
@@ -174,6 +176,57 @@ namespace ApiTesting_Calimatic
                     Console.WriteLine("\nAPI Response : " + ex.Message);
                     var OTP_Scriptcall = new Otp_Verification_TestScript();
                     OTP_Scriptcall.Otp_Invalidurl();
+                }
+            }
+            return finalResult;
+        }
+
+        //4- get Company URL            --- /api/Auth/getCompanyUrl
+        public ForgotPassword_Class GetCompanyUrl()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Auth/getCompanyUrl -----------------\n");
+            var datacompanyurl = new getCompanyUrl_RF();
+            var companyurl = datacompanyurl.Get_companyurl_FP();
+            ForgotPassword_Class finalResult = null;
+
+            // If no records in companyurl, you may want to handle that case.
+            if (companyurl == null || !companyurl.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in companyurl)
+            {
+                try
+                {
+                    Console.WriteLine("Input Value : ");
+                    Console.WriteLine($"userName: {record.userName}");
+                    string queryString_company = $"userName={record.userName}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/Auth/getCompanyUrl?{queryString_company}", Method.Post);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_Comapanyurl = restClient.Execute(restRequest);
+                    var CompanyUrl_request = JsonConvert.DeserializeObject<Commons.DTO_s.Auth.ForgotPassword_Class>(response_Comapanyurl.Content);
+                    var CompanyUrl_Scriptcall = new GetCompanyUrl_TestScripts();
+                    if (CompanyUrl_request.Response == "https://core-lms.calibermatrix.com")
+                    {
+                        Console.WriteLine("API Response: " + response_Comapanyurl.Content);
+                        CompanyUrl_Scriptcall.valid_username(CompanyUrl_request.Response);
+                    }
+                    else
+                    {
+                        Console.WriteLine("API Response: " + response_Comapanyurl.Content);
+                        CompanyUrl_Scriptcall.Invalid_username(CompanyUrl_request.Response);
+                    }
+                    finalResult = CompanyUrl_request;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nAPI Response : " + ex.Message);
                 }
             }
             return finalResult;

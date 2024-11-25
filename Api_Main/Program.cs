@@ -8,7 +8,6 @@ using ApiTesting_Calimatic.Forgot_PasswordAttempt;
 Api_AppLogin appLogin = new Api_AppLogin();
 appLogin.MainAppLogin();
 
-
 //Forgot Password endpoint
 var login_data_read = new ApiStudents();
 login_data_read.ForgotPassword();
@@ -17,6 +16,9 @@ login_data_read.ForgotPassword();
 var Otp_endpoint = new ApiStudents();
 Otp_endpoint.OtpForgotPassword();
 
+//getCompanyUrl endpoint
+var geturl = new ApiStudents();
+geturl.GetCompanyUrl();
 ////Forgot Password
 //Forgot_Password_Dataget FP = new Forgot_Password_Dataget();
 //FP.ForgotGetData();
