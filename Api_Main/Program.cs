@@ -19,6 +19,11 @@ Otp_endpoint.OtpForgotPassword();
 //getCompanyUrl endpoint
 var geturl = new ApiStudents();
 geturl.GetCompanyUrl();
+
+//getCompanyUrl endpoint
+var resetPassword_1 = new ApiStudents();
+resetPassword_1.ResetPassword();
+
 ////Forgot Password
 //Forgot_Password_Dataget FP = new Forgot_Password_Dataget();
 //FP.ForgotGetData();

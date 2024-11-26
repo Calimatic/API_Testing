@@ -8,6 +8,7 @@ using TestProject1;
 using TestProject1.TestScripts_Otp_Verification;
 using ApiTesting_Calimatic.GetCompany;
 using TestProject1.TestScripts_GetCompanyUrl;
+using TestProject1.TestScripts_ResetPassword;
 
 namespace ApiTesting_Calimatic
 {
@@ -181,7 +182,7 @@ namespace ApiTesting_Calimatic
             return finalResult;
         }
 
-        //4- get Company URL            --- /api/Auth/getCompanyUrl
+        //4- get Company URL            --- /api/Auth/getCompanyUrl ---
         public ForgotPassword_Class GetCompanyUrl()
         {
             Login();
@@ -232,6 +233,68 @@ namespace ApiTesting_Calimatic
             return finalResult;
         }
 
+        //5- Reset Password            --- /api/Auth/ResetPassword ---
+        public ForgotPassword_Class ResetPassword()
+        {
+            Login();
+            Console.WriteLine("\n----------------- /api/Auth/ResetPassword -----------------\n");
+            var Restetpass = new ResetPassword_Dataget();
+            var reset = Restetpass.Resetpassword_FP();
+            ForgotPassword_Class finalResult = null;
+
+            // If no records in ResetPassword, you may want to handle that case.
+            if (reset == null || !reset.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in reset)
+            {
+                try
+                {
+                    Console.WriteLine("Input Values : ");
+                    Console.WriteLine($"password: {record.password} , \nconfirmPassword:  {record.confirmPassword}, \nuserGuid: {record.userGuid}, \ncompanyUrl: {record.companyUrl}");
+                    var bodyContent = new
+                    {
+                        password = record.password,
+                        confirmPassword = record.confirmPassword,
+                        userGuid = record.userGuid,
+                        companyUrl = record.companyUrl
+                    };
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/Auth/ResetPassword", Method.Post);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    restRequest.AddJsonBody(bodyContent);
+                    var response_Comapanyurl = restClient.Execute(restRequest);
+                    var resetPass_request = JsonConvert.DeserializeObject<Commons.DTO_s.Auth.ForgotPassword_Class>(response_Comapanyurl.Content);
+                    var resetPass_Scriptcall = new Resetpassword_TestScripts();
+                    if (resetPass_request.Response == "Password saved successfully!!")
+                    {
+                        Console.WriteLine("API Response: " + response_Comapanyurl.Content);
+                        resetPass_Scriptcall.Password_Changed_Scuccesfully(resetPass_request.Response);
+                    }
+                    else if (resetPass_request.Response == "Unable to update password!")
+                    {
+                        Console.WriteLine("API Response: " + response_Comapanyurl.Content);
+                        resetPass_Scriptcall.Invalid_Url(resetPass_request.Response);
+                    }
+                    else
+                    {
+                        Console.WriteLine("API Response: " + response_Comapanyurl.Content);
+                        resetPass_Scriptcall.Invalid_userGuid(resetPass_request.Response);
+                    }
+                    finalResult = resetPass_request;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nAPI Response : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
         //GET Students Record
         //public StudentResponse GetStudents()
         //{
