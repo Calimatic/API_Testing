@@ -3,7 +3,8 @@ using ApiTesting_Calimatic.AppLoginClass;
 using ApiTesting_Calimatic.Forgot_PasswordAttempt;
 
 
-
+//                                                  -------------AUTH------------
+/*
 //AppLogin endpoint
 Api_AppLogin appLogin = new Api_AppLogin();
 appLogin.MainAppLogin();
@@ -24,11 +25,16 @@ geturl.GetCompanyUrl();
 var resetPassword_1 = new ApiStudents();
 resetPassword_1.ResetPassword();
 
-////Forgot Password
-//Forgot_Password_Dataget FP = new Forgot_Password_Dataget();
-//FP.ForgotGetData();
 
+//Forgot Password
+Forgot_Password_Dataget FP = new Forgot_Password_Dataget();
+FP.ForgotGetData();
+*/
 
+//                                                  -----------Dashboard------------
+//Widgets Endpoint
+var dashbboardWidgets = new ApiStudents();
+dashbboardWidgets.Widgets();
 
 //var ApiStudents = new ApiStudents();
 //ApiStudents.TestLogin();

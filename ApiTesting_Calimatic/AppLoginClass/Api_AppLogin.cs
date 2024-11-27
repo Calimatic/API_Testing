@@ -12,7 +12,7 @@ namespace ApiTesting_Calimatic.AppLoginClass
 {
     public class Api_AppLogin
     {
-        public void MainAppLogin()
+     /*   public void MainAppLogin()
         {
             Console.WriteLine("--------------- /api/Auth/Applogin ---------------\n");
             var data = GetTestCaseData();
@@ -60,6 +60,6 @@ namespace ApiTesting_Calimatic.AppLoginClass
                 Console.WriteLine($"Error reading CSV file: {ex.Message}");
                 return new List<csvData>();
             }
-        }
+        }*/
     }
 }

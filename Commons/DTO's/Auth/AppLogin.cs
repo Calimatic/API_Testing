@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ApiTesting_Calimatic.AppLoginFolder
 {
-    public partial class AppLogin
+    public class ApiResponse<T>
     {
-        public string Response { get; set; }
+        public T Response { get; set; }
         public bool IsSuccessful { get; set; }
         public long StatusCode { get; set; }
     }
