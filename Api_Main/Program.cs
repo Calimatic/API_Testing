@@ -36,6 +36,10 @@ FP.ForgotGetData();
 var dashbboardWidgets = new ApiStudents();
 dashbboardWidgets.Widgets();
 
+//Partner Enrollment
+var partnerenrollment_P = new ApiStudents();
+partnerenrollment_P.PartnerEnrollment();
+
 //var ApiStudents = new ApiStudents();
 //ApiStudents.TestLogin();
 

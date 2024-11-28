@@ -11,6 +11,8 @@ using TestProject1.TestScripts_GetCompanyUrl;
 using TestProject1.TestScripts_ResetPassword;
 using TestProject1.Dashboard.Widgets_Folder;
 using Commons.DTO_s.Widget;
+using Commons.DTO_s.Dashboards.Partner_Enrollment;
+using ApiTesting_Calimatic.Dashboard_RF.PartnerEnrollment_RF;
 
 namespace ApiTesting_Calimatic
 {
@@ -339,6 +341,7 @@ namespace ApiTesting_Calimatic
       */
 
         //------------->Dashboard<-------------
+       // 1- Widgets Endpoint Check
         public bool Widgets()
         {
             try 
@@ -351,14 +354,11 @@ namespace ApiTesting_Calimatic
                     restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
                     restRequest.RequestFormat = DataFormat.Json;
                     var response_widgets = restClient.Get(restRequest);
-                   // var content = response_widgets.Content;
-                 //   var widget_request = JsonConvert.DeserializeObject<Commons.DTO_s.Auth.ForgotPassword_Class>(content);
                     var widget_Scriptcall = new TestScripts_widgets();
                     if (response_widgets.Content.StartsWith("{"))
                     {
                         // Deserialize as a List if the response is an array
                         var widget_request = JsonConvert.DeserializeObject<ApiResponse<List<WidgetResponse>>>(response_widgets.Content);
-                       // Console.WriteLine("Deserialized successfully as List.");
                         Console.WriteLine("API Response: " + response_widgets.Content);
                         widget_Scriptcall.Get_Data_Widgets();
                     }
@@ -376,6 +376,65 @@ namespace ApiTesting_Calimatic
             }
            // return widget_request;
             return false;
-        }        
+        }
+
+      // 1- Partner Enrollment Endpoint Check
+        public PartnerEnrollment_Response PartnerEnrollment()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Dashboard/PartnerEnrollment -----------------\n");
+            var partnerenroll_RF = new PartnerEnroll_RF();
+            var getfile_partnerenroll = partnerenroll_RF.Getfile_PartnerEnroll();
+            PartnerEnrollment_Response finalResult = null;
+
+            // If no records in companyurl, you may want to handle that case.
+            if (getfile_partnerenroll == null || !getfile_partnerenroll.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_partnerenroll)
+            {
+                try
+                {
+                    Console.WriteLine("Input Value : ");
+                    Console.WriteLine($"franchises: {record.franchises}");
+                    string queryString_partner = $"franchises={record.franchises}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/Dashboard/PartnerEnrollments?{queryString_partner}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_PartnerEnroll = restClient.Execute(restRequest);
+                    var PartnerEnrollment_request = JsonConvert.DeserializeObject<ApiResponse<List<PartnerEnrollment_Response>>>(response_PartnerEnroll.Content);
+                    //var ForgotScriptcall = new FP_TestScripts();
+                    if (PartnerEnrollment_request.IsSuccessful == true)
+                    {
+                        Console.WriteLine("API Response: " + response_PartnerEnroll.Content);
+                       // ForgotScriptcall.ForgotPassword_Script(PartnerEnrollment_request.IsSuccessful);
+                       // var Otp = new ApiStudents();
+                        //    Otp.OtpForgotPassword();
+                    }
+                    if (PartnerEnrollment_request.Response != null && PartnerEnrollment_request.Response.Any())
+                    {
+                        finalResult = PartnerEnrollment_request.Response.First();
+                    }
+                    else
+                    {
+                        Console.WriteLine("API Response: " + response_PartnerEnroll.Content);
+                        //ForgotScriptcall.ForgotPassword_Script2(PartnerEnrollment_request.IsSuccessful);
+                    }
+                    //finalResult = PartnerEnrollment_request;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nAPI Response : " + ex.Message);
+                   // var ForgotScriptcall = new FP_TestScripts();
+                  //  ForgotScriptcall.Invalidurl();
+                }
+            }
+                return finalResult;
+        }
     }
 }
