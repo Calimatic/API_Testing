@@ -13,6 +13,9 @@ using TestProject1.Dashboard.Widgets_Folder;
 using Commons.DTO_s.Widget;
 using Commons.DTO_s.Dashboards.Partner_Enrollment;
 using ApiTesting_Calimatic.Dashboard_RF.PartnerEnrollment_RF;
+using TestProject1.Dashboard.Partner_Enrollment;
+using System.Net;
+using System.Text.RegularExpressions;
 
 namespace ApiTesting_Calimatic
 {
@@ -398,7 +401,7 @@ namespace ApiTesting_Calimatic
             {
                 try
                 {
-                    Console.WriteLine("Input Value : ");
+                    Console.WriteLine("\nInput Value : ");
                     Console.WriteLine($"franchises: {record.franchises}");
                     string queryString_partner = $"franchises={record.franchises}";
                     var restClient = new RestClient("https://angular-api.calibermatrix.com");
@@ -407,31 +410,39 @@ namespace ApiTesting_Calimatic
                     restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
                     restRequest.RequestFormat = DataFormat.Json;
                     var response_PartnerEnroll = restClient.Execute(restRequest);
-                    var PartnerEnrollment_request = JsonConvert.DeserializeObject<ApiResponse<List<PartnerEnrollment_Response>>>(response_PartnerEnroll.Content);
-                    //var ForgotScriptcall = new FP_TestScripts();
-                    if (PartnerEnrollment_request.IsSuccessful == true)
+                    var Partnerenroll_Scriptcall = new TestScripts_PartnerEnrollment();
+                    if (response_PartnerEnroll.StatusCode == HttpStatusCode.OK)
                     {
-                        Console.WriteLine("API Response: " + response_PartnerEnroll.Content);
-                       // ForgotScriptcall.ForgotPassword_Script(PartnerEnrollment_request.IsSuccessful);
-                       // var Otp = new ApiStudents();
-                        //    Otp.OtpForgotPassword();
-                    }
-                    if (PartnerEnrollment_request.Response != null && PartnerEnrollment_request.Response.Any())
-                    {
-                        finalResult = PartnerEnrollment_request.Response.First();
+                        var PartnerEnrollment_request = JsonConvert.DeserializeObject<ApiResponse<List<PartnerEnrollment_Response>>>(response_PartnerEnroll.Content);
+                        if (PartnerEnrollment_request.IsSuccessful == true)
+                        {
+                            Console.WriteLine("API Response: " + response_PartnerEnroll.Content);
+                            Partnerenroll_Scriptcall.ValidFranchise_ID(record.franchises);
+                        }
+                        if (PartnerEnrollment_request.Response != null && PartnerEnrollment_request.Response.Any())
+                        {
+                            finalResult = PartnerEnrollment_request.Response.First();
+                        }
                     }
                     else
                     {
-                        Console.WriteLine("API Response: " + response_PartnerEnroll.Content);
-                        //ForgotScriptcall.ForgotPassword_Script2(PartnerEnrollment_request.IsSuccessful);
+                        var PartnerEnrollment_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_PartnerEnroll.Content);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        if (Regex.IsMatch(record.franchises,pattern))
+                        {
+                            Console.WriteLine("API Response: " + PartnerEnrollment_Errorrequest.Message);
+                            Partnerenroll_Scriptcall.SpecialCharacter(record.franchises);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + PartnerEnrollment_Errorrequest.Message);
+                            Partnerenroll_Scriptcall.AlphabetCharacter(record.franchises);
+                        }
                     }
-                    //finalResult = PartnerEnrollment_request;
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("\nAPI Response : " + ex.Message);
-                   // var ForgotScriptcall = new FP_TestScripts();
-                  //  ForgotScriptcall.Invalidurl();
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
                 }
             }
                 return finalResult;

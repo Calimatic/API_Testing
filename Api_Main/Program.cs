@@ -1,6 +1,8 @@
 ﻿using ApiTesting_Calimatic;
 using ApiTesting_Calimatic.AppLoginClass;
+using ApiTesting_Calimatic.Dashboard_RF.PartnerEnrollment_RF;
 using ApiTesting_Calimatic.Forgot_PasswordAttempt;
+using TestProject1.Dashboard.Partner_Enrollment;
 
 
 //                                                  -------------AUTH------------
@@ -40,6 +42,8 @@ dashbboardWidgets.Widgets();
 var partnerenrollment_P = new ApiStudents();
 partnerenrollment_P.PartnerEnrollment();
 
+//var testing = new PartnerEnroll_RF();
+//testing.testing();
 //var ApiStudents = new ApiStudents();
 //ApiStudents.TestLogin();
 

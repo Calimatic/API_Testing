@@ -6,11 +6,28 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TestProject1.Dashboard.Partner_Enrollment;
 
 namespace ApiTesting_Calimatic.Dashboard_RF.PartnerEnrollment_RF
 {
     public class PartnerEnroll_RF
     {
+        //public void testing()
+        //{
+        //    Console.WriteLine("--------------- /api/Auth/Applogin ---------------\n");
+        //    var data = Getfile_PartnerEnroll();
+
+        //    foreach (var entry in data)
+        //    {
+        //        Console.WriteLine("Input Value");
+        //        Console.WriteLine($"franchises: {entry.franchises}");
+        //        var testscript = new TestScripts_PartnerEnrollment();
+        //        testscript.testscript(entry.franchises);
+        //        var ApiStudents = new ApiStudents();
+        //        ApiStudents.PartnerEnrollment(entry);
+        //    }
+        //}
+
         public List<csv_PartnerEnrollment_Data> Getfile_PartnerEnroll()
         {
             string baseDirectory = AppContext.BaseDirectory;
