@@ -16,6 +16,8 @@ using ApiTesting_Calimatic.Dashboard_RF.PartnerEnrollment_RF;
 using TestProject1.Dashboard.Partner_Enrollment;
 using System.Net;
 using System.Text.RegularExpressions;
+using ApiTesting_Calimatic.Dashboard_RF.ClassEnrollmentCountByType_RF;
+using TestProject1.Dashboard.ClassEnrollmentCountByType;
 
 namespace ApiTesting_Calimatic
 {
@@ -381,7 +383,7 @@ namespace ApiTesting_Calimatic
             return false;
         }
 
-      // 1- Partner Enrollment Endpoint Check
+      // 2- Partner Enrollment Endpoint Check
         public PartnerEnrollment_Response PartnerEnrollment()
         {
             Login();
@@ -446,6 +448,82 @@ namespace ApiTesting_Calimatic
                 }
             }
                 return finalResult;
+        }
+
+        // 3- ClassEnrollmentCountByType Endpoint Check
+        public PartnerEnrollment_Response ClassEnrollmentCountByType()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Dashboard/ClassEnrollmentCountByType -----------------\n");
+            var ClassEnrollCountByType_RF = new ClassEnrollCountByType();
+            var getfile_ClassEnrollCountByType = ClassEnrollCountByType_RF.Getfile_ClassEnrollCountByType();
+            PartnerEnrollment_Response finalResult = null;
+
+            // If no records in companyurl, you may want to handle that case.
+            if (getfile_ClassEnrollCountByType == null || !getfile_ClassEnrollCountByType.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_ClassEnrollCountByType)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"type: {record.type}, franchises: {record.franchises}");
+                    string queryString_ClassEnroll = $"type={record.type}&franchises={record.franchises}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/Dashboard/ClassEnrollmentCountByType?{queryString_ClassEnroll}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_ClassEnroll = restClient.Execute(restRequest);
+                    var Classenroll_Scriptcall = new TestScripts_ClassEnroll();
+                    if (response_ClassEnroll.StatusCode == HttpStatusCode.OK)
+                    {
+                        var ClassEnrollment_request = JsonConvert.DeserializeObject<ApiResponse<List<PartnerEnrollment_Response>>>(response_ClassEnroll.Content);
+                        if (ClassEnrollment_request.IsSuccessful == true)
+                        {
+                            Console.WriteLine("API Response: " + response_ClassEnroll.Content);
+                            Classenroll_Scriptcall.Valid_Type_FranchisesID(record.type,record.franchises);
+                        }
+                        if (ClassEnrollment_request.Response != null && ClassEnrollment_request.Response.Any())
+                        {
+                            finalResult = ClassEnrollment_request.Response.First();
+                        }
+                    }
+                    else
+                    {
+                        var ClassEnrollment_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_ClassEnroll.Content);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        string Alphabetpattern = @"^[a-zA-Z]+$";
+                        var abc = Regex.IsMatch(record.franchises, Alphabetpattern);
+                        if (Regex.IsMatch($"{record.type}{record.franchises}", pattern))
+                        {
+                            Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
+                            Classenroll_Scriptcall.SpecialCharacter(record.franchises ,record.type);
+                        }
+                        
+                        else if (Regex.IsMatch(record.franchises, Alphabetpattern))
+                        {
+                            Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
+                            Classenroll_Scriptcall.AlphabetCharacter(record.franchises);
+                        }
+                        
+                        else
+                        {
+                            Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
+                            Classenroll_Scriptcall.Nullparamsvalue(record.franchises, record.type);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
         }
     }
 }

@@ -33,14 +33,18 @@ Forgot_Password_Dataget FP = new Forgot_Password_Dataget();
 FP.ForgotGetData();
 */
 
-//                                                  -----------Dashboard------------
+//                                                  ----------Dashboard----------
 //Widgets Endpoint
-var dashbboardWidgets = new ApiStudents();
-dashbboardWidgets.Widgets();
+var dashbboardWidgets_P = new ApiStudents();
+dashbboardWidgets_P.Widgets();
 
-//Partner Enrollment
+//Partner Enrollment Endpoint
 var partnerenrollment_P = new ApiStudents();
 partnerenrollment_P.PartnerEnrollment();
+
+//ClassEnrollmentCountByType Endpoint
+var ClassEnrollmentCountBytype_P = new ApiStudents();
+ClassEnrollmentCountBytype_P.ClassEnrollmentCountByType();
 
 //var testing = new PartnerEnroll_RF();
 //testing.testing();
