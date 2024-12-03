@@ -34,7 +34,7 @@ FP.ForgotGetData();
 */
 
 //                                                  ----------Dashboard----------
-//Widgets Endpoint
+/*//Widgets Endpoint
 var dashbboardWidgets_P = new ApiStudents();
 dashbboardWidgets_P.Widgets();
 
@@ -45,6 +45,10 @@ partnerenrollment_P.PartnerEnrollment();
 //ClassEnrollmentCountByType Endpoint
 var ClassEnrollmentCountBytype_P = new ApiStudents();
 ClassEnrollmentCountBytype_P.ClassEnrollmentCountByType();
+*/
+//Enrollment Performance Endpoint
+var Enrollment_Performance_P = new ApiStudents();
+Enrollment_Performance_P.EnrollmentPerformance();
 
 //var testing = new PartnerEnroll_RF();
 //testing.testing();
