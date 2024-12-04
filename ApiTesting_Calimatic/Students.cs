@@ -532,7 +532,7 @@ namespace ApiTesting_Calimatic
         public PartnerEnrollment_Response EnrollmentPerformance()
         {
             Login();
-            Console.WriteLine("----------------- /api/Dashboard/EnrollmentPerformance -----------------\n");
+            Console.WriteLine("----------------- /api/Dashboard/EnrollmentPerformance -----------------");
             var enrollperformance_RF = new EnrollPerformance_RF();
             var getfile_enrollpermformance = enrollperformance_RF.Getfile_EnrollmentPerformance();
             PartnerEnrollment_Response finalResult = null;
@@ -561,45 +561,61 @@ namespace ApiTesting_Calimatic
                     if (response_EnrollPermfromance.StatusCode == HttpStatusCode.OK)
                     {
                         var ClassEnrollment_request = JsonConvert.DeserializeObject<ApiResponse<List<PartnerEnrollment_Response>>>(response_EnrollPermfromance.Content);
-                        if (ClassEnrollment_request.IsSuccessful == true)
+                        if (ClassEnrollment_request.IsSuccessful == true && ClassEnrollment_request.Response.Count>0)
                         {
                             Console.WriteLine("API Response: " + response_EnrollPermfromance.Content);
                             EnrollPerformance_Scriptcall.ValidInputValues(record.types, record.franchiseIds, record.type, record.performance);
                         }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_EnrollPermfromance.Content);
+                            EnrollPerformance_Scriptcall.InvalidInputValues(record.types, record.franchiseIds, record.type, record.performance);
+                        }
                         if (ClassEnrollment_request.Response != null && ClassEnrollment_request.Response.Any())
                         {
                             finalResult = ClassEnrollment_request.Response.First();
-                        }
+                        } 
                     }
                     else
                     {
                         var ClassEnrollment_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_EnrollPermfromance.Content);
                         string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
                         string Alphabetpattern = @"^[a-zA-Z]+$";
-                        string combinedInputValues_Special = $"{record.types}+{record.type}";
-                        string combinedInputValues_Null = $"{record.types}+{record.franchiseIds}";
-                        string testInput = null;
+                        string combinedInputValues_Special = $"{record.types},{record.franchiseIds}";
+                        string combinedInputValues_Null = $"{record.types},{record.franchiseIds}";
+                        string Null_testInput = @"^,$";
+                        string testInputs = @"^\s*$";
                         var abc = Regex.IsMatch(record.types, Alphabetpattern);
-                        if (Regex.IsMatch(combinedInputValues_Special, pattern))
+                        if (Regex.IsMatch(record.franchiseIds, pattern))
                         {
                             Console.WriteLine("API Response: " + response_EnrollPermfromance.Content);
-                            EnrollPerformance_Scriptcall.SpecialCharacter(record.types, record.type);
+                            EnrollPerformance_Scriptcall.SpecialCharacter(record.franchiseIds);
                         }
-                        else if (Regex.IsMatch(combinedInputValues_Null, testInput))
+                        else if (Regex.IsMatch(combinedInputValues_Null, Null_testInput))
                         {
                             Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
                             EnrollPerformance_Scriptcall.ValidateInput_NullValues(record.types, record.franchiseIds);
                         }
+                        else if(Regex.IsMatch(record.types ?? "", testInputs))
+                        {
+                            Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
+                            EnrollPerformance_Scriptcall.ValidateInput_NulltypeValues(record.types);
+                        }
+                        else if(Regex.IsMatch(record.franchiseIds ?? "" , testInputs))
+                        {
+                            Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
+                            EnrollPerformance_Scriptcall.ValidateInput_NullfranchiseIds_Values(record.franchiseIds);
+                        }
                         else
                         {
-                            //Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
-                            //EnrollPerformance_Scriptcall.Nullparamsvalue(record.franchises, record.type);
+                            Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
+                            EnrollPerformance_Scriptcall.ContainsAlphabet_franchiseIds(record.franchiseIds);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                    Console.WriteLine("\nAPI response with Exception Error Message : " + ex.Message);
                 }
             }
             return finalResult;
