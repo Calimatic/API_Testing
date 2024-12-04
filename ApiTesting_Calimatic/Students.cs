@@ -586,6 +586,7 @@ namespace ApiTesting_Calimatic
                         string Null_testInput = @"^,$";
                         string testInputs = @"^\s*$";
                         var abc = Regex.IsMatch(record.types, Alphabetpattern);
+                        //
                         if (Regex.IsMatch(record.franchiseIds, pattern))
                         {
                             Console.WriteLine("API Response: " + response_EnrollPermfromance.Content);
