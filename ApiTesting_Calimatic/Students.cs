@@ -20,6 +20,8 @@ using ApiTesting_Calimatic.Dashboard_RF.ClassEnrollmentCountByType_RF;
 using TestProject1.Dashboard.ClassEnrollmentCountByType;
 using ApiTesting_Calimatic.Dashboard_RF.EnrollmentPerformance_RF;
 using TestProject1.Dashboard.EnrollmentPerformance_TestScrpts;
+using ApiTesting_Calimatic.Dashboard_RF.EventEnrollmentCountByType_RF;
+using TestProject1.Dashboard.EventEnrollmentCountByType_testScripts;
 
 namespace ApiTesting_Calimatic
 {
@@ -53,7 +55,6 @@ namespace ApiTesting_Calimatic
                 
             }
             return false;
-            
         }
 
         //------------->Auth<-------------
@@ -611,6 +612,100 @@ namespace ApiTesting_Calimatic
                         {
                             Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
                             EnrollPerformance_Scriptcall.ContainsAlphabet_franchiseIds(record.franchiseIds);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nAPI response with Exception Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 5- EventEnrollmentCountByType Endpoint Check
+        public PartnerEnrollment_Response EventEnrollmentCountByType()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Dashboard/EventEnrollmentCountByType -----------------");
+            var enrollCountBytype_RF = new EventEnrollCountByType();
+            var enrollCountBytype = enrollCountBytype_RF.Getfile_EnrollCountByType();
+            PartnerEnrollment_Response finalResult = null;
+
+            // If no records in companyurl, you may want to handle that case.
+            if (enrollCountBytype == null || !enrollCountBytype.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in enrollCountBytype)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Values : ");
+                    Console.WriteLine($"types: {record.type}, franchises: {record.franchises}");
+                    string queryString_EnrollCountBytype = $"types={record.type} &franchiseIds= {record.franchises}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/Dashboard/EnrollmentPerformance?{queryString_EnrollCountBytype}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_EnrollPermfromance = restClient.Execute(restRequest);
+                    var EventEnrollCountBytype_Scriptcall = new TestScripts_EventEnrollCountByType();
+                    if (response_EnrollPermfromance.StatusCode == HttpStatusCode.OK)
+                    {
+                        var ClassEnrollment_request = JsonConvert.DeserializeObject<ApiResponse<List<PartnerEnrollment_Response>>>(response_EnrollPermfromance.Content);
+                        if (ClassEnrollment_request.IsSuccessful == true && ClassEnrollment_request.Response.Count > 0)
+                        {
+                            Console.WriteLine("API Response: " + response_EnrollPermfromance.Content);
+                            EventEnrollCountBytype_Scriptcall.ValidInputValues(record.type, record.franchises);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_EnrollPermfromance.Content);
+                            EventEnrollCountBytype_Scriptcall.InvalidInputValues(record.type, record.franchises);
+                        }
+                        if (ClassEnrollment_request.Response != null && ClassEnrollment_request.Response.Any())
+                        {
+                            finalResult = ClassEnrollment_request.Response.First();
+                        }
+                    }
+                    else
+                    {
+                        var ClassEnrollment_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_EnrollPermfromance.Content);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        string Alphabetpattern = @"^[a-zA-Z]+$";
+                        string combinedInputValues_Special = $"{record.type},{record.franchises}";
+                        string combinedInputValues_Null = $"{record.type},{record.franchises}";
+                        string Null_testInput = @"^,$";
+                        string testInputs = @"^\s*$";
+                        var abc = Regex.IsMatch(record.type, Alphabetpattern);
+                        //
+                        if (Regex.IsMatch(record.franchises, pattern))
+                        {
+                            Console.WriteLine("API Response: " + response_EnrollPermfromance.Content);
+                          //  EventEnrollCountBytype_Scriptcall.SpecialCharacter(record.franchises);
+                        }
+                        else if (Regex.IsMatch(combinedInputValues_Null, Null_testInput))
+                        {
+                            Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
+                           // EventEnrollCountBytype_Scriptcall.ValidateInput_NullValues(record.type, record.franchises);
+                        }
+                        else if (Regex.IsMatch(record.type ?? "", testInputs))
+                        {
+                            Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
+                            //EventEnrollCountBytype_Scriptcall.ValidateInput_NulltypeValues(record.type);
+                        }
+                        else if (Regex.IsMatch(record.franchises ?? "", testInputs))
+                        {
+                            Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
+                           // EventEnrollCountBytype_Scriptcall.ValidateInput_NullfranchiseIds_Values(record.franchises);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
+                           // EventEnrollCountBytype_Scriptcall.ContainsAlphabet_franchiseIds(record.franchises);
                         }
                     }
                 }
