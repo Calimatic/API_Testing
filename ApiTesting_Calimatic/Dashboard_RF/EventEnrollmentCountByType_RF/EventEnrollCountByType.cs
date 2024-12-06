@@ -18,7 +18,7 @@ namespace ApiTesting_Calimatic.Dashboard_RF.EventEnrollmentCountByType_RF
             // Go up two levels from "bin/Debug/net8.0" to the project directory and then to the desired path
             string projectPath = Path.Combine(baseDirectory, "..", "..", "..");
             // Construct the relative path to the CSV file
-            string relativePath = Path.Combine(projectPath, "Dataset_files", "Enrollment Performance.csv");
+            string relativePath = Path.Combine(projectPath, "Dataset_files", "EventEnrollmentCountByType.csv");
 
             // Check if the file exists
             if (File.Exists(relativePath))

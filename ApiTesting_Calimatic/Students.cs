@@ -528,7 +528,7 @@ namespace ApiTesting_Calimatic
                 }
                 return finalResult;
             }
-       */
+       
         // 4- Enrollment Performance Endpoint Check
         public PartnerEnrollment_Response EnrollmentPerformance()
         {
@@ -622,7 +622,7 @@ namespace ApiTesting_Calimatic
             }
             return finalResult;
         }
-
+        */
         // 5- EventEnrollmentCountByType Endpoint Check
         public PartnerEnrollment_Response EventEnrollmentCountByType()
         {
@@ -685,27 +685,27 @@ namespace ApiTesting_Calimatic
                         if (Regex.IsMatch(record.franchises, pattern))
                         {
                             Console.WriteLine("API Response: " + response_EnrollPermfromance.Content);
-                          //  EventEnrollCountBytype_Scriptcall.SpecialCharacter(record.franchises);
+                            EventEnrollCountBytype_Scriptcall.SpecialCharacter(record.franchises);
                         }
                         else if (Regex.IsMatch(combinedInputValues_Null, Null_testInput))
                         {
                             Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
-                           // EventEnrollCountBytype_Scriptcall.ValidateInput_NullValues(record.type, record.franchises);
+                            EventEnrollCountBytype_Scriptcall.ValidateInput_NullValues(record.type, record.franchises);
                         }
                         else if (Regex.IsMatch(record.type ?? "", testInputs))
                         {
                             Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
-                            //EventEnrollCountBytype_Scriptcall.ValidateInput_NulltypeValues(record.type);
+                            EventEnrollCountBytype_Scriptcall.ValidateInput_NulltypeValues(record.type);
                         }
                         else if (Regex.IsMatch(record.franchises ?? "", testInputs))
                         {
                             Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
-                           // EventEnrollCountBytype_Scriptcall.ValidateInput_NullfranchiseIds_Values(record.franchises);
+                            EventEnrollCountBytype_Scriptcall.ValidateInput_Nullfranchises_Values(record.franchises);
                         }
                         else
                         {
                             Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
-                           // EventEnrollCountBytype_Scriptcall.ContainsAlphabet_franchiseIds(record.franchises);
+                            EventEnrollCountBytype_Scriptcall.ContainsAlphabet_franchises(record.franchises);
                         }
                     }
                 }
