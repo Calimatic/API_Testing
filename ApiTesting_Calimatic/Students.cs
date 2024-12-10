@@ -624,7 +624,7 @@ namespace ApiTesting_Calimatic
             }
             return finalResult;
         }
-        */
+   
         // 5- EventEnrollmentCountByType Endpoint Check
         public PartnerEnrollment_Response EventEnrollmentCountByType()
         {
@@ -718,8 +718,8 @@ namespace ApiTesting_Calimatic
             }
             return finalResult;
         }
-        
-
+        */
+        // 6- studentAttendance Endpoint Check
         public PartnerEnrollment_Response studentAttendance()
         {
             Login();
