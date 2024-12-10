@@ -50,10 +50,10 @@ ClassEnrollmentCountBytype_P.ClassEnrollmentCountByType();
 var Enrollment_Performance_P = new ApiStudents();
 Enrollment_Performance_P.EnrollmentPerformance();
 
-
+*/
 var eventenrollcountbyttype_P = new ApiStudents();
 eventenrollcountbyttype_P.EventEnrollmentCountByType();
-*/
+
 
 var studentAttendance_P = new ApiStudents();
 studentAttendance_P.studentAttendance();

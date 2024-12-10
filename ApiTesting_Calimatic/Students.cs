@@ -624,7 +624,7 @@ namespace ApiTesting_Calimatic
             }
             return finalResult;
         }
-        
+        */
         // 5- EventEnrollmentCountByType Endpoint Check
         public PartnerEnrollment_Response EventEnrollmentCountByType()
         {
@@ -647,9 +647,9 @@ namespace ApiTesting_Calimatic
                 {
                     Console.WriteLine("\nInput Values : ");
                     Console.WriteLine($"type: {record.type}, franchises: {record.franchises}");
-                    string queryString_EnrollCountBytype = $"type={record.type} &franchises= {record.franchises}";
+                    string queryString_EnrollCountBytype = $"type={record.type}&franchises={record.franchises}";
                     var restClient = new RestClient("https://angular-api.calibermatrix.com");
-                    var restRequest = new RestRequest($"/api/Dashboard/EnrollmentPerformance?{queryString_EnrollCountBytype}", Method.Get);
+                    var restRequest = new RestRequest($"/api/Dashboard/EventEnrollmentCountByType?{queryString_EnrollCountBytype}", Method.Get);
                     restRequest.AddHeader("Accept", "application/json");
                     restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
                     restRequest.RequestFormat = DataFormat.Json;
@@ -718,7 +718,7 @@ namespace ApiTesting_Calimatic
             }
             return finalResult;
         }
-        */
+        
 
         public PartnerEnrollment_Response studentAttendance()
         {
