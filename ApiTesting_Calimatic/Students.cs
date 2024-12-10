@@ -22,6 +22,8 @@ using ApiTesting_Calimatic.Dashboard_RF.EnrollmentPerformance_RF;
 using TestProject1.Dashboard.EnrollmentPerformance_TestScrpts;
 using ApiTesting_Calimatic.Dashboard_RF.EventEnrollmentCountByType_RF;
 using TestProject1.Dashboard.EventEnrollmentCountByType_testScripts;
+using ApiTesting_Calimatic.Dashboard_RF.studentAttendance_RF;
+using TestProject1.Dashboard.studentAttendance_Testscript;
 
 namespace ApiTesting_Calimatic
 {
@@ -622,7 +624,7 @@ namespace ApiTesting_Calimatic
             }
             return finalResult;
         }
-        */
+        
         // 5- EventEnrollmentCountByType Endpoint Check
         public PartnerEnrollment_Response EventEnrollmentCountByType()
         {
@@ -644,8 +646,8 @@ namespace ApiTesting_Calimatic
                 try
                 {
                     Console.WriteLine("\nInput Values : ");
-                    Console.WriteLine($"types: {record.type}, franchises: {record.franchises}");
-                    string queryString_EnrollCountBytype = $"types={record.type} &franchiseIds= {record.franchises}";
+                    Console.WriteLine($"type: {record.type}, franchises: {record.franchises}");
+                    string queryString_EnrollCountBytype = $"type={record.type} &franchises= {record.franchises}";
                     var restClient = new RestClient("https://angular-api.calibermatrix.com");
                     var restRequest = new RestRequest($"/api/Dashboard/EnrollmentPerformance?{queryString_EnrollCountBytype}", Method.Get);
                     restRequest.AddHeader("Accept", "application/json");
@@ -706,6 +708,111 @@ namespace ApiTesting_Calimatic
                         {
                             Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
                             EventEnrollCountBytype_Scriptcall.ContainsAlphabet_franchises(record.franchises);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nAPI response with Exception Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+        */
+
+        public PartnerEnrollment_Response studentAttendance()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Dashboard/studentAttendance -----------------");
+            var studentAttendance_RF = new studentAttend_RF();
+            var stdAttendance = studentAttendance_RF.Getfile_studentAttendance();
+            PartnerEnrollment_Response finalResult = null;
+
+            // If no records in companyurl, you may want to handle that case.
+            if (stdAttendance == null || !stdAttendance.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in stdAttendance)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Values : ");
+                    Console.WriteLine($"type: {record.type}, franchises: {record.franchises}");
+                    string queryString_studentAttendance = $"type={record.type} &franchises= {record.franchises}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/Dashboard/studentAttendance?{queryString_studentAttendance}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_studentAttendance = restClient.Execute(restRequest);
+                    var studentAttendance_Scriptcall = new TestScript_studentAttendance();
+                    if (response_studentAttendance.StatusCode == HttpStatusCode.OK)
+                    {
+                        var studentAttendance_request = JsonConvert.DeserializeObject<ApiResponse<List<PartnerEnrollment_Response>>>(response_studentAttendance.Content);
+                        if (studentAttendance_request.IsSuccessful == true && studentAttendance_request.Response.Count > 0)
+                        {
+                            Console.WriteLine("API Response: " + response_studentAttendance.Content);
+                            studentAttendance_Scriptcall.ValidInputValues(record.type, record.franchises);
+                        }
+                        //else
+                        //{
+                        //    Console.WriteLine("API Response: " + response_studentAttendance.Content);
+                        //    studentAttendance_Scriptcall.InvalidInputValues(record.type, record.franchises);
+                        //}
+                        if (studentAttendance_request.Response != null && studentAttendance_request.Response.Any())
+                        {
+                            finalResult = studentAttendance_request.Response.First();
+                        }
+                    }
+                    else
+                    {
+                        var studentattendance_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_studentAttendance.Content);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        string Alphabetpattern = @"^[a-zA-Z]+$";
+                        string Alphabetpattern_types = @"'([a-zA-Z]+)'";
+                        string combinedInputValues_Special = $"{record.type},{record.franchises}";
+                        string combinedInputValues_Null = $"{record.type},{record.franchises}";
+                        string Null_testInput = @"^,$";
+                        string testInputs = @"^\s*$";
+                        var abc = Regex.IsMatch(record.type, Alphabetpattern);
+                        //
+                        if (Regex.IsMatch(record.type, pattern))
+                        {
+                            Console.WriteLine("API Response: " + response_studentAttendance.Content);
+                            studentAttendance_Scriptcall.SpecialCharacter(record.type);
+                        }
+                        else if (Regex.IsMatch(record.franchises, pattern))
+                        {
+                            Console.WriteLine("API Response: " + response_studentAttendance.Content);
+                            studentAttendance_Scriptcall.SpecialCharacter_franchises(record.franchises);
+                        }
+                        else if (Regex.IsMatch(combinedInputValues_Null, Null_testInput))
+                        {
+                            Console.WriteLine("API Response: " + studentattendance_Errorrequest.Message);
+                            studentAttendance_Scriptcall.ValidateInput_NullValues(record.type, record.franchises);
+                        }
+                        else if (Regex.IsMatch(record.type ?? "", testInputs))
+                        {
+                            Console.WriteLine("API Response: " + studentattendance_Errorrequest.Message);
+                            studentAttendance_Scriptcall.ValidateInput_NulltypeValues(record.type);
+                        }
+                        else if (Regex.IsMatch(record.franchises ?? "", testInputs))
+                        {
+                            Console.WriteLine("API Response: " + studentattendance_Errorrequest.Message);
+                            studentAttendance_Scriptcall.ValidateInput_Nullfranchises_Values(record.franchises);
+                        }
+                        else if (Regex.IsMatch(record.type ?? "", Alphabetpattern))
+                        {
+                            Console.WriteLine("API Response: " + studentattendance_Errorrequest.Message);
+                            studentAttendance_Scriptcall.ContainsAlphabet_type(record.type);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + studentattendance_Errorrequest.Message);
+                            studentAttendance_Scriptcall.ContainsAlphabet_franchises(record.franchises);
                         }
                     }
                 }
