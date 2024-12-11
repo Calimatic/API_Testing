@@ -24,6 +24,9 @@ using ApiTesting_Calimatic.Dashboard_RF.EventEnrollmentCountByType_RF;
 using TestProject1.Dashboard.EventEnrollmentCountByType_testScripts;
 using ApiTesting_Calimatic.Dashboard_RF.studentAttendance_RF;
 using TestProject1.Dashboard.studentAttendance_Testscript;
+using Commons.DTO_s.Dashboards.studentAttendance_Response;
+using TestProject1.Dashboard.GetActiveCourseCountByType_TestScripts;
+using Commons.DTO_s.Dashboards.GetActive_CourseCount;
 
 namespace ApiTesting_Calimatic
 {
@@ -718,7 +721,7 @@ namespace ApiTesting_Calimatic
             }
             return finalResult;
         }
-        */
+        
         // 6- studentAttendance Endpoint Check
         public PartnerEnrollment_Response studentAttendance()
         {
@@ -823,6 +826,43 @@ namespace ApiTesting_Calimatic
             }
             return finalResult;
         }
-
+        */
+        // 7- GetActiveCourseCountByType Endpoint Check
+        public bool GetActiveCourseCountByType()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/Dashboard/GetActiveCourseCountByType -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/Dashboard/GetActiveCourseCountByType", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_GetActiveCourseCountByType = restClient.Get(restRequest);
+                var GetActiveCourseCountByType_Scriptcall = new TestScrips_ActiveCourseCountByType();
+                if (response_GetActiveCourseCountByType.StatusCode == HttpStatusCode.OK)
+                {
+                    // Deserialize as a List if the response is an array
+                    var ActiveCourse_request = JsonConvert.DeserializeObject<ApiResponse<List<Respone_Get_ActiveCourseCount>>>(response_GetActiveCourseCountByType.Content);
+                    if (ActiveCourse_request.IsSuccessful == true && ActiveCourse_request.Response.Count > 0)
+                    {
+                        Console.WriteLine("API Response: " + response_GetActiveCourseCountByType.Content);
+                        GetActiveCourseCountByType_Scriptcall.Successfully_Response();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_GetActiveCourseCountByType.Content);
+                    GetActiveCourseCountByType_Scriptcall.Failed_Response();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
+        }
     }
 }

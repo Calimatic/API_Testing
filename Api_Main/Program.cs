@@ -50,14 +50,18 @@ ClassEnrollmentCountBytype_P.ClassEnrollmentCountByType();
 var Enrollment_Performance_P = new ApiStudents();
 Enrollment_Performance_P.EnrollmentPerformance();
 
-*/
+//EventEnrollmentCountByType Endpoint
 var eventenrollcountbyttype_P = new ApiStudents();
 eventenrollcountbyttype_P.EventEnrollmentCountByType();
 
-
+//studentAttendance Endpoint
 var studentAttendance_P = new ApiStudents();
 studentAttendance_P.studentAttendance();
+*/
 
+// GetActiveCourseCountByType Endpoint
+var GetActiveCourseCountByType_P = new ApiStudents();
+GetActiveCourseCountByType_P.GetActiveCourseCountByType();
 
 //var testing = new PartnerEnroll_RF();
 //testing.testing();
