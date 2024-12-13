@@ -58,16 +58,18 @@ eventenrollcountbyttype_P.EventEnrollmentCountByType();
 var studentAttendance_P = new ApiStudents();
 studentAttendance_P.studentAttendance();
 
-
 // GetActiveCourseCountByType Endpoint
 var GetActiveCourseCountByType_P = new ApiStudents();
 GetActiveCourseCountByType_P.GetActiveCourseCountByType();
-*/
 
 // listofleadscount Endpoints
 var listofleadscount_P = new ApiStudents();
 listofleadscount_P.listofleadscount();
+*/
 
+// topfranchisesbyrevenue Endpoint
+var topfranchisesbyrevenue_P = new ApiStudents();
+topfranchisesbyrevenue_P.topfranchisesbyrevenue();
 
 //var testing = new PartnerEnroll_RF();
 //testing.testing();

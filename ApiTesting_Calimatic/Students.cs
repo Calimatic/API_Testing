@@ -29,6 +29,8 @@ using TestProject1.Dashboard.GetActiveCourseCountByType_TestScripts;
 using Commons.DTO_s.Dashboards.GetActive_CourseCount;
 using Commons.DTO_s.Dashboards.listofleadscount_Response;
 using TestProject1.Dashboard.listofleadcount_TestScripts;
+using TestProject1.Dashboard.topfranchisesbyrevenue_TestScripts;
+using Commons.DTO_s.Dashboards.topfranchisesbyrevenue_Response;
 
 namespace ApiTesting_Calimatic
 {
@@ -828,7 +830,7 @@ namespace ApiTesting_Calimatic
             }
             return finalResult;
         }
-        */
+       
         // 7- GetActiveCourseCountByType Endpoint Check
         public bool GetActiveCourseCountByType()
         {
@@ -866,6 +868,7 @@ namespace ApiTesting_Calimatic
             }
             return false;
         }
+         */
 
         // 8- listofleadscount Endpoint Check
         public bool listofleadscount()
@@ -895,6 +898,44 @@ namespace ApiTesting_Calimatic
                 {
                     Console.WriteLine("API Response: " + response_listofleadscount.Content);
                     listofleadscount_Scriptcall.Failed_Response();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
+        }
+
+        // 9- topfranchisesbyrevenue Endpoint Check
+        public bool topfranchisesbyrevenue()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/Dashboard/listofleadscount -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/Dashboard/topfranchisesbyrevenue", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_topfranchisesbyrevenue = restClient.Get(restRequest);
+                var topfranchisesbyrevenue_Scriptcall = new TestScripts_topfranchisesbyrevenue();
+                if (response_topfranchisesbyrevenue.StatusCode == HttpStatusCode.OK)
+                {
+                    // Deserialize as a List if the response is an array
+                    var listofleadcount_request = JsonConvert.DeserializeObject<ApiResponse<List<Response_topfranchisesbyrevenue>>>(response_topfranchisesbyrevenue.Content);
+                    if (listofleadcount_request.IsSuccessful == true && listofleadcount_request.Response.Count > 0)
+                    {
+                        Console.WriteLine("API Response: " + response_topfranchisesbyrevenue.Content);
+                        topfranchisesbyrevenue_Scriptcall.Successfully_Response();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_topfranchisesbyrevenue.Content);
+                    topfranchisesbyrevenue_Scriptcall.Failed_Response();
                 }
                 return true;
             }
