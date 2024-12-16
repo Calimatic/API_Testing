@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TestProject1.Dashboard.topfranchisesbyrevenue_TestScripts
 {
+    [TestClass]
     public class TestScripts_topfranchisesbyrevenue
     {
         [TestMethod]

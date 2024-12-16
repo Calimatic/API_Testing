@@ -31,6 +31,8 @@ using Commons.DTO_s.Dashboards.listofleadscount_Response;
 using TestProject1.Dashboard.listofleadcount_TestScripts;
 using TestProject1.Dashboard.topfranchisesbyrevenue_TestScripts;
 using Commons.DTO_s.Dashboards.topfranchisesbyrevenue_Response;
+using Commons.DTO_s.Dashboards.getStudentPointsCounter_resposne;
+using TestProject1.Dashboard.getStudentPointsCounter_TestScripts;
 
 namespace ApiTesting_Calimatic
 {
@@ -59,9 +61,9 @@ namespace ApiTesting_Calimatic
             {
                 var responseData = JsonConvert.DeserializeObject<ApiTesting_Calimatic.AppLoginFolder.ApiResponse<string>>(responsedata.Content);
                 bearerToken = responseData.Response;
-              //  Console.WriteLine("Bearer Token generated Successfully");
+                //  Console.WriteLine("Bearer Token generated Successfully");
                 return true;
-                
+
             }
             return false;
         }
@@ -868,7 +870,7 @@ namespace ApiTesting_Calimatic
             }
             return false;
         }
-         */
+         
 
         // 8- listofleadscount Endpoint Check
         public bool listofleadscount()
@@ -907,6 +909,7 @@ namespace ApiTesting_Calimatic
             }
             return false;
         }
+        */
 
         // 9- topfranchisesbyrevenue Endpoint Check
         public bool topfranchisesbyrevenue()
@@ -946,5 +949,41 @@ namespace ApiTesting_Calimatic
             return false;
         }
 
+        //getStudentPointsCounter Endpoints Check
+        public bool getStudentPointsCounter()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/Dashboard/getStudentPointsCounter -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/Dashboard/getStudentPointsCounter", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_getStudentPointsCounter = restClient.Get(restRequest);
+                var getStudentPointsCounter_Scriptcall = new TestScripts_getStudentPointsCounter();
+                if (response_getStudentPointsCounter.StatusCode == HttpStatusCode.OK)
+                {
+                    var getStudentPointsCounter_request = JsonConvert.DeserializeObject<EndpointResponse_getStudentPointsCunter>(response_getStudentPointsCounter.Content);
+                    if (getStudentPointsCounter_request.IsSuccessful == true)
+                    {
+                        Console.WriteLine("API Response: " + response_getStudentPointsCounter.Content);
+                        getStudentPointsCounter_Scriptcall.Successfully_Response();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_getStudentPointsCounter.Content);
+                    getStudentPointsCounter_Scriptcall.Failed_Response();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
+        }
     }
 }

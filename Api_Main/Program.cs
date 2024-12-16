@@ -65,12 +65,16 @@ GetActiveCourseCountByType_P.GetActiveCourseCountByType();
 // listofleadscount Endpoints
 var listofleadscount_P = new ApiStudents();
 listofleadscount_P.listofleadscount();
-*/
 
 // topfranchisesbyrevenue Endpoint
 var topfranchisesbyrevenue_P = new ApiStudents();
 topfranchisesbyrevenue_P.topfranchisesbyrevenue();
 
+*/
+
+// getStudentPointsCounter Endpoint
+var getStudentPointsCounter_P = new ApiStudents();
+getStudentPointsCounter_P.getStudentPointsCounter();
 //var testing = new PartnerEnroll_RF();
 //testing.testing();
 //var ApiStudents = new ApiStudents();
