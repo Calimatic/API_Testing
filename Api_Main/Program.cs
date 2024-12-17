@@ -1,6 +1,7 @@
 ﻿using ApiTesting_Calimatic;
 using ApiTesting_Calimatic.AppLoginClass;
 using ApiTesting_Calimatic.Dashboard_RF.PartnerEnrollment_RF;
+using ApiTesting_Calimatic.Dashboard_RF.restoreWidgetsToDefault_RF;
 using ApiTesting_Calimatic.Forgot_PasswordAttempt;
 using TestProject1.Dashboard.Partner_Enrollment;
 
@@ -70,11 +71,15 @@ listofleadscount_P.listofleadscount();
 var topfranchisesbyrevenue_P = new ApiStudents();
 topfranchisesbyrevenue_P.topfranchisesbyrevenue();
 
-*/
-
 // getStudentPointsCounter Endpoint
 var getStudentPointsCounter_P = new ApiStudents();
 getStudentPointsCounter_P.getStudentPointsCounter();
+
+*/
+
+// restoreWidgetsToDefault Endpoint
+var restoreWidgetsToDefault_P = new ApiStudents();
+restoreWidgetsToDefault_P.restoreWidgetsToDefault();
 //var testing = new PartnerEnroll_RF();
 //testing.testing();
 //var ApiStudents = new ApiStudents();

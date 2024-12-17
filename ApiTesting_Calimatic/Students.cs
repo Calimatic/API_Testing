@@ -33,6 +33,8 @@ using TestProject1.Dashboard.topfranchisesbyrevenue_TestScripts;
 using Commons.DTO_s.Dashboards.topfranchisesbyrevenue_Response;
 using Commons.DTO_s.Dashboards.getStudentPointsCounter_resposne;
 using TestProject1.Dashboard.getStudentPointsCounter_TestScripts;
+using ApiTesting_Calimatic.Dashboard_RF.restoreWidgetsToDefault_RF;
+using TestProject1.Dashboard.restoreWidgetsToDefault_TestScripts;
 
 namespace ApiTesting_Calimatic
 {
@@ -909,7 +911,6 @@ namespace ApiTesting_Calimatic
             }
             return false;
         }
-        */
 
         // 9- topfranchisesbyrevenue Endpoint Check
         public bool topfranchisesbyrevenue()
@@ -949,7 +950,7 @@ namespace ApiTesting_Calimatic
             return false;
         }
 
-        //getStudentPointsCounter Endpoints Check
+        // 10- getStudentPointsCounter Endpoints Check
         public bool getStudentPointsCounter()
         {
             try
@@ -984,6 +985,90 @@ namespace ApiTesting_Calimatic
                 Console.WriteLine("\nAPI Response : " + ex.Message);
             }
             return false;
+        }
+        */
+
+        // 11- restoreWidgetsToDefault Endpoint Check
+        public ForgotPassword_Class restoreWidgetsToDefault()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Auth/restoreWidgetsToDefault -----------------\n");
+            var Restetpass = new restoreWidgetsTo_Default();
+            var reset = Restetpass.restoreWidgetsToDefault_FP();
+            ForgotPassword_Class finalResult = null;
+
+            // If no records in ResetPassword, you may want to handle that case.
+            if (reset == null || !reset.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in reset)
+            {
+                try
+                {
+                    Console.WriteLine("Input Values : ");
+                    Console.WriteLine($"role: {record.role}");
+                    var bodyContent = new
+                    {
+                        role = record.role,
+                    };
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/Dashboard/restoreWidgetsToDefault", Method.Post);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    restRequest.AddJsonBody(bodyContent);
+                    var response_restoreWidgetsToDefault = restClient.Execute(restRequest);
+                    var studentAttendance_Scriptcall = new TestScripts_restoreWidgetsToDefault();
+                    if (response_restoreWidgetsToDefault.StatusCode == HttpStatusCode.OK)
+                    {
+                        var restoreWidgetsToDefault_request = JsonConvert.DeserializeObject<Commons.DTO_s.Auth.ForgotPassword_Class>(response_restoreWidgetsToDefault.Content);
+                        if (restoreWidgetsToDefault_request.IsSuccessful == true)
+                        {
+                            Console.WriteLine("API Response: " + response_restoreWidgetsToDefault.Content);
+                            studentAttendance_Scriptcall.ValidInputValues(record.role);
+                        }
+                        if (restoreWidgetsToDefault_request.Response != null && restoreWidgetsToDefault_request.Response.Any())
+                        {
+                            finalResult = restoreWidgetsToDefault_request;
+                        }
+                    }
+                    else
+                    {
+                        var restoreWidgetsToDefault_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_restoreWidgetsToDefault.Content);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        string Alphabetpattern = @"^[a-zA-Z]+$";
+                        string testInputs = @"^\s*$";
+                        if (Regex.IsMatch(record.role, pattern))
+                        {
+                            Console.WriteLine("API Response: " + response_restoreWidgetsToDefault.Content);
+                            studentAttendance_Scriptcall.SpecialCharacter(record.role);
+                        }
+                        else if (Regex.IsMatch(record.role ?? "", testInputs))
+                        {
+                            Console.WriteLine("API Response: " + restoreWidgetsToDefault_Errorrequest.Message);
+                            studentAttendance_Scriptcall.ValidateInput_NullValues(record.role);
+                        }
+                        else if (Regex.IsMatch(record.role ?? "", Alphabetpattern))
+                        {
+                            Console.WriteLine("API Response: " + restoreWidgetsToDefault_Errorrequest.Message);
+                            studentAttendance_Scriptcall.ContainsAlphabet_role(record.role);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + restoreWidgetsToDefault_Errorrequest.Message);
+                            studentAttendance_Scriptcall.BeginExecuteNonQuery(record.role);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nAPI response with Exception Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
         }
     }
 }
