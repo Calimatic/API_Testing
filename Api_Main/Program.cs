@@ -75,11 +75,14 @@ topfranchisesbyrevenue_P.topfranchisesbyrevenue();
 var getStudentPointsCounter_P = new ApiStudents();
 getStudentPointsCounter_P.getStudentPointsCounter();
 
-*/
-
 // restoreWidgetsToDefault Endpoint
 var restoreWidgetsToDefault_P = new ApiStudents();
 restoreWidgetsToDefault_P.restoreWidgetsToDefault();
+
+*/
+
+var leadsGeneration_P = new ApiStudents();
+leadsGeneration_P.leadsGeneration();
 //var testing = new PartnerEnroll_RF();
 //testing.testing();
 //var ApiStudents = new ApiStudents();
