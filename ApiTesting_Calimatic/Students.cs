@@ -1133,30 +1133,6 @@ namespace ApiTesting_Calimatic
                             finalResult = leadsGeneration_request.Response.First();
                         }
                     }
-                    else
-                    {
-                        var ClassEnrollment_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_leadsGeneration.Content);
-                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
-                        string Alphabetpattern = @"^[a-zA-Z]+$";
-                   //     var abc = Regex.IsMatch(record.franchises, Alphabetpattern);
-                        if (Regex.IsMatch($"{record.type}{record.companyId}", pattern))
-                        {
-                            Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
-                         // Classenroll_Scriptcall.SpecialCharacter(record.companyId, record.type);
-                        }
-
-                       /* else if (Regex.IsMatch(record.companyId, Alphabetpattern))
-                        {
-                            Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
-                           // Classenroll_Scriptcall.AlphabetCharacter(record.companyId);
-                        }*/
-
-                        else
-                        {
-                            Console.WriteLine("API Response: " + ClassEnrollment_Errorrequest.Message);
-                          //  Classenroll_Scriptcall.Nullparamsvalue(record.companyId, record.type);
-                        }
-                    }
                 }
                 catch (Exception ex)
                 {
