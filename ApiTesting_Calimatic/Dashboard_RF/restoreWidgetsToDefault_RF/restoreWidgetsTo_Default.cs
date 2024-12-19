@@ -31,7 +31,6 @@ namespace ApiTesting_Calimatic.Dashboard_RF.restoreWidgetsToDefault_RF
                 return new List<ReadData_restoreWdgets>();
             }
         }
-        //
         private static List<ReadData_restoreWdgets> ReadCsv(string relativePath)
         {
             try

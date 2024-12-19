@@ -1106,15 +1106,27 @@ namespace ApiTesting_Calimatic
                     if (response_leadsGeneration.StatusCode == HttpStatusCode.OK)
                     {
                         var leadsGeneration_request = JsonConvert.DeserializeObject<ApiResponse<List<PartnerEnrollment_Response>>>(response_leadsGeneration.Content);
-                        if (leadsGeneration_request.IsSuccessful == true && leadsGeneration_request.Response.Count > 0)
+                        if (leadsGeneration_request.Response != null && 
+                            leadsGeneration_request.Response.All(item => string.IsNullOrEmpty(item.key) && item.value == "0") && 
+                            leadsGeneration_request.Response.Count > 0)
+                        {
+                            Console.WriteLine("Condition met: An item with key='' and value='0' found.");
+                            leadsGeneration_Scriptcall.ValidateCompanyId(record.companyId);
+                        }
+                        else if (leadsGeneration_request.IsSuccessful == true && leadsGeneration_request.Response.Count > 0)
                         {
                             Console.WriteLine("API Response: \n\n" + response_leadsGeneration.Content);
                             leadsGeneration_Scriptcall.ValidInputValues(record.type, record.companyId);
                         }
+                        else if (leadsGeneration_request.StatusCode == 200 && leadsGeneration_request.IsSuccessful == true 
+                                  && leadsGeneration_request.Response != null && !leadsGeneration_request.Response.Any())
+                        {
+                            Console.WriteLine("Condition met: API response is successful, statusCode is 200, But response is empty.");
+                            leadsGeneration_Scriptcall.ValidTypeValue(record.type, record.companyId);
+                        }
                         else
                         {
                             Console.WriteLine("API Response: " + response_leadsGeneration.Content);
-                          //  EnrollPerformance_Scriptcall.InvalidInputValues(record.type, record.companyId);
                         }
                         if (leadsGeneration_request.Response != null && leadsGeneration_request.Response.Any())
                         {
