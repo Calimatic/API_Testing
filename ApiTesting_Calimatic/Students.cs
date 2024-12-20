@@ -37,6 +37,7 @@ using ApiTesting_Calimatic.Dashboard_RF.restoreWidgetsToDefault_RF;
 using TestProject1.Dashboard.restoreWidgetsToDefault_TestScripts;
 using ApiTesting_Calimatic.Dashboard_RF.leadsGeneration_RF;
 using TestProject1.Dashboard.leadsGeneration_TestScript;
+using ApiTesting_Calimatic.Dashboard_RF.ClassDropOffCountByType_RF;
 
 namespace ApiTesting_Calimatic
 {
@@ -410,7 +411,7 @@ namespace ApiTesting_Calimatic
                 var getfile_partnerenroll = partnerenroll_RF.Getfile_PartnerEnroll();
                 PartnerEnrollment_Response finalResult = null;
 
-                // If no records in companyurl, you may want to handle that case.
+                // If no records in Partner Enrollment, you may want to handle that case.
                 if (getfile_partnerenroll == null || !getfile_partnerenroll.Any())
                 {
                     Console.WriteLine("No records found.");
@@ -477,7 +478,7 @@ namespace ApiTesting_Calimatic
                 var getfile_ClassEnrollCountByType = ClassEnrollCountByType_RF.Getfile_ClassEnrollCountByType();
                 PartnerEnrollment_Response finalResult = null;
 
-                // If no records in companyurl, you may want to handle that case.
+                // If no records in ClassEnrollmentCountByType, you may want to handle that case.
                 if (getfile_ClassEnrollCountByType == null || !getfile_ClassEnrollCountByType.Any())
                 {
                     Console.WriteLine("No records found.");
@@ -553,7 +554,7 @@ namespace ApiTesting_Calimatic
             var getfile_enrollpermformance = enrollperformance_RF.Getfile_EnrollmentPerformance();
             PartnerEnrollment_Response finalResult = null;
 
-            // If no records in companyurl, you may want to handle that case.
+            // If no records in Enrollment Performance, you may want to handle that case.
             if (getfile_enrollpermformance == null || !getfile_enrollpermformance.Any())
             {
                 Console.WriteLine("No records found.");
@@ -647,7 +648,7 @@ namespace ApiTesting_Calimatic
             var enrollCountBytype = enrollCountBytype_RF.Getfile_EnrollCountByType();
             PartnerEnrollment_Response finalResult = null;
 
-            // If no records in companyurl, you may want to handle that case.
+            // If no records in EventEnrollmentCountByType, you may want to handle that case.
             if (enrollCountBytype == null || !enrollCountBytype.Any())
             {
                 Console.WriteLine("No records found.");
@@ -741,7 +742,7 @@ namespace ApiTesting_Calimatic
             var stdAttendance = studentAttendance_RF.Getfile_studentAttendance();
             PartnerEnrollment_Response finalResult = null;
 
-            // If no records in companyurl, you may want to handle that case.
+            // If no records in studentAttendance, you may want to handle that case.
             if (stdAttendance == null || !stdAttendance.Any())
             {
                 Console.WriteLine("No records found.");
@@ -999,7 +1000,7 @@ namespace ApiTesting_Calimatic
             var reset = Restetpass.restoreWidgetsToDefault_FP();
             ForgotPassword_Class finalResult = null;
 
-            // If no records in ResetPassword, you may want to handle that case.
+            // If no records in restoreWidgetsToDefault, you may want to handle that case.
             if (reset == null || !reset.Any())
             {
                 Console.WriteLine("No records found.");
@@ -1072,8 +1073,9 @@ namespace ApiTesting_Calimatic
             }
             return finalResult;
         }
-        */
+        
 
+        // 12- LeadsGeneration Endpoint Check
         public PartnerEnrollment_Response leadsGeneration()
         {
             Login();
@@ -1082,7 +1084,7 @@ namespace ApiTesting_Calimatic
             var getfile_ClassEnrollCountByType = ClassEnrollCountByType_RF.Getfile_leadsGeneration();
             PartnerEnrollment_Response finalResult = null;
 
-            // If no records in companyurl, you may want to handle that case.
+            // If no records in LeadsGeneration, you may want to handle that case.
             if (getfile_ClassEnrollCountByType == null || !getfile_ClassEnrollCountByType.Any())
             {
                 Console.WriteLine("No records found.");
@@ -1141,5 +1143,76 @@ namespace ApiTesting_Calimatic
             }
             return finalResult;
         }
+        */
+
+        // 13- ClassDropOffCountByType Endpoint Check
+        public PartnerEnrollment_Response ClassDropOffCountByType()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Dashboard/ClassDropOffCountByType -----------------\n");
+            var ClassDropOffCountByType_RF = new ClassDropOffCountByType_DataRead();
+            var getfile_ClassDropOffCountByType = ClassDropOffCountByType_RF.Getfile_ClassDropOffCountByType();
+            PartnerEnrollment_Response finalResult = null;
+
+            // If no records in ClassDropOffCountByType, you may want to handle that case.
+            if (getfile_ClassDropOffCountByType == null || !getfile_ClassDropOffCountByType.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_ClassDropOffCountByType)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"type: {record.type}, franchises: {record.franchises}");
+                    string queryString_ClassDrop = $"type={record.type}&franchises={record.franchises}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/Dashboard/ClassDropOffCountByType?{queryString_ClassDrop}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_ClassDrop = restClient.Execute(restRequest);
+                    var ClassDrop_Scriptcall = new TestScripts_leadsGeneration();
+                    if (response_ClassDrop.StatusCode == HttpStatusCode.OK)
+                    {
+                        var ClassDrop_request = JsonConvert.DeserializeObject<ApiResponse<List<PartnerEnrollment_Response>>>(response_ClassDrop.Content);
+                        if (ClassDrop_request.Response != null &&
+                            ClassDrop_request.Response.All(item => string.IsNullOrEmpty(item.key) && item.value == "0") &&
+                            ClassDrop_request.Response.Count > 0)
+                        {
+                            Console.WriteLine("Condition met: An item with key='' and value='0' found.");
+                            //  ClassDrop_Scriptcall.Validatefranchisesvalue(record.franchises);
+                        }
+                        else if (ClassDrop_request.IsSuccessful == true && ClassDrop_request.Response.Count > 0)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_ClassDrop.Content);
+                            //   ClassDrop_Scriptcall.ValidInputValues(record.type, record.companyId);
+                        }
+                        else if (ClassDrop_request.StatusCode == 200 && ClassDrop_request.IsSuccessful == true
+                                  && ClassDrop_request.Response != null && !ClassDrop_request.Response.Any())
+                        {
+                            Console.WriteLine("Condition met: API response is successful, statusCode is 200, But response is empty.");
+                            // ClassDrop_Scriptcall.ValidTypeValue(record.type, record.companyId);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_ClassDrop.Content);
+                        }
+                        if (ClassDrop_request.Response != null && ClassDrop_request.Response.Any())
+                        {
+                            finalResult = ClassDrop_request.Response.First();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
     }
 }

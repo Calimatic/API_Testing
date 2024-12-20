@@ -79,10 +79,16 @@ getStudentPointsCounter_P.getStudentPointsCounter();
 var restoreWidgetsToDefault_P = new ApiStudents();
 restoreWidgetsToDefault_P.restoreWidgetsToDefault();
 
-*/
-
+// leadsGeneration Endpoint
 var leadsGeneration_P = new ApiStudents();
 leadsGeneration_P.leadsGeneration();
+*/
+
+//ClassDropOffCountByType Endpoint
+var ClassDropOffCountByType_P = new ApiStudents();
+ClassDropOffCountByType_P.ClassDropOffCountByType();
+
+
 //var testing = new PartnerEnroll_RF();
 //testing.testing();
 //var ApiStudents = new ApiStudents();
