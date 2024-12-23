@@ -16,9 +16,6 @@ namespace TestProject1.Dashboard.leadsGeneration_TestScript
             Console.WriteLine("\nTest Scripts Results: ");
             Console.WriteLine("Valid Input Values                                                      :    PASS");
             Console.WriteLine("Dummy Response                                                          :    FAIL");
-            //   Console.WriteLine("Alphabet characters used in input value                                :    FAIL");
-            //   Console.WriteLine("Null Input role value                                                  :    FAIL");
-            //   Console.WriteLine("BeginExecuteNonQuery: CommandText property has not been initialized    :    FAIL");
         }
         [TestMethod]
         public void InvalidCompanyId()

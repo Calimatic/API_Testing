@@ -38,6 +38,7 @@ using TestProject1.Dashboard.restoreWidgetsToDefault_TestScripts;
 using ApiTesting_Calimatic.Dashboard_RF.leadsGeneration_RF;
 using TestProject1.Dashboard.leadsGeneration_TestScript;
 using ApiTesting_Calimatic.Dashboard_RF.ClassDropOffCountByType_RF;
+using TestProject1.Dashboard.ClassDropOffCountByType_TestScripts;
 
 namespace ApiTesting_Calimatic
 {
@@ -1174,27 +1175,14 @@ namespace ApiTesting_Calimatic
                     restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
                     restRequest.RequestFormat = DataFormat.Json;
                     var response_ClassDrop = restClient.Execute(restRequest);
-                    var ClassDrop_Scriptcall = new TestScripts_leadsGeneration();
+                    var ClassDrop_Scriptcall = new TestScripts_ClassDropOffCountByType();
                     if (response_ClassDrop.StatusCode == HttpStatusCode.OK)
                     {
                         var ClassDrop_request = JsonConvert.DeserializeObject<ApiResponse<List<PartnerEnrollment_Response>>>(response_ClassDrop.Content);
-                        if (ClassDrop_request.Response != null &&
-                            ClassDrop_request.Response.All(item => string.IsNullOrEmpty(item.key) && item.value == "0") &&
-                            ClassDrop_request.Response.Count > 0)
-                        {
-                            Console.WriteLine("Condition met: An item with key='' and value='0' found.");
-                            //  ClassDrop_Scriptcall.Validatefranchisesvalue(record.franchises);
-                        }
-                        else if (ClassDrop_request.IsSuccessful == true && ClassDrop_request.Response.Count > 0)
+                        if (ClassDrop_request.IsSuccessful == true && ClassDrop_request.Response.Count > 0)
                         {
                             Console.WriteLine("API Response: \n\n" + response_ClassDrop.Content);
-                            //   ClassDrop_Scriptcall.ValidInputValues(record.type, record.companyId);
-                        }
-                        else if (ClassDrop_request.StatusCode == 200 && ClassDrop_request.IsSuccessful == true
-                                  && ClassDrop_request.Response != null && !ClassDrop_request.Response.Any())
-                        {
-                            Console.WriteLine("Condition met: API response is successful, statusCode is 200, But response is empty.");
-                            // ClassDrop_Scriptcall.ValidTypeValue(record.type, record.companyId);
+                            ClassDrop_Scriptcall.ValidInputValues(record.type, record.franchises);
                         }
                         else
                         {
@@ -1203,6 +1191,43 @@ namespace ApiTesting_Calimatic
                         if (ClassDrop_request.Response != null && ClassDrop_request.Response.Any())
                         {
                             finalResult = ClassDrop_request.Response.First();
+                        }
+                    }
+                    else
+                    {
+                        var ClassDrop_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_ClassDrop.Content);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        string Alphabetpattern = @"^[a-zA-Z]+$";
+                        string combinedInputValues_Special = $"{record.type},{record.franchises}";
+                        string combinedInputValues_Null = $"{record.type},{record.franchises}";
+                        string Null_testInput = @"^,$";
+                        string testInputs = @"^\s*$";
+                        var abc = Regex.IsMatch(record.type, Alphabetpattern);
+                
+                        if (Regex.IsMatch(record.franchises, pattern))
+                        {
+                            Console.WriteLine("API Response: " + response_ClassDrop.Content);
+                            ClassDrop_Scriptcall.SpecialCharacter_franchises(record.franchises);
+                        }
+                        else if (Regex.IsMatch(combinedInputValues_Null, Null_testInput))
+                        {
+                             Console.WriteLine("API Response: " + ClassDrop_Errorrequest.Message);
+                            ClassDrop_Scriptcall.ValidateInput_NullValues(record.type, record.franchises);
+                        }
+                        else if (Regex.IsMatch(record.type ?? "", testInputs))
+                        {
+                            Console.WriteLine("API Response: " + ClassDrop_Errorrequest.Message);
+                            ClassDrop_Scriptcall.ValidateInput_NulltypeValues(record.type);
+                        }
+                        else if (Regex.IsMatch(record.franchises ?? "", testInputs))
+                        {
+                            Console.WriteLine("API Response: " + ClassDrop_Errorrequest.Message);
+                            ClassDrop_Scriptcall.ValidateInput_Nullfranchises_Values(record.franchises);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + ClassDrop_Errorrequest.Message);
+                            ClassDrop_Scriptcall.ContainsAlphabet_franchises(record.franchises);
                         }
                     }
                 }
