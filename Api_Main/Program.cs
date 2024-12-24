@@ -7,7 +7,7 @@ using TestProject1.Dashboard.Partner_Enrollment;
 
 
 //                                                  -------------AUTH------------
-/*
+
 //AppLogin endpoint
 Api_AppLogin appLogin = new Api_AppLogin();
 appLogin.MainAppLogin();
@@ -29,10 +29,10 @@ var resetPassword_1 = new ApiStudents();
 resetPassword_1.ResetPassword();
 
 
-//Forgot Password
-Forgot_Password_Dataget FP = new Forgot_Password_Dataget();
-FP.ForgotGetData();
-*/
+////Forgot Password
+//Forgot_Password_Dataget FP = new Forgot_Password_Dataget();
+//FP.ForgotGetData();
+
 
 //                                                  ----------Dashboard----------
 /*//Widgets Endpoint

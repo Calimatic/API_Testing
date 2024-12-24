@@ -40,6 +40,7 @@ using TestProject1.Dashboard.leadsGeneration_TestScript;
 using ApiTesting_Calimatic.Dashboard_RF.ClassDropOffCountByType_RF;
 using TestProject1.Dashboard.ClassDropOffCountByType_TestScripts;
 using ApiTesting_Calimatic.Dashboard_RF.EventDropOffCountByType_RF;
+using ApiTesting_Calimatic.AppLoginClass;
 
 namespace ApiTesting_Calimatic
 {
@@ -76,10 +77,9 @@ namespace ApiTesting_Calimatic
         }
 
         //------------->Auth<-------------
-        /*      // 1-  AppLogin Endpoint Check      ----/api/Auth/AppLogin----
-              public AppLogin TestLogin(csvData requestdata)
+              // 1-  AppLogin Endpoint Check      ----/api/Auth/AppLogin----
+              public AppLogin_response TestLogin(csvData requestdata)
               {
-
                   Login();
                   var restClient = new RestClient("https://angular-api.calibermatrix.com");
                   var restRequest = new RestRequest("/api/Auth/AppLogin", Method.Post);
@@ -88,17 +88,17 @@ namespace ApiTesting_Calimatic
                   restRequest.RequestFormat = DataFormat.Json;
                   restRequest.AddJsonBody(requestdata);
                   var responsedata = restClient.Execute(restRequest);
-                  var DataLogin = JsonConvert.DeserializeObject<ApiTesting_Calimatic.AppLoginFolder.AppLogin>(responsedata.Content);
+                  var DataLogin = JsonConvert.DeserializeObject<ApiTesting_Calimatic.AppLoginClass.AppLogin_response>(responsedata.Content);
                   var LoginScriptcall = new login_Testscripts();
-                  if (DataLogin.IsSuccessful == true)
+                  if (DataLogin.isSuccessful == true)
                   {
                       Console.WriteLine("API Response: " + responsedata.Content);           
-                      LoginScriptcall.ValidLoginCredential(DataLogin.IsSuccessful);
+                      LoginScriptcall.ValidLoginCredential(DataLogin.isSuccessful);
                   }
                   else
                   {
                       Console.WriteLine("API Response: " + responsedata.Content);
-                      LoginScriptcall.inValidLoginCredential(DataLogin.IsSuccessful);
+                      LoginScriptcall.inValidLoginCredential(DataLogin.isSuccessful);
                   }
 
                   return DataLogin;
@@ -364,7 +364,6 @@ namespace ApiTesting_Calimatic
               //       var username = JsonConvert.DeserializeObject<duplusername>(content);
               //       return username;
               //   }
-      */
 
         //------------->Dashboard<-------------
             // 1- Widgets Endpoint Check
