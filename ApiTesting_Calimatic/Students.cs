@@ -78,7 +78,7 @@ namespace ApiTesting_Calimatic
 
         //------------->Auth<-------------
               // 1-  AppLogin Endpoint Check      ----/api/Auth/AppLogin----
-              public AppLogin_response TestLogin(csvData requestdata)
+        public AppLogin_response TestLogin(csvData requestdata)
               {
                   Login();
                   var restClient = new RestClient("https://angular-api.calibermatrix.com");
@@ -104,8 +104,8 @@ namespace ApiTesting_Calimatic
                   return DataLogin;
               }
 
-              //2-   Forgot Password          --- /api/Auth//api/Auth/ForgotPassword ---
-              public ForgotPassword_Class ForgotPassword()
+        //2-   Forgot Password          --- /api/Auth//api/Auth/ForgotPassword ---
+        public ForgotPassword_Class ForgotPassword()
               {
                   Login();
                   Console.WriteLine("----------------- /api/Auth/ForgotPassword -----------------\n");
@@ -159,8 +159,8 @@ namespace ApiTesting_Calimatic
                    return finalResult;
               }
 
-              //3- Forgot Password OTP Verification           --- /api/Auth/ForgotPasswordOtpVerification ---
-              public ForgotPassword_Class OtpForgotPassword()
+        //3- Forgot Password OTP Verification           --- /api/Auth/ForgotPasswordOtpVerification ---
+        public ForgotPassword_Class OtpForgotPassword()
               {
                   Login();
                   Console.WriteLine("----------------- /api/Auth/ForgotPasswordOtpVerification -----------------\n");
@@ -212,8 +212,8 @@ namespace ApiTesting_Calimatic
                   return finalResult;
               }
 
-              //4- get Company URL            --- /api/Auth/getCompanyUrl ---
-              public ForgotPassword_Class GetCompanyUrl()
+        //4- get Company URL            --- /api/Auth/getCompanyUrl ---
+        public ForgotPassword_Class GetCompanyUrl()
               {
                   Login();
                   Console.WriteLine("----------------- /api/Auth/getCompanyUrl -----------------\n");
@@ -263,8 +263,8 @@ namespace ApiTesting_Calimatic
                   return finalResult;
               }
 
-              //5- Reset Password            --- /api/Auth/ResetPassword ---
-              public ForgotPassword_Class ResetPassword()
+        //5- Reset Password            --- /api/Auth/ResetPassword ---
+         public ForgotPassword_Class ResetPassword()
               {
                   Login();
                   Console.WriteLine("\n----------------- /api/Auth/ResetPassword -----------------\n");
@@ -325,7 +325,7 @@ namespace ApiTesting_Calimatic
                   }
                   return finalResult;
               }
-              //GET Students Record
+        //GET Students Record
               //public StudentResponse GetStudents()
               //{
               //    //GET Method
@@ -367,7 +367,7 @@ namespace ApiTesting_Calimatic
 
         //------------->Dashboard<-------------
             // 1- Widgets Endpoint Check
-            public bool Widgets()
+        public bool Widgets()
             {
                 try 
                 { 
@@ -403,8 +403,8 @@ namespace ApiTesting_Calimatic
                 return false;
             }
 
-          // 2- Partner Enrollment Endpoint Check
-            public PartnerEnrollment_Response PartnerEnrollment()
+        // 2- Partner Enrollment Endpoint Check
+        public PartnerEnrollment_Response PartnerEnrollment()
             {
                 Login();
                 Console.WriteLine("----------------- /api/Dashboard/PartnerEnrollment -----------------\n");
@@ -470,8 +470,8 @@ namespace ApiTesting_Calimatic
                     return finalResult;
             }
 
-            // 3- ClassEnrollmentCountByType Endpoint Check
-           public PartnerEnrollment_Response ClassEnrollmentCountByType()
+        // 3- ClassEnrollmentCountByType Endpoint Check
+        public PartnerEnrollment_Response ClassEnrollmentCountByType()
             {
                 Login();
                 Console.WriteLine("----------------- /api/Dashboard/ClassEnrollmentCountByType -----------------\n");
