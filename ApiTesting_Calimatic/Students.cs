@@ -39,6 +39,7 @@ using ApiTesting_Calimatic.Dashboard_RF.leadsGeneration_RF;
 using TestProject1.Dashboard.leadsGeneration_TestScript;
 using ApiTesting_Calimatic.Dashboard_RF.ClassDropOffCountByType_RF;
 using TestProject1.Dashboard.ClassDropOffCountByType_TestScripts;
+using ApiTesting_Calimatic.Dashboard_RF.EventDropOffCountByType_RF;
 
 namespace ApiTesting_Calimatic
 {
@@ -366,7 +367,7 @@ namespace ApiTesting_Calimatic
       */
 
         //------------->Dashboard<-------------
-        /*    // 1- Widgets Endpoint Check
+            // 1- Widgets Endpoint Check
             public bool Widgets()
             {
                 try 
@@ -875,8 +876,7 @@ namespace ApiTesting_Calimatic
                 Console.WriteLine("\nAPI Response : " + ex.Message);
             }
             return false;
-        }
-         
+        }         
 
         // 8- listofleadscount Endpoint Check
         public bool listofleadscount()
@@ -990,7 +990,6 @@ namespace ApiTesting_Calimatic
             }
             return false;
         }
-        
 
         // 11- restoreWidgetsToDefault Endpoint Check
         public ForgotPassword_Class restoreWidgetsToDefault()
@@ -1073,8 +1072,7 @@ namespace ApiTesting_Calimatic
                 }
             }
             return finalResult;
-        }
-        
+        }   
 
         // 12- LeadsGeneration Endpoint Check
         public PartnerEnrollment_Response leadsGeneration()
@@ -1144,7 +1142,6 @@ namespace ApiTesting_Calimatic
             }
             return finalResult;
         }
-        */
 
         // 13- ClassDropOffCountByType Endpoint Check
         public PartnerEnrollment_Response ClassDropOffCountByType()
@@ -1228,6 +1225,99 @@ namespace ApiTesting_Calimatic
                         {
                             Console.WriteLine("API Response: " + ClassDrop_Errorrequest.Message);
                             ClassDrop_Scriptcall.ContainsAlphabet_franchises(record.franchises);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+        
+        // 14- EventDropOffCountByType Endpoint Check
+        public PartnerEnrollment_Response EventDropOffCountByType()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Dashboard/EventDropOffCountByType -----------------\n");
+            var EventDropOffCountByType_RF = new EventDropOffCountByType_DataRead();
+            var getfile_EventDropOffCountByType = EventDropOffCountByType_RF.Getfile_EventDropOffCountByType();
+            PartnerEnrollment_Response finalResult = null;
+
+            // If no records in EventDropOffCountByType, you may want to handle that case.
+            if (getfile_EventDropOffCountByType == null || !getfile_EventDropOffCountByType.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_EventDropOffCountByType)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"type: {record.type}, franchises: {record.franchises}");
+                    string queryString_EventDrop = $"type={record.type}&franchises={record.franchises}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/Dashboard/EventDropOffCountByType?{queryString_EventDrop}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_EventDrop = restClient.Execute(restRequest);
+                    var EventDrop_Scriptcall = new TestScripts_ClassDropOffCountByType();
+                    if (response_EventDrop.StatusCode == HttpStatusCode.OK)
+                    {
+                        var EventDrop_request = JsonConvert.DeserializeObject<ApiResponse<List<PartnerEnrollment_Response>>>(response_EventDrop.Content);
+                        if (EventDrop_request.IsSuccessful == true && EventDrop_request.Response.Count > 0)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_EventDrop.Content);
+                            EventDrop_Scriptcall.ValidInputValues(record.type, record.franchises);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_EventDrop.Content);
+                        }
+                        if (EventDrop_request.Response != null && EventDrop_request.Response.Any())
+                        {
+                            finalResult = EventDrop_request.Response.First();
+                        }
+                    }
+                    else
+                    {
+                        var EventDrop_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_EventDrop.Content);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        string Alphabetpattern = @"^[a-zA-Z]+$";
+                        string combinedInputValues_Special = $"{record.type},{record.franchises}";
+                        string combinedInputValues_Null = $"{record.type},{record.franchises}";
+                        string Null_testInput = @"^,$";
+                        string testInputs = @"^\s*$";
+                        var abc = Regex.IsMatch(record.type, Alphabetpattern);
+
+                        if (Regex.IsMatch(record.franchises, pattern))
+                        {
+                            Console.WriteLine("API Response: " + response_EventDrop.Content);
+                            EventDrop_Scriptcall.SpecialCharacter_franchises(record.franchises);
+                        }
+                        else if (Regex.IsMatch(combinedInputValues_Null, Null_testInput))
+                        {
+                            Console.WriteLine("API Response: " + EventDrop_Errorrequest.Message);
+                            EventDrop_Scriptcall.ValidateInput_NullValues(record.type, record.franchises);
+                        }   
+                        else if (Regex.IsMatch(record.type ?? "", testInputs))
+                        {
+                            Console.WriteLine("API Response: " + EventDrop_Errorrequest.Message);
+                            EventDrop_Scriptcall.ValidateInput_NulltypeValues(record.type);
+                        }
+                        else if (Regex.IsMatch(record.franchises ?? "", testInputs))
+                        {
+                            Console.WriteLine("API Response: " + EventDrop_Errorrequest.Message);
+                            EventDrop_Scriptcall.ValidateInput_Nullfranchises_Values(record.franchises);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + EventDrop_Errorrequest.Message);
+                            EventDrop_Scriptcall.ContainsAlphabet_franchises(record.franchises);
                         }
                     }
                 }
