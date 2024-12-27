@@ -41,6 +41,11 @@ using ApiTesting_Calimatic.Dashboard_RF.ClassDropOffCountByType_RF;
 using TestProject1.Dashboard.ClassDropOffCountByType_TestScripts;
 using ApiTesting_Calimatic.Dashboard_RF.EventDropOffCountByType_RF;
 using ApiTesting_Calimatic.AppLoginClass;
+using ApiTesting_Calimatic.Dashboard_RF.currentmonthwidgetscount_RF;
+using TestProject1.Dashboard.currentmonthwidgetType_TestScripts;
+using Commons.DTO_s.Dashboards.currentmonthwidgetcount_Dataget;
+using Newtonsoft.Json.Linq;
+using Commons.DTO_s.Dashboards.Calender;
 
 namespace ApiTesting_Calimatic
 {
@@ -876,7 +881,6 @@ namespace ApiTesting_Calimatic
             }
             return false;
         }         
-
         // 8- listofleadscount Endpoint Check
         public bool listofleadscount()
         {
@@ -1328,5 +1332,130 @@ namespace ApiTesting_Calimatic
             return finalResult;
         }
 
+        // 15- currentmonthwidgetscount Endpint Check
+        public Response_currentmonthwidgetscount currentmonthwidgetscount()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Dashboard/currentmonthwidgetscount -----------------\n");
+            var Currentmonthwidgetscount_RF = new currentmonthwidgetscount_DataRead();
+            var getfile_currentmonthwidgetscount = Currentmonthwidgetscount_RF.Getfile_currentmont_WC();
+            Response_currentmonthwidgetscount finalResult = null;
+
+            // If no records in currentmonthwidgetscount, you may want to handle that case.
+            if (getfile_currentmonthwidgetscount == null || !getfile_currentmonthwidgetscount.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_currentmonthwidgetscount)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"widgetType: {record.widgetType}");
+                    string queryString_currentmonth_WC = $"widgetType={record.widgetType}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/Dashboard/currentmonthwidgetscount?{queryString_currentmonth_WC}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_currentmonth_WC = restClient.Execute(restRequest);
+                    var WidgetType_Scriptcall = new TestScripts_currentmonthwidgetType();
+                    if (response_currentmonth_WC.StatusCode == HttpStatusCode.OK)
+                    {
+                        Console.WriteLine("API Response: \n\n" + response_currentmonth_WC.Content);
+                        WidgetType_Scriptcall.ValidateInputvalue(record.widgetType);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 16-  triowidgetscount Endpoint Check
+        public Response_currentmonthwidgetscount triowidgetscount()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Dashboard/triowidgetscount -----------------\n");
+            var triowidgetscount_RF = new currentmonthwidgetscount_DataRead();
+            var getfile_triowidgetscount = triowidgetscount_RF.Getfile_currentmont_WC();
+            Response_currentmonthwidgetscount finalResult = null;
+
+            // If no records in triowidgetscount, you may want to handle that case.
+            if (getfile_triowidgetscount == null || !getfile_triowidgetscount.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_triowidgetscount)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"widgetType: {record.widgetType}");
+                    string queryString_triowidgetscount = $"widgetType={record.widgetType}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/Dashboard/triowidgetscount?{queryString_triowidgetscount}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_triowidgetscount = restClient.Execute(restRequest);
+                    var WidgetType_Scriptcall = new TestScripts_currentmonthwidgetType();
+                    var ClassDrop_request = JsonConvert.DeserializeObject<ApiResponse<Response_currentmonthwidgetscount>>(response_triowidgetscount.Content);
+                    if (response_triowidgetscount.StatusCode == HttpStatusCode.OK)
+                    {
+                        Console.WriteLine("API Response: \n\n" + response_triowidgetscount.Content);
+                        WidgetType_Scriptcall.ValidateInputvalue(record.widgetType);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 17- DashbaordCalender Endpoint Check
+        public bool Calendar()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/Dashboard/Calendar -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/Dashboard/calendar", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_topfranchisesby = restClient.Get(restRequest);
+                var topfranchisesbyrevenue_Scriptcall = new TestScripts_topfranchisesbyrevenue();
+                var listofleadcount_request = JsonConvert.DeserializeObject<General_Response>(response_topfranchisesby.Content);
+                if (response_topfranchisesby.StatusCode == HttpStatusCode.OK)
+                {
+                    if (listofleadcount_request.isSuccessful == true)
+                    {
+                        Console.WriteLine("API Response: " + response_topfranchisesby.Content);
+                        topfranchisesbyrevenue_Scriptcall.Successfully_Response();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_topfranchisesby.Content);
+                    topfranchisesbyrevenue_Scriptcall.Failed_Response();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
+        }
     }
 }

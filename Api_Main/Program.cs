@@ -7,7 +7,7 @@ using TestProject1.Dashboard.Partner_Enrollment;
 
 
 //                                                  -------------AUTH------------
-
+/*
 //AppLogin endpoint
 Api_AppLogin appLogin = new Api_AppLogin();
 appLogin.MainAppLogin();
@@ -32,7 +32,7 @@ resetPassword_1.ResetPassword();
 ////Forgot Password
 //Forgot_Password_Dataget FP = new Forgot_Password_Dataget();
 //FP.ForgotGetData();
-
+*/
 
 //                                                  ----------Dashboard----------
 /*//Widgets Endpoint
@@ -87,11 +87,22 @@ leadsGeneration_P.leadsGeneration();
 //ClassDropOffCountByType Endpoint
 var ClassDropOffCountByType_P = new ApiStudents();
 ClassDropOffCountByType_P.ClassDropOffCountByType();
-*/
 
-//EventDropOffCountByType
+//EventDropOffCountByType Endpoint
 var EventDropOffCountByType_P = new ApiStudents();
 EventDropOffCountByType_P.EventDropOffCountByType();
+
+// currentmonthwidgetscount Endpoint
+var currentmonthwidgetscount_P = new ApiStudents();
+currentmonthwidgetscount_P.currentmonthwidgetscount();
+
+// response_triowidgetscount Endpoint
+var triowidgetscount_P = new ApiStudents();
+triowidgetscount_P.triowidgetscount();
+*/
+
+// Calender Endpoint
+var Calender_P =new ApiStudents().Calendar();
 
 //var testing = new PartnerEnroll_RF();
 //testing.testing();
