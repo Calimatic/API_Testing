@@ -99,10 +99,17 @@ currentmonthwidgetscount_P.currentmonthwidgetscount();
 // response_triowidgetscount Endpoint
 var triowidgetscount_P = new ApiStudents();
 triowidgetscount_P.triowidgetscount();
-*/
 
 // Calender Endpoint
 var Calender_P =new ApiStudents().Calendar();
+
+
+// studentDemographics Endpoint
+var studentDemographics_P = new ApiStudents().studentDemographics();
+*/
+
+// announcement Endpoint
+var announcement_P = new ApiStudents().Announcement_Endpoint();
 
 //var testing = new PartnerEnroll_RF();
 //testing.testing();
