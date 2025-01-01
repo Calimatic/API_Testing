@@ -106,10 +106,20 @@ var Calender_P =new ApiStudents().Calendar();
 
 // studentDemographics Endpoint
 var studentDemographics_P = new ApiStudents().studentDemographics();
-*/
 
 // announcement Endpoint
 var announcement_P = new ApiStudents().Announcement_Endpoint();
+*/
+
+//                                                  -----------Students----------
+//1- getEnrollmentDropdown Ebdpoint
+var getEnrollmentDropdown_P = new ApiStudents().getEnrollmentDropdown();
+
+//2- students Endpoint
+var Student_students_P = new ApiStudents().Student_students();
+
+//3- setStudentStatus
+var setStudentStatus_P = new ApiStudents().setStudentStatus();
 
 //var testing = new PartnerEnroll_RF();
 //testing.testing();
@@ -128,4 +138,4 @@ var announcement_P = new ApiStudents().Announcement_Endpoint();
 ////
 //ApiStudents.GetStudents();
 //Console.WriteLine("Successfully Executed GetStudents");
-//Console.ReadLine();
+//Console.ReadLine();7
