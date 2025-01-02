@@ -59,6 +59,15 @@ using TestProject1.Student_TestScripts.students_TestScripts;
 using ApiTesting_Calimatic.Students_RF;
 using TestProject1.Student_TestScripts.setStudentStatus_TestScripts;
 using ApiTtesting_Calimatic;
+using Commons.DTO_s.PaymentCommon;
+using ApiTesting_Calimatic.PaymentCommon_RF.DuplicateUsername_RF;
+using TestProject1.PaymentCommon_TestScripts.DuplicateUserName_TestScripts;
+using System.Transactions;
+using Commons.DTO_s.PaymentCommon.GetTransactionConfig;
+using ApiTesting_Calimatic.PaymentCommon_RF.GetTransactionConfig_RF;
+using TestProject1.PaymentCommon_TestScripts.GetTransactionConfig_TestScripts;
+using Commons.DTO_s.PaymentCommon.GetAllEnrolledCourses;
+using TestProject1.PaymentCommon_TestScripts.GetAllEnrolledCourses_TestScripts;
 
 namespace ApiTesting_Calimatic
 {
@@ -1574,7 +1583,7 @@ namespace ApiTesting_Calimatic
                 }
         */
 
-                                    //-------------------->/api/Student/getCompanyDropdown<--------------------
+                                    //-------------------->/api/Student/<--------------------
 
         // 1- getEnrollmentDropdown Check Endpoint
         public bool getEnrollmentDropdown()
@@ -1743,6 +1752,232 @@ namespace ApiTesting_Calimatic
                 }
             }
             return finalResult;
+        }
+
+                                //--------------------->/api/PaymentCommon/<--------------------
+        // 1-  Duplicate UserName Endpoint Check 
+        public Root_PaymentCommon DuplicateUserName()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/PaymentCommon/DuplicateUserName -----------------\n");
+            var Duplicateusername_RF = new DuplicateUserName_DataRead();
+            var getfile_Duplicateusername = Duplicateusername_RF.Getfile_Duplicateusername();
+            Root_PaymentCommon finalResult = null;
+
+            // If no records in EventDropOffCountByType, you may want to handle that case.
+            if (getfile_Duplicateusername == null || !getfile_Duplicateusername.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_Duplicateusername)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"username: {record.username}");
+                    string queryString_DuplicateUsername = $"username={record.username}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/PaymentCommon/DuplicateUserName?{queryString_DuplicateUsername}", Method.Post);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_DuplicateuserName = restClient.Execute(restRequest);
+                    var DuplicateUserName_Scriptcall = new TestScripts_DuplicateUserName();
+                    if (response_DuplicateuserName.StatusCode == HttpStatusCode.OK)
+                    {
+                        var DuplicateUsername_request = JsonConvert.DeserializeObject<Root_PaymentCommon>(response_DuplicateuserName.Content);
+                        ApiResponse_PaymentCommon.Set_PaymentCommon(DuplicateUsername_request);
+                        if (DuplicateUsername_request.response.response.isExist == true)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_DuplicateuserName.Content);
+                            DuplicateUserName_Scriptcall.ValidInputValue(record.username);
+                        }
+                        else
+                        {
+                            var EventDrop_Errorrequest = JsonConvert.DeserializeObject<Root_ErrorHandler_DuplicateUserName>(response_DuplicateuserName.Content);
+                            string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                            string Alphabetpattern = @"^[a-zA-Z]+$";
+                            string Null_testInput = @"^,$";
+                            string testInputs = @"^\s*$";
+                            var abc = Regex.IsMatch(record.username, Alphabetpattern);
+
+                            if (Regex.IsMatch(record.username, pattern))
+                            {
+                                Console.WriteLine("API Response: " + response_DuplicateuserName.Content);
+                                DuplicateUserName_Scriptcall.SpecialCharacter_username(record.username);
+                            }
+                            else if (Regex.IsMatch(record.username ?? "", @"^\d+$"))
+                            {
+                                Console.WriteLine("API Response: " + EventDrop_Errorrequest.response);
+                                DuplicateUserName_Scriptcall.InValidInputValue(record.username);
+                            }
+                            else if (Regex.IsMatch(record.username ?? "", testInputs))
+                            {
+                                Console.WriteLine("API Response: " + EventDrop_Errorrequest.response);
+                                // DuplicateUserName_Scriptcall.ValidateInput_Nullfranchises_Values(record.username);
+                            }
+                            else
+                            {
+                                Console.WriteLine("API Response: " + EventDrop_Errorrequest.response);
+                                DuplicateUserName_Scriptcall.ContainsAlphabet_franchises(record.username);
+                            }
+                        }
+                        if (DuplicateUsername_request.response != null)
+                        {
+                            finalResult = DuplicateUsername_request;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 2- GetTransactionConfig Endpoint Check
+        public Root_GetTransactionConfig GetTransactionConfig()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/PaymentCommon/GetTransactionConfig -----------------\n");
+            var GetTransactionConfig_RF = new GetTransactionConfig_DataRead();
+            var getfile_GetTransactionConfig = GetTransactionConfig_RF.Getfile_GetTransactionConfig();
+            Root_GetTransactionConfig finalResult = null;
+
+            // If no records in GetTransactionConfig, you may want to handle that case.
+            if (getfile_GetTransactionConfig == null || !getfile_GetTransactionConfig.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_GetTransactionConfig)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"CompanyGuid: {record.CompanyGuid}");
+                    string queryString_DuplicateUsername = $"CompanyGuid={record.CompanyGuid}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/PaymentCommon/GetTransactionConfig?{queryString_DuplicateUsername}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_DuplicateuserName = restClient.Execute(restRequest);
+                    var DuplicateUserName_Scriptcall = new TestScripts_GetTransactionConfig();
+                    // var Get_request = JsonConvert.DeserializeObject<Response_GetTransactionConfig>(response_DuplicateuserName.Content);
+
+                    try
+                    {
+                        if ((int)response_DuplicateuserName.StatusCode == 200)
+                        {
+                            var DuplicateUsername_request = JsonConvert.DeserializeObject<Root_GetTransactionConfig>(response_DuplicateuserName.Content);
+                            ApiResponse_GetTransactionConfig.Set_GetTransactionConfig(DuplicateUsername_request);
+
+                            if (DuplicateUsername_request.response.statusCode == 200 &&
+                               DuplicateUsername_request.response.isSuccessful == true)
+                            {
+                                Console.WriteLine("API Response: \n\n" + response_DuplicateuserName.Content);
+                                DuplicateUserName_Scriptcall.ValidInputValue(record.CompanyGuid);
+                            }
+                            else
+                            {
+                                var EventDrop_Errorrequest = JsonConvert.DeserializeObject<Root_ErrorHandler_DuplicateUserName>(response_DuplicateuserName.Content);
+                                string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                                string Alphabetpattern = @"^[a-zA-Z]+$";
+                                string combinedInputValues_Special = $"{record.CompanyGuid}";
+                                string combinedInputValues_Null = $"{record.CompanyGuid}";
+                                string Null_testInput = @"^,$";
+                                string testInputs = @"^\s*$";
+                                var abc = Regex.IsMatch(record.CompanyGuid, Alphabetpattern);
+
+                                if (Regex.IsMatch(record.CompanyGuid, pattern))
+                                {
+                                    Console.WriteLine("API Response: " + response_DuplicateuserName.Content);
+                                    //     DuplicateUserName_Scriptcall.SpecialCharacter_username(record.CompanyGuid);
+                                }
+                                else if (Regex.IsMatch(combinedInputValues_Null, Null_testInput))
+                                {
+                                    Console.WriteLine("API Response: " + EventDrop_Errorrequest.response);
+                                    //  DuplicateUserName_Scriptcall.ValidateInput_NullValues(record.username);
+                                }
+                                else if (Regex.IsMatch(record.CompanyGuid ?? "", @"^\d+$"))
+                                {
+                                    Console.WriteLine("API Response: " + EventDrop_Errorrequest.response);
+                                    //  DuplicateUserName_Scriptcall.InValidInputValue(record.CompanyGuid);
+                                }
+                                else if (Regex.IsMatch(record.CompanyGuid ?? "", testInputs))
+                                {
+                                    Console.WriteLine("API Response: " + EventDrop_Errorrequest.response);
+                                    // DuplicateUserName_Scriptcall.ValidateInput_Nullfranchises_Values(record.username);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("API Response: " + EventDrop_Errorrequest.response);
+                                    //    DuplicateUserName_Scriptcall.ContainsAlphabet_franchises(record.CompanyGuid);
+                                }
+                            }
+                            if (DuplicateUsername_request.response != null)
+                            {
+                                finalResult = DuplicateUsername_request;
+                            }
+                        }
+                    
+                    }
+                       catch (JsonException ex)
+                       {
+                           Console.WriteLine("Deserialization error: " + ex.Message);
+                           DuplicateUserName_Scriptcall.InValidInputValue(record.CompanyGuid);
+                       }
+                    }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 3- GetAllEnrolledCourses Endpoint Check
+        public bool GetAllEnrolledCourses()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/PaymentCommon/GetAllEnrolledCourses -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/PaymentCommon/GetAllEnrolledCourses", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_students = restClient.Get(restRequest);
+                var students_Scriptcall = new TestScripts_GetAllEnrolledCourses();
+                if (response_students.StatusCode == HttpStatusCode.OK)
+                {
+                    // Deserialize as a List if the response is an array
+                    var ActiveCourse_request = JsonConvert.DeserializeObject<Root_GetAllEnrolledCourses>(response_students.Content);
+                    ApiResponse_GetAllEnrolledCourses.Set_GetAllEnrolledCourses(ActiveCourse_request);
+                    if (ActiveCourse_request.isSuccessful == true)
+                    {
+                        Console.WriteLine("API Response: " + response_students.Content);
+                        students_Scriptcall.GetAllEnrolledCourses_GetResponse();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_students.Content);
+                    students_Scriptcall.GetAllEnrolledCourses_ResponseFailed();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
         }
     }
 }

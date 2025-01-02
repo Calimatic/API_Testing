@@ -3,6 +3,7 @@ using ApiTesting_Calimatic.AppLoginClass;
 using ApiTesting_Calimatic.Dashboard_RF.PartnerEnrollment_RF;
 using ApiTesting_Calimatic.Dashboard_RF.restoreWidgetsToDefault_RF;
 using ApiTesting_Calimatic.Forgot_PasswordAttempt;
+using Commons.DTO_s.PaymentCommon;
 using TestProject1.Dashboard.Partner_Enrollment;
 
 
@@ -111,7 +112,7 @@ var studentDemographics_P = new ApiStudents().studentDemographics();
 var announcement_P = new ApiStudents().Announcement_Endpoint();
 */
 
-//                                                  -----------Students----------
+/*//                                                  -----------Students----------
 //1- getEnrollmentDropdown Ebdpoint
 var getEnrollmentDropdown_P = new ApiStudents().getEnrollmentDropdown();
 
@@ -120,6 +121,17 @@ var Student_students_P = new ApiStudents().Student_students();
 
 //3- setStudentStatus
 var setStudentStatus_P = new ApiStudents().setStudentStatus();
+*/
+
+//                                                ------------PaymentCommon----------
+// 1- DuplicateUserName Endpoint
+var Duplicateusername_P =new ApiStudents().DuplicateUserName();
+
+// 2- GetTransactionConfig
+var GetTransactionConfig_P = new ApiStudents().GetTransactionConfig();
+
+// 3- GetAllEnrolledCourses Endpoint
+var GetAllEnrolledCourses_P = new ApiStudents().GetAllEnrolledCourses();
 
 //var testing = new PartnerEnroll_RF();
 //testing.testing();

@@ -35,7 +35,7 @@ namespace Commons.DTO_s.Dashboards.announcement_response
         // Method to set the Main_Response value
         public static void Set_announcement(Main_Response value)
         {
-        Sets_announcement = value;
+            Sets_announcement = value;
         }
     }
 }
