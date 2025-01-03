@@ -125,13 +125,19 @@ var setStudentStatus_P = new ApiStudents().setStudentStatus();
 
 //                                                ------------PaymentCommon----------
 // 1- DuplicateUserName Endpoint
-var Duplicateusername_P =new ApiStudents().DuplicateUserName();
+//var Duplicateusername_P =new ApiStudents().DuplicateUserName();
 
 // 2- GetTransactionConfig
-var GetTransactionConfig_P = new ApiStudents().GetTransactionConfig();
+//var GetTransactionConfig_P = new ApiStudents().GetTransactionConfig();
 
 // 3- GetAllEnrolledCourses Endpoint
-var GetAllEnrolledCourses_P = new ApiStudents().GetAllEnrolledCourses();
+//var GetAllEnrolledCourses_P = new ApiStudents().GetAllEnrolledCourses();
+
+// 4- GetPortalEnrolledCourses Endpoint
+var GetPortalEnrolledCourses_P = new ApiStudents().GetPortalEnrolledCourses();
+
+// 5- 
+var GetPortalEnrolledCourses_P = new ApiStudents().GetPortalEnrolledCourses();
 
 //var testing = new PartnerEnroll_RF();
 //testing.testing();

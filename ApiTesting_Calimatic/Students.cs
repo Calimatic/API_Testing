@@ -68,6 +68,10 @@ using ApiTesting_Calimatic.PaymentCommon_RF.GetTransactionConfig_RF;
 using TestProject1.PaymentCommon_TestScripts.GetTransactionConfig_TestScripts;
 using Commons.DTO_s.PaymentCommon.GetAllEnrolledCourses;
 using TestProject1.PaymentCommon_TestScripts.GetAllEnrolledCourses_TestScripts;
+using ApiTesting_Calimatic.PaymentCommon_RF.GetPortalEnrolledCourses_RF;
+using Commons.DTO_s.PaymentCommon.GetPortalEnrolledCourses;
+using TestProject1.PaymentCommon_TestScripts.GetPortalEnrolledCourses_TestScripts;
+using Commons.DTO_s.PaymentCommon.GetStudentCoursesViewDetails;
 
 namespace ApiTesting_Calimatic
 {
@@ -1979,5 +1983,287 @@ namespace ApiTesting_Calimatic
             }
             return false;
         }
+
+        // 4- GetPortalEnrolledCourses Endpoint Check
+        public Root_GetPortalEnrolledCourses GetPortalEnrolledCourses()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/PaymentCommon/GetPortalEnrolledCourses -----------------\n");
+            var GetPortalEnrolledCourses_RF = new GetPortalEnrolledCourses_DataRead();
+            var getfile_GetPortalEnrolledCourses = GetPortalEnrolledCourses_RF.Getfile_GetPortalEnrolledCourses();
+            Root_GetPortalEnrolledCourses finalResult = null;
+
+            // If no records in GetPortalEnrolledCourses, you may want to handle that case.
+            if (getfile_GetPortalEnrolledCourses == null || !getfile_GetPortalEnrolledCourses.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_GetPortalEnrolledCourses)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"userId: {record.userId}");
+                    string queryString_GetPortalEnrolledCourses = $"userId={record.userId}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/PaymentCommon/GetPortalEnrolledCourses?{queryString_GetPortalEnrolledCourses}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_GetPortalEnrolledCourses = restClient.Execute(restRequest);
+                    var GetPortalEnrolledCourses_Scriptcall = new TestScripts_GetPortalEnrolledCourses();
+                    try
+                    {
+                        if ((int)response_GetPortalEnrolledCourses.StatusCode == 200)
+                        {
+                            var GetPortalEnrolledCourses_request = JsonConvert.DeserializeObject<Root_GetPortalEnrolledCourses>(response_GetPortalEnrolledCourses.Content);
+                            ApiResponse_GetPortalEnrolledCourses.Set_GetAllEnrolledCourses(GetPortalEnrolledCourses_request);
+
+                            if (GetPortalEnrolledCourses_request.response.statusCode != 500 &&
+                               GetPortalEnrolledCourses_request.isSuccessful == true)
+                            {
+                                Console.WriteLine("API Response: \n\n" + response_GetPortalEnrolledCourses.Content);
+                                GetPortalEnrolledCourses_Scriptcall.GetPortalEnrolledCourses_GetResponse();
+                            }
+                            else
+                            {
+                                var EventDrop_Errorrequest = JsonConvert.DeserializeObject<Root_GetPortalEnrolledCourses>(response_GetPortalEnrolledCourses.Content);
+                                string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                                string Alphabetpattern = @"^[a-zA-Z]+$";
+                                string combinedInputValues_Special = $"{record.userId}";
+                                string combinedInputValues_Null = $"{record.userId}";
+                                string Null_testInput = @"^,$";
+                                string testInputs = @"^\s*$";
+                                var abc = Regex.IsMatch(record.userId, Alphabetpattern);
+
+                                if (Regex.IsMatch(record.userId, pattern))
+                                {
+                                    Console.WriteLine("API Response: " + response_GetPortalEnrolledCourses.Content);
+                                    //     GetPortalEnrolledCourses_Scriptcall.SpecialCharacter_username(record.CompanyGuid);
+                                }
+                                else if (Regex.IsMatch(record.userId ?? "", @"^\d+$"))
+                                {
+                                    Console.WriteLine("API Response: " + EventDrop_Errorrequest.response);
+                                    GetPortalEnrolledCourses_Scriptcall.GetPortalEnrolledCourses_ResponseFailed();
+                                }
+                                else if (Regex.IsMatch(record.userId ?? "", testInputs))
+                                {
+                                    Console.WriteLine("API Response: " + EventDrop_Errorrequest.response);
+                                    // GetPortalEnrolledCourses_Scriptcall.ValidateInput_Nullfranchises_Values(record.username);
+                                }
+                                else
+                                {
+                                    Console.WriteLine("API Response: " + EventDrop_Errorrequest.response);
+                                    GetPortalEnrolledCourses_Scriptcall.AlphabetCharacter_GetPortalEnrolledCourses();
+                                }
+                            }
+                            if (GetPortalEnrolledCourses_request.response != null)
+                            {
+                                finalResult = GetPortalEnrolledCourses_request;
+                            }
+                        }
+                    }
+                    catch (JsonException ex)
+                    {
+                        Console.WriteLine("Deserialization error: " + ex.Message);
+                        //     GetPortalEnrolledCourses_Scriptcall.InValidInputValue(record.userId);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 5- IsCourseEnrolledByUser Endpoint Check
+        /*   public Root_GetPortalEnrolledCourses IsCourseEnrolledByUser()
+           {
+               Login();
+               Console.WriteLine("----------------- /api/PaymentCommon/IsCourseEnrolledByUser -----------------\n");
+               var GetPortalEnrolledCourses_RF = new GetPortalEnrolledCourses_DataRead();
+               var getfile_IsCourseEnrolledByUser = GetPortalEnrolledCourses_RF.Getfile_GetPortalEnrolledCourses();
+               Root_GetPortalEnrolledCourses finalResult = null;
+
+               // If no records in IsCourseEnrolledByUser, you may want to handle that case.
+               if (getfile_IsCourseEnrolledByUser == null || !getfile_IsCourseEnrolledByUser.Any())
+               {
+                   Console.WriteLine("No records found.");
+                   // Return null or handle as appropriate
+                   return finalResult;
+               }
+               foreach (var record in getfile_IsCourseEnrolledByUser)
+               {
+                   try
+                   {
+                       Console.WriteLine("\nInput Value : ");
+                       Console.WriteLine($"userId: {record.userId}");
+                       string queryString_GetPortalEnrolledCourses = $"userId={record.userId}";
+                       var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                       var restRequest = new RestRequest($"/api/PaymentCommon/IsCourseEnrolledByUser?{queryString_GetPortalEnrolledCourses}", Method.Get);
+                       restRequest.AddHeader("Accept", "application/json");
+                       restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                       restRequest.RequestFormat = DataFormat.Json;
+                       var response_GetPortalEnrolledCourses = restClient.Execute(restRequest);
+                       var GetPortalEnrolledCourses_Scriptcall = new TestScripts_GetPortalEnrolledCourses();
+                       try
+                       {
+                           if ((int)response_GetPortalEnrolledCourses.StatusCode == 200)
+                           {
+                               var GetPortalEnrolledCourses_request = JsonConvert.DeserializeObject<Root_GetPortalEnrolledCourses>(response_GetPortalEnrolledCourses.Content);
+                               ApiResponse_GetPortalEnrolledCourses.Set_GetAllEnrolledCourses(GetPortalEnrolledCourses_request);
+
+                               if (GetPortalEnrolledCourses_request.response.statusCode != 500 &&
+                                  GetPortalEnrolledCourses_request.isSuccessful == true)
+                               {
+                                   Console.WriteLine("API Response: \n\n" + response_GetPortalEnrolledCourses.Content);
+                                   GetPortalEnrolledCourses_Scriptcall.GetPortalEnrolledCourses_GetResponse();
+                               }
+                               else
+                               {
+                                   var EventDrop_Errorrequest = JsonConvert.DeserializeObject<Root_GetPortalEnrolledCourses>(response_GetPortalEnrolledCourses.Content);
+                                   string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                                   string Alphabetpattern = @"^[a-zA-Z]+$";
+                                   string combinedInputValues_Special = $"{record.userId}";
+                                   string combinedInputValues_Null = $"{record.userId}";
+                                   string Null_testInput = @"^,$";
+                                   string testInputs = @"^\s*$";
+                                   var abc = Regex.IsMatch(record.userId, Alphabetpattern);
+
+                                   if (Regex.IsMatch(record.userId, pattern))
+                                   {
+                                       Console.WriteLine("API Response: " + response_GetPortalEnrolledCourses.Content);
+                                       //     GetPortalEnrolledCourses_Scriptcall.SpecialCharacter_username(record.CompanyGuid);
+                                   }
+                                   else if (Regex.IsMatch(record.userId ?? "", @"^\d+$"))
+                                   {
+                                       Console.WriteLine("API Response: " + EventDrop_Errorrequest.response);
+                                       GetPortalEnrolledCourses_Scriptcall.GetPortalEnrolledCourses_ResponseFailed();
+                                   }
+                                   else if (Regex.IsMatch(record.userId ?? "", testInputs))
+                                   {
+                                       Console.WriteLine("API Response: " + EventDrop_Errorrequest.response);
+                                       // GetPortalEnrolledCourses_Scriptcall.ValidateInput_Nullfranchises_Values(record.username);
+                                   }
+                                   else
+                                   {
+                                       Console.WriteLine("API Response: " + EventDrop_Errorrequest.response);
+                                       GetPortalEnrolledCourses_Scriptcall.AlphabetCharacter_GetPortalEnrolledCourses();
+                                   }
+                               }
+                               if (GetPortalEnrolledCourses_request.response != null)
+                               {
+                                   finalResult = GetPortalEnrolledCourses_request;
+                               }
+                           }
+                       }
+                       catch (JsonException ex)
+                       {
+                           Console.WriteLine("Deserialization error: " + ex.Message);
+                           //     GetPortalEnrolledCourses_Scriptcall.InValidInputValue(record.userId);
+                       }
+                   }
+                   catch (Exception ex)
+                   {
+                       Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                   }
+               }
+               return finalResult;
+           }*/
+
+        // 6- GetStudentCoursesViewDetails Endpoint Check
+        public Root_GetStudentCoursesViewDetails GetStudentCoursesViewDetails()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Dashboard/GetStudentCoursesViewDetails -----------------\n");
+            var setstudentStatus_RF_record = new setStudentStatus_DataRead();
+            var getfile_setStudentStatus = setstudentStatus_RF_record.Getfile_setStudentStatus();
+            Root_GetStudentCoursesViewDetails finalResult = null;
+
+            // If no records in getfile_setStudentStatus, you may want to handle that case.
+            if (getfile_setStudentStatus == null || !getfile_setStudentStatus.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_setStudentStatus)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    var bodyContent = new
+                    {
+                        studentIds = record.studentIds,
+                        activateStudent = record.activateStudent
+
+                    };
+                    Console.WriteLine($"studentIds: {record.studentIds}, activateStudent: {record.activateStudent}");
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/PaymentCommon/GetStudentCoursesViewDetails", Method.Post);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    restRequest.AddJsonBody(bodyContent);
+                    var response_setStudentStatus = restClient.Execute(restRequest);
+                    var setStudentStatus_Scriptcall = new TestScripts_setStudentStatus();
+                    if (response_setStudentStatus.StatusCode == HttpStatusCode.OK)
+                    {
+                        var EventDrop_request = JsonConvert.DeserializeObject<Root_GetStudentCoursesViewDetails>(response_setStudentStatus.Content);
+                       // ApiResponse_setStudentstatus.Set_setstudentsStatus(EventDrop_request);
+                        if (EventDrop_request.isSuccessful == true)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_setStudentStatus.Content);
+                            setStudentStatus_Scriptcall.ValidInputValues();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_setStudentStatus.Content);
+                            // setStudentStatus_Scriptcall.DummyResponse();
+                        }
+                        finalResult = EventDrop_request;
+                    }
+                    else
+                    {
+                        var setStudentStatus_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_setStudentStatus.Content);
+                        ErrorHandler_setStudentstatus.Set_setstudentsStatus(setStudentStatus_Errorrequest);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        string Alphabetpattern = @"([a-zA-Z]+)";
+                        string combinedInputValues_Special = $"{record.studentIds},{record.activateStudent}";
+                        var abc = Regex.IsMatch(record.studentIds, Alphabetpattern);
+
+                        if (Regex.IsMatch(record.studentIds, pattern))
+                        {
+                            Console.WriteLine("API Response: " + response_setStudentStatus.Content);
+                            setStudentStatus_Scriptcall.SpecialCharacter_studentIds(record.studentIds);
+                        }
+                        else if (record.activateStudent.GetValueOrDefault(false) == false)
+                        {
+                            Console.WriteLine("API Response: " + setStudentStatus_Errorrequest.Message);
+                            setStudentStatus_Scriptcall.NullactivateStudent_Values();
+                        }
+                        else if (Regex.IsMatch(record.studentIds, Alphabetpattern))
+                        {
+                            Console.WriteLine("API Response: " + setStudentStatus_Errorrequest.Message);
+                            setStudentStatus_Scriptcall.ContainsAlphabet_studentIds(record.studentIds);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + setStudentStatus_Errorrequest.Message);
+                            setStudentStatus_Scriptcall.Invalid_studentIds(record.studentIds);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
     }
 }
