@@ -123,7 +123,7 @@ var Student_students_P = new ApiStudents().Student_students();
 var setStudentStatus_P = new ApiStudents().setStudentStatus();
 */
 
-//                                                ------------PaymentCommon----------
+/*                                            ------------PaymentCommon----------
 // 1- DuplicateUserName Endpoint
 //var Duplicateusername_P =new ApiStudents().DuplicateUserName();
 
@@ -137,7 +137,25 @@ var setStudentStatus_P = new ApiStudents().setStudentStatus();
 var GetPortalEnrolledCourses_P = new ApiStudents().GetPortalEnrolledCourses();
 
 // 5- 
-var GetPortalEnrolledCourses_P = new ApiStudents().GetPortalEnrolledCourses();
+var GetStudentCoursesViewDetails_P = new ApiStudents().GetStudentCoursesViewDetails();
+
+*/
+
+//                                                 ----------CourseCategory-----------
+// getCourseCategoriesByTypeId Endpoint
+//var getCourseCategoriesByTypeId_P = new ApiStudents().getCourseCategoriesByTypeId();
+
+/*                      -----------------------Courses---------------------
+// 1- central Endpoint
+//var central_P = new ApiStudents().central();
+
+// 2- getCoursesByTypeAndCategory Endpoint
+var getCoursesByTypeAndCategory_P = new ApiStudents().getCoursesByTypeAndCategory();
+*/
+
+//                                               ------------CourseReview-------------
+// 1- GetReviewedCourse
+var GetReviewCourse_P = new ApiStudents().GetReviewedCourse();
 
 //var testing = new PartnerEnroll_RF();
 //testing.testing();

@@ -72,6 +72,15 @@ using ApiTesting_Calimatic.PaymentCommon_RF.GetPortalEnrolledCourses_RF;
 using Commons.DTO_s.PaymentCommon.GetPortalEnrolledCourses;
 using TestProject1.PaymentCommon_TestScripts.GetPortalEnrolledCourses_TestScripts;
 using Commons.DTO_s.PaymentCommon.GetStudentCoursesViewDetails;
+using Commons.DTO_s.Course_Category.getCourseCategoriesByTypeId;
+using ApiTesting_Calimatic.CourseCategory.getCourseCategoriesByTypeId_RF;
+using TestProject1.CourseCategory_TestScripts.getCourseCategoriesByTypeId_TestScripts;
+using Commons.DTO_s.Courses.central;
+using TestProject1.Courses.central_TestScripts;
+using ApiTesting_Calimatic.Courses.getCoursesByTypeAndCategory_RF;
+using Commons.DTO_s.CourseReview.GetReviewedCourse;
+using ApiTesting_Calimatic.CourseReview.GetReviewedCourse_RF;
+using TestProject1.CourseReview.GetReviewedCourse_TestScripts;
 
 namespace ApiTesting_Calimatic
 {
@@ -1587,7 +1596,7 @@ namespace ApiTesting_Calimatic
                 }
         */
 
-                                    //-------------------->/api/Student/<--------------------
+        //-------------------->/api/Student/<--------------------
 
         // 1- getEnrollmentDropdown Check Endpoint
         public bool getEnrollmentDropdown()
@@ -1715,7 +1724,7 @@ namespace ApiTesting_Calimatic
                         else
                         {
                             Console.WriteLine("API Response: " + response_setStudentStatus.Content);
-                           // setStudentStatus_Scriptcall.DummyResponse();
+                            // setStudentStatus_Scriptcall.DummyResponse();
                         }
                         finalResult = EventDrop_request;
                     }
@@ -1758,7 +1767,7 @@ namespace ApiTesting_Calimatic
             return finalResult;
         }
 
-                                //--------------------->/api/PaymentCommon/<--------------------
+        //--------------------->/api/PaymentCommon/<--------------------
         // 1-  Duplicate UserName Endpoint Check 
         public Root_PaymentCommon DuplicateUserName()
         {
@@ -1929,14 +1938,14 @@ namespace ApiTesting_Calimatic
                                 finalResult = DuplicateUsername_request;
                             }
                         }
-                    
+
                     }
-                       catch (JsonException ex)
-                       {
-                           Console.WriteLine("Deserialization error: " + ex.Message);
-                           DuplicateUserName_Scriptcall.InValidInputValue(record.CompanyGuid);
-                       }
+                    catch (JsonException ex)
+                    {
+                        Console.WriteLine("Deserialization error: " + ex.Message);
+                        DuplicateUserName_Scriptcall.InValidInputValue(record.CompanyGuid);
                     }
+                }
                 catch (Exception ex)
                 {
                     Console.WriteLine("\nTest Script Error Message : " + ex.Message);
@@ -2174,7 +2183,7 @@ namespace ApiTesting_Calimatic
                return finalResult;
            }*/
 
-        // 6- GetStudentCoursesViewDetails Endpoint Check
+        // 6- GetStudentCoursesViewDetails Endpoint Check (PENDING) (MARKETPLACE ENDPOINT PENDING)
         public Root_GetStudentCoursesViewDetails GetStudentCoursesViewDetails()
         {
             Login();
@@ -2213,7 +2222,7 @@ namespace ApiTesting_Calimatic
                     if (response_setStudentStatus.StatusCode == HttpStatusCode.OK)
                     {
                         var EventDrop_request = JsonConvert.DeserializeObject<Root_GetStudentCoursesViewDetails>(response_setStudentStatus.Content);
-                       // ApiResponse_setStudentstatus.Set_setstudentsStatus(EventDrop_request);
+                        // ApiResponse_setStudentstatus.Set_setstudentsStatus(EventDrop_request);
                         if (EventDrop_request.isSuccessful == true)
                         {
                             Console.WriteLine("API Response: \n\n" + response_setStudentStatus.Content);
@@ -2265,5 +2274,222 @@ namespace ApiTesting_Calimatic
             return finalResult;
         }
 
+                                         //--------------------CourseCategory--------------------
+        // getCourseCategoriesByTypeId Endpoint Check
+        public Root_getCourseCategoriesByTypeId_Response getCourseCategoriesByTypeId()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/CourseCategory/getCourseCategoriesByTypeId -----------------\n");
+            var getCourseCategoriesByTypeId_RF = new getCourseCategoriesByTypeId_DataReadFile();
+            var getfile_getCourseCategoriesByTypeId = getCourseCategoriesByTypeId_RF.Getfile_getCourseCategoriesByTypeId();
+            Root_getCourseCategoriesByTypeId_Response finalResult = null;
+
+            // If no records in getCourseCategoriesByTypeId, you may want to handle that case.
+            if (getfile_getCourseCategoriesByTypeId == null || !getfile_getCourseCategoriesByTypeId.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_getCourseCategoriesByTypeId)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"typeId: {record.typeId}");
+                    string queryString_getCourseCategoriesByTypeId = $"typeId={record.typeId}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/CourseCategory/getCourseCategoriesByTypeId?{queryString_getCourseCategoriesByTypeId}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_getCourseCategoriesByTypeId = restClient.Execute(restRequest);
+                    var getCourseCategoriesByTypeId_Scriptcall = new TestScripts_getCourseCategoriesByTypeId();
+                    if (response_getCourseCategoriesByTypeId.StatusCode == HttpStatusCode.OK)
+                    {
+                        var getCourseCategoriesByTypeId_request = JsonConvert.DeserializeObject<Root_getCourseCategoriesByTypeId_Response>(response_getCourseCategoriesByTypeId.Content);
+                        ApiResponse_getCourseCategoriesByTypeId.Set_getCourseCategoriesByTypeId(getCourseCategoriesByTypeId_request);
+                        if (getCourseCategoriesByTypeId_request.isSuccessful == true && getCourseCategoriesByTypeId_request.response.Count > 0)
+                        {
+                            Console.WriteLine("API Response: " + response_getCourseCategoriesByTypeId.Content);
+                            getCourseCategoriesByTypeId_Scriptcall.Default_Response();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_getCourseCategoriesByTypeId.Content);
+                            getCourseCategoriesByTypeId_Scriptcall.ValidReponse();
+                        }
+                        if (getCourseCategoriesByTypeId_request.response != null && getCourseCategoriesByTypeId_request.response.Any())
+                        {
+                            finalResult = getCourseCategoriesByTypeId_request;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+                                        //--------------------Courses--------------------
+        // 1- central Endpoint Check
+        public bool central()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/Courses/central -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/Courses/central", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_central = restClient.Get(restRequest);
+                var central_Scriptcall = new TestScripts_central();
+                if (response_central.StatusCode == HttpStatusCode.OK)
+                {
+                    // Deserialize as a List if the response is an array
+                    var central_request = JsonConvert.DeserializeObject<Root_central>(response_central.Content);
+                    ApiResponse_central.Set_central(central_request);
+                    if (central_request.isSuccessful == true)
+                    {
+                        Console.WriteLine("API Response: " + response_central.Content);
+                        central_Scriptcall.GetResponse_Successfully();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_central.Content);
+                    central_Scriptcall.GetResponse_Failed();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
+        }
+
+        // 2- getCoursesByTypeAndCategory Endpoint Check
+        public Root_getCourseCategoriesByTypeId_Response getCoursesByTypeAndCategory()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Courses/getCoursesByTypeAndCategory -----------------\n");
+            var getCoursesByTypeAndCategory_RF = new getCoursesByTypeAndCategory_DataRead();
+            var getfile_getCoursesByTypeAndCategory = getCoursesByTypeAndCategory_RF.Getfile_getCoursesByTypeAndCategory_DataRead();
+            Root_getCourseCategoriesByTypeId_Response finalResult = null;
+
+            // If no records in getCourseCategoriesByTypeId, you may want to handle that case.
+            if (getfile_getCoursesByTypeAndCategory == null || !getfile_getCoursesByTypeAndCategory.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_getCoursesByTypeAndCategory)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"typeId: {record.typeId}, categoryId: {record.categoryId}");
+                    string queryString_getCourseCategoriesByTypeId = $"typeId={record.typeId}&categoryId={record.categoryId}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/Courses/getCoursesByTypeAndCategory?{queryString_getCourseCategoriesByTypeId}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_getCourseCategoriesByTypeId = restClient.Execute(restRequest);
+                    var getCourseCategoriesByTypeId_Scriptcall = new TestScripts_getCourseCategoriesByTypeId();
+                    if (response_getCourseCategoriesByTypeId.StatusCode == HttpStatusCode.OK)
+                    {
+                        var getCourseCategoriesByTypeId_request = JsonConvert.DeserializeObject<Root_getCourseCategoriesByTypeId_Response>(response_getCourseCategoriesByTypeId.Content);
+                        ApiResponse_getCourseCategoriesByTypeId.Set_getCourseCategoriesByTypeId(getCourseCategoriesByTypeId_request);
+                        if (getCourseCategoriesByTypeId_request.isSuccessful == true && getCourseCategoriesByTypeId_request.response.Count > 0)
+                        {
+                            Console.WriteLine("API Response: " + response_getCourseCategoriesByTypeId.Content);
+                            getCourseCategoriesByTypeId_Scriptcall.Default_Response();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_getCourseCategoriesByTypeId.Content);
+                            getCourseCategoriesByTypeId_Scriptcall.ValidReponse();
+                        }
+                        if (getCourseCategoriesByTypeId_request.response != null && getCourseCategoriesByTypeId_request.response.Any())
+                        {
+                            finalResult = getCourseCategoriesByTypeId_request;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // -----------------------CourseReview-------------------------
+        // 1- GetReviewedCourse Endpoint Check
+        public Root_GetReviewCourse GetReviewedCourse()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/CourseReview/GetReviewedCourse -----------------\n");
+            var GetReviewedCourse_RF = new GetReviewedCourse_DataRead();
+            var getfile_GetReviewedCourse = GetReviewedCourse_RF.Getfile_GetReviewedCourse();
+            Root_GetReviewCourse finalResult = null;
+
+            // If no records in getCourseCategoriesByTypeId, you may want to handle that case.
+            if (getfile_GetReviewedCourse == null || !getfile_GetReviewedCourse.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_GetReviewedCourse)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"courseId: {record.courseId}");
+                    string queryString_getCourseCategoriesByTypeId = $"courseId={record.courseId}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/CourseReview/GetReviewedCourse?{queryString_getCourseCategoriesByTypeId}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_getCourseCategoriesByTypeId = restClient.Execute(restRequest);
+                    var getCourseCategoriesByTypeId_Scriptcall = new TestScripts_GetReviewedCourse();
+                    if (response_getCourseCategoriesByTypeId.StatusCode == HttpStatusCode.OK)
+                    {
+                        var getCourseCategoriesByTypeId_request = JsonConvert.DeserializeObject<Root_GetReviewCourse>(response_getCourseCategoriesByTypeId.Content);
+                        ApiResponse_GetReviewCourse.Set_GetReviewCourse(getCourseCategoriesByTypeId_request);
+                        if (getCourseCategoriesByTypeId_request.isSuccessful == true)
+                        {
+                            Console.WriteLine("API Response: " + response_getCourseCategoriesByTypeId.Content);
+                            getCourseCategoriesByTypeId_Scriptcall.ValidResponse();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_getCourseCategoriesByTypeId.Content);
+                            getCourseCategoriesByTypeId_Scriptcall.InValidReponse();
+                        }
+                        if (getCourseCategoriesByTypeId_request.response != null)
+                        {
+                            finalResult = getCourseCategoriesByTypeId_request;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
     }
 }
+
+ 
