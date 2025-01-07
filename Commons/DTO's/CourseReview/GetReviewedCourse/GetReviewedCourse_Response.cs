@@ -42,4 +42,22 @@ namespace Commons.DTO_s.CourseReview.GetReviewedCourse
             Sets_GetReviewCourse = value;
         }
     }
+    public class Root_IsReviewAddedByUser
+    {
+        public bool response { get; set; }
+        public bool isSuccessful { get; set; }
+        public int statusCode { get; set; }
+    }
+    //
+    public class ApiResponse_IsReviewAddedByUser
+    {
+        // Public property to store the Main_Response value
+        public static Root_IsReviewAddedByUser Sets_IsReviewAddedByUser { get; set; }
+
+        // Method to set the Main_Response value
+        public static void Set_IsReviewAddedByUser(Root_IsReviewAddedByUser value)
+        {
+            Sets_IsReviewAddedByUser = value;
+        }
+    }
 }

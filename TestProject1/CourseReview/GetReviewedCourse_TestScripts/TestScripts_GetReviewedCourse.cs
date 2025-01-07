@@ -22,7 +22,7 @@ namespace TestProject1.CourseReview.GetReviewedCourse_TestScripts
         public void InValidReponse()
         {
             var GetReviewedCourse_GetResponse = ApiResponse_GetReviewCourse.Sets_GetReviewCourse;
-            Console.WriteLine("Get Response Successfully            :   PASS");
+            Console.WriteLine("Get Response Successfully            :   FAIL");
             Assert.AreEqual(200, GetReviewedCourse_GetResponse.statusCode, "Unexpected status code.");
         }
     }

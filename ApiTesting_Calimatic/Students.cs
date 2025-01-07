@@ -81,6 +81,14 @@ using ApiTesting_Calimatic.Courses.getCoursesByTypeAndCategory_RF;
 using Commons.DTO_s.CourseReview.GetReviewedCourse;
 using ApiTesting_Calimatic.CourseReview.GetReviewedCourse_RF;
 using TestProject1.CourseReview.GetReviewedCourse_TestScripts;
+using ApiTesting_Calimatic.CourseReview.AddCourseReview_RF;
+using Commons.DTO_s.CourseReview.AddCourseReview;
+using TestProject1.CourseReview.AddCourseReview_TestScripts;
+using TestProject1.CourseReview.IsReviewAddedByUser_TestScripts;
+using Commons.DTO_s.CourseType.list;
+using ApiTesting_Calimatic.CourseType.list;
+using Commons.DTO_s.Department.getDepartments;
+using TestProject1.Department.getDepartment_TestScripts;
 
 namespace ApiTesting_Calimatic
 {
@@ -1680,7 +1688,7 @@ namespace ApiTesting_Calimatic
         public setStudentStatus setStudentStatus()
         {
             Login();
-            Console.WriteLine("----------------- /api/Dashboard/setStudentStatus -----------------\n");
+            Console.WriteLine("----------------- /api/Student/setStudentStatus -----------------\n");
             var setstudentStatus_RF_record = new setStudentStatus_DataRead();
             var getfile_setStudentStatus = setstudentStatus_RF_record.Getfile_setStudentStatus();
             setStudentStatus finalResult = null;
@@ -2488,6 +2496,260 @@ namespace ApiTesting_Calimatic
                 }
             }
             return finalResult;
+        }
+
+        // 2- AddCourseReview Endpoint Check
+        public AddCourseReview_Response AddCourseReview()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/CourseReview/AddCourseReview -----------------\n");
+            var AddCourseReview_RF_record = new AddCourseReview_DataRead();
+            var getfile_AddCourseReview = AddCourseReview_RF_record.Getfile_AddCourseReview();
+            AddCourseReview_Response finalResult = null;
+
+            // If no records in getfile_AddCourseReview, you may want to handle that case.
+            if (getfile_AddCourseReview == null || !getfile_AddCourseReview.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_AddCourseReview)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    var bodyContent = new
+                    {
+                        id = record.id,
+                        courseId = record.courseId,
+                        rating = record.rating,
+                        review = record.review,
+                        isShow = record.isShow,
+                        createdDate = record.createdDate
+                    };
+                    Console.WriteLine($"id: {record.id},\ncourseId: {record.courseId},\nrating: {record.rating},\nreview: {record.review},\nisShow: {record.isShow},\ncreatedDate: {record.createdDate}");
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/CourseReview/AddCourseReview", Method.Post);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    restRequest.AddJsonBody(bodyContent);
+                    var response_setStudentStatus = restClient.Execute(restRequest);
+                    var setStudentStatus_Scriptcall = new TestScripts_AddCourseReview();
+                    if (response_setStudentStatus.StatusCode == HttpStatusCode.OK)
+                    {
+                        var AddCourseReview_request = JsonConvert.DeserializeObject<AddCourseReview_Response>(response_setStudentStatus.Content);
+                        ApiResponse_AddCourseReview.Set_AddCourseReview(AddCourseReview_request);
+                        if (AddCourseReview_request.isSuccessful == true)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_setStudentStatus.Content);
+                            setStudentStatus_Scriptcall.ValidInputValues();
+                        }
+                        finalResult = AddCourseReview_request;
+                    }
+                    else
+                    {
+                        var setStudentStatus_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_setStudentStatus.Content);
+                        ErrorHandler_setStudentstatus.Set_setstudentsStatus(setStudentStatus_Errorrequest);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        string Alphabetpattern = @"([a-zA-Z]+)";
+                        string Null_testInput = @"^,$";
+                        string testInputs = @"^\s*$";
+                        string combinedInputValues_Special = $"{record.id},{record.courseId}";
+                        var abc = Regex.IsMatch(record.id, Alphabetpattern);
+
+                        if (Regex.IsMatch(record.id, pattern) ||
+                            Regex.IsMatch(record.courseId, pattern) ||
+                            Regex.IsMatch(record.rating, pattern))
+                        {
+                            Console.WriteLine("API Response: " + response_setStudentStatus.Content);
+                            setStudentStatus_Scriptcall.SpecialCharacter(record.id,record.courseId,record.rating);
+                        }
+                        else if (Regex.IsMatch(record.id, testInputs) ||
+                            Regex.IsMatch(record.courseId, testInputs) ||
+                            Regex.IsMatch(record.rating, testInputs))
+                        {
+                            Console.WriteLine("API Response: " + setStudentStatus_Errorrequest.Message);
+                            setStudentStatus_Scriptcall.Null_Values(record.id, record.courseId, record.rating);
+                        }
+                        else if (Regex.IsMatch(record.id, Alphabetpattern) || 
+                            Regex.IsMatch(record.courseId, Alphabetpattern) || 
+                            Regex.IsMatch(record.rating, Alphabetpattern))
+                        {
+                            Console.WriteLine("API Response: " + setStudentStatus_Errorrequest.Message);
+                            setStudentStatus_Scriptcall.ContainsAlphabetValue(record.id, record.courseId, record.rating);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + setStudentStatus_Errorrequest.Message);
+                        //    setStudentStatus_Scriptcall.Invalid_studentIds(record.id);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 3- IsReviewAddedByUser Endpoint Check
+        public Root_IsReviewAddedByUser IsReviewAddedByUser()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/CourseReview/IsReviewAddedByUser -----------------\n");
+            var IsReviewAddedByUser_RF = new GetReviewedCourse_DataRead();
+            var getfile_IsReviewAddedByUser = IsReviewAddedByUser_RF.Getfile_GetReviewedCourse();
+            Root_IsReviewAddedByUser finalResult = null;
+
+            // If no records in IsReviewAddedByUser, you may want to handle that case.
+            if (getfile_IsReviewAddedByUser == null || !getfile_IsReviewAddedByUser.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_IsReviewAddedByUser)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"courseId: {record.courseId}");
+                    string queryString_IsReviewAddedByUser = $"courseId={record.courseId}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/CourseReview/IsReviewAddedByUser?{queryString_IsReviewAddedByUser}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_IsReviewAddedByUser = restClient.Execute(restRequest);
+                    var IsReviewAddedByUser_Scriptcall = new TestScripts_IsReviewAddedByUser();
+                    if (response_IsReviewAddedByUser.StatusCode == HttpStatusCode.OK)
+                    {
+                        var IsReviewAddedByUser_request = JsonConvert.DeserializeObject<Root_IsReviewAddedByUser>(response_IsReviewAddedByUser.Content);
+                        ApiResponse_IsReviewAddedByUser.Set_IsReviewAddedByUser(IsReviewAddedByUser_request);
+                        if (IsReviewAddedByUser_request.isSuccessful == true && IsReviewAddedByUser_request.response == true)
+                        {
+                            Console.WriteLine("API Response: " + response_IsReviewAddedByUser.Content);
+                            IsReviewAddedByUser_Scriptcall.ValidResponse();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_IsReviewAddedByUser.Content);
+                            IsReviewAddedByUser_Scriptcall.InValidReponse();
+                        }
+                        if (IsReviewAddedByUser_request.response == true)
+                        {
+                            finalResult = IsReviewAddedByUser_request;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        //                                          -----------------CourseType--------------------
+        // list Endpoint Check
+        public Root_course_list list()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/CourseType/list -----------------\n");
+            var list_RF = new course_list_DataRead();
+            var getfile_list = list_RF.Getfile_list();
+            Root_course_list finalResult = null;
+
+            // If no records in IsReviewAddedByUser, you may want to handle that case.
+            if (getfile_list == null || !getfile_list.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_list)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"unassign: {record.unassign}");
+                    string queryString_list = $"unassign={record.unassign}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"/api/CourseType/list?{queryString_list}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_list = restClient.Execute(restRequest);
+                    var list_Scriptcall = new TestScripts_IsReviewAddedByUser();
+                    if (response_list.StatusCode == HttpStatusCode.OK)
+                    {
+                        var list_request = JsonConvert.DeserializeObject<Root_course_list>(response_list.Content);
+                        ApiResponse_course_list.Set_course_list(list_request);
+                        if (list_request.isSuccessful == true && list_request.response.Count > 0 )
+                        {
+                            Console.WriteLine("API Response: " + response_list.Content);
+                            list_Scriptcall.ValidResponse();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_list.Content);
+                            list_Scriptcall.InValidReponse();
+                        }
+                        if (list_request.response.Count < 0)
+                        {
+                            finalResult = list_request;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        //                                          ----------------Department------------------
+        // 1- getDepartments Endpoint Check
+        public bool getDepartments()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/Department/getDepartments -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/Department/getDepartments", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_getDepartment = restClient.Get(restRequest);
+                var getDepartment_Scriptcall = new TestScripts_getDepartment();
+                if (response_getDepartment.StatusCode == HttpStatusCode.OK)
+                {
+                    // Deserialize as a List if the response is an array
+                    var getDepartment_request = JsonConvert.DeserializeObject<Root_getDepartment_Response>(response_getDepartment.Content);
+                    ApiResponse_Root_getDepartment.Set_getDepartment(getDepartment_request);
+                    if (getDepartment_request.isSuccessful == true)
+                    {
+                        Console.WriteLine("API Response: " + response_getDepartment.Content);
+                        getDepartment_Scriptcall.ValidResponse();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_getDepartment.Content);
+                    getDepartment_Scriptcall.InValidReponse();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
         }
 
     }

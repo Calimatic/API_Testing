@@ -155,7 +155,23 @@ var getCoursesByTypeAndCategory_P = new ApiStudents().getCoursesByTypeAndCategor
 
 //                                               ------------CourseReview-------------
 // 1- GetReviewedCourse
-var GetReviewCourse_P = new ApiStudents().GetReviewedCourse();
+//var GetReviewCourse_P = new ApiStudents().GetReviewedCourse();
+
+// 2- AddCourseReview
+//var AddCourseReview_P = new ApiStudents().AddCourseReview();
+
+// 3- IsReviewAddedByUser Endpoint Check
+//var IsReviewAddedByUser_P = new ApiStudents().IsReviewAddedByUser();
+
+//                                              -------------CourseType---------------
+//var course_list_P = new ApiStudents().list();
+
+//                                             --------------Department--------------
+// 1- getDepartment Endpoint
+var getDepartment_P = new ApiStudents().getDepartments();
+
+
+
 
 //var testing = new PartnerEnroll_RF();
 //testing.testing();
