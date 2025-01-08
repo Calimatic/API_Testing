@@ -4,11 +4,13 @@ using ApiTesting_Calimatic.Dashboard_RF.PartnerEnrollment_RF;
 using ApiTesting_Calimatic.Dashboard_RF.restoreWidgetsToDefault_RF;
 using ApiTesting_Calimatic.Forgot_PasswordAttempt;
 using Commons.DTO_s.PaymentCommon;
+using System.Reflection;
 using TestProject1.Dashboard.Partner_Enrollment;
+using static System.Net.Mime.MediaTypeNames;
 
 
-//                                                  -------------AUTH------------
-/*
+/*                                                -------------AUTH------------
+
 //AppLogin endpoint
 Api_AppLogin appLogin = new Api_AppLogin();
 appLogin.MainAppLogin();
@@ -35,8 +37,8 @@ resetPassword_1.ResetPassword();
 //FP.ForgotGetData();
 */
 
-//                                                  ----------Dashboard----------
-/*//Widgets Endpoint
+/*                                                  ----------Dashboard----------
+//Widgets Endpoint
 var dashbboardWidgets_P = new ApiStudents();
 dashbboardWidgets_P.Widgets();
 
@@ -112,7 +114,8 @@ var studentDemographics_P = new ApiStudents().studentDemographics();
 var announcement_P = new ApiStudents().Announcement_Endpoint();
 */
 
-/*//                                                  -----------Students----------
+/*                                                  -----------Students---------
+                                                 
 //1- getEnrollmentDropdown Ebdpoint
 var getEnrollmentDropdown_P = new ApiStudents().getEnrollmentDropdown();
 
@@ -141,9 +144,10 @@ var GetStudentCoursesViewDetails_P = new ApiStudents().GetStudentCoursesViewDeta
 
 */
 
-//                                                 ----------CourseCategory-----------
+/*                                                ----------CourseCategory-----------
 // getCourseCategoriesByTypeId Endpoint
-//var getCourseCategoriesByTypeId_P = new ApiStudents().getCourseCategoriesByTypeId();
+var getCourseCategoriesByTypeId_P = new ApiStudents().getCourseCategoriesByTypeId();
+*/
 
 /*                      -----------------------Courses---------------------
 // 1- central Endpoint
@@ -153,22 +157,44 @@ var GetStudentCoursesViewDetails_P = new ApiStudents().GetStudentCoursesViewDeta
 var getCoursesByTypeAndCategory_P = new ApiStudents().getCoursesByTypeAndCategory();
 */
 
-//                                               ------------CourseReview-------------
+/*                                               ------------CourseReview-------------
 // 1- GetReviewedCourse
-//var GetReviewCourse_P = new ApiStudents().GetReviewedCourse();
+var GetReviewCourse_P = new ApiStudents().GetReviewedCourse();
 
 // 2- AddCourseReview
-//var AddCourseReview_P = new ApiStudents().AddCourseReview();
+var AddCourseReview_P = new ApiStudents().AddCourseReview();
 
 // 3- IsReviewAddedByUser Endpoint Check
-//var IsReviewAddedByUser_P = new ApiStudents().IsReviewAddedByUser();
+var IsReviewAddedByUser_P = new ApiStudents().IsReviewAddedByUser();
+*/
 
-//                                              -------------CourseType---------------
-//var course_list_P = new ApiStudents().list();
+/*                                              -------------CourseType---------------
+var course_list_P = new ApiStudents().list();
+*/
 
-//                                             --------------Department--------------
+/*                                             --------------Department--------------
 // 1- getDepartment Endpoint
 var getDepartment_P = new ApiStudents().getDepartments();
+
+// 2- saveDepartment Endpoint
+var saveDepartment_P = new ApiStudents().saveDepartments();
+
+// 3- deleteDepartments Endpoint
+var deleteDepartments_P = new ApiStudents().deleteDepartments();
+*/
+
+//                                                 -----------------------Notification----------------------
+// 1- GetUserNotifications Endpoint
+//var notification_P = new ApiStudents().GetUserNotifications();
+
+// 2- ClearAllNotification Endpoint
+var ClearAllNotification_P = new ApiStudents().ClearAllNotification();
+
+
+
+
+
+
 
 
 

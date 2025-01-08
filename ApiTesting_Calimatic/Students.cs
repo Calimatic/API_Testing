@@ -89,6 +89,16 @@ using Commons.DTO_s.CourseType.list;
 using ApiTesting_Calimatic.CourseType.list;
 using Commons.DTO_s.Department.getDepartments;
 using TestProject1.Department.getDepartment_TestScripts;
+using ApiTesting_Calimatic.Department.saveDepartment_RF;
+using Commons.DTO_s.Department.saveDepartment;
+using TestProject1.Department.saveDepartment_TestScripts;
+using ApiTesting_Calimatic.Department.deleteDepartments_RF;
+using Commons.DTO_s.Department.deleteDepartments;
+using TestProject1.Department.deleteDepartments_TestScripts;
+using Commons.DTO_s.Notification.GetUserNotifications;
+using TestProject1.GetUserNotifications_TestScripts;
+using Commons.DTO_s.Notification.ClearAllNotification_Response;
+using TestProject1.Notification.ClearAllNotification_TestScript;
 
 namespace ApiTesting_Calimatic
 {
@@ -2712,7 +2722,7 @@ namespace ApiTesting_Calimatic
             return finalResult;
         }
 
-        //                                          ----------------Department------------------
+        //                                          ------------------Department-------------------
         // 1- getDepartments Endpoint Check
         public bool getDepartments()
         {
@@ -2752,7 +2762,264 @@ namespace ApiTesting_Calimatic
             return false;
         }
 
+        // 2- saveDepartments Endpoint Check
+        public Root_saveDepartment saveDepartments()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Department/saveDepartments -----------------\n");
+            var AddCourseReview_RF_record = new saveDepartment_DataRead();
+            var getfile_AddCourseReview = AddCourseReview_RF_record.Getfile_saveDepartment();
+            Root_saveDepartment finalResult = null;
+
+            // If no records in getfile_AddCourseReview, you may want to handle that case.
+            if (getfile_AddCourseReview == null || !getfile_AddCourseReview.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_AddCourseReview)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    var bodyContent = new
+                    {
+                        deptId = record.deptId,
+                        deptName = record.deptName,
+                        statusCode = record.statusCode
+                    };
+                    Console.WriteLine($"deptId: {record.deptId},\ndeptName: {record.deptName},\nstatusCode: {record.statusCode}");
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/Department/saveDepartments", Method.Post);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    restRequest.AddJsonBody(bodyContent);
+                    var response_saveDepartment = restClient.Execute(restRequest);
+                    var saveDepartment_Scriptcall = new TestScripts_saveDepartment();
+                    if (response_saveDepartment.StatusCode == HttpStatusCode.OK)
+                    {
+                        var saveDepartment_request = JsonConvert.DeserializeObject<Root_saveDepartment>(response_saveDepartment.Content);
+                        ApiResponse_saveDepartment.Set_saveDepartment(saveDepartment_request);
+                        if (saveDepartment_request.isSuccessful == true)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_saveDepartment.Content);
+                            saveDepartment_Scriptcall.ValidInputValues();
+                        }
+                        finalResult = saveDepartment_request;
+                    }
+                    else
+                    {
+                        var saveDepartment_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_saveDepartment.Content);
+                        ErrorHandler_setStudentstatus.Set_setstudentsStatus(saveDepartment_Errorrequest);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        string Alphabetpattern = @"([a-zA-Z]+)";
+                        string Null_testInput = @"^,$";
+                        string testInputs = @"^\s*$";
+                        string combinedInputValues_Special = $"{record.deptId},{record.statusCode}";
+                        var abc = Regex.IsMatch(record.deptId, Alphabetpattern);
+
+                        if (Regex.IsMatch(record.deptId, pattern))                   
+                        {
+                            Console.WriteLine("API Response: " + response_saveDepartment.Content);
+                            saveDepartment_Scriptcall.SpecialCharacter(record.deptId);
+                        }
+                        else if (Regex.IsMatch(record.deptId, testInputs))
+                        {
+                            Console.WriteLine("API Response: " + saveDepartment_Errorrequest.Message);
+                            saveDepartment_Scriptcall.Null_Values(record.deptId);
+                        }
+                        else if (Regex.IsMatch(record.deptId, Alphabetpattern))
+                        {
+                            Console.WriteLine("API Response: " + saveDepartment_Errorrequest.Message);
+                            saveDepartment_Scriptcall.ContainsAlphabetValue(record.deptId);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + saveDepartment_Errorrequest.Message);
+                            //    setStudentStatus_Scriptcall.Invalid_studentIds(record.id);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 3- deleteDepartments Endpoint Check
+        public deleteDepartments_Response deleteDepartments()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Department/deleteDepartments -----------------\n");
+            var AddCourseReview_RF_record = new deleteDepartments_DataRead();
+            var getfile_AddCourseReview = AddCourseReview_RF_record.Getfile_deleteDepartments();
+            deleteDepartments_Response finalResult = null;
+
+            // If no records in getfile_AddCourseReview, you may want to handle that case.
+            if (getfile_AddCourseReview == null || !getfile_AddCourseReview.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_AddCourseReview)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    var bodyContent = new
+                    {
+                        deptId = record.deptId,
+                        deptName = record.deptName,
+                        statusCode = record.statusCode
+                    };
+                    Console.WriteLine($"deptId: {record.deptId},\ndeptName: {record.deptName},\nstatusCode: {record.statusCode}");
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/Department/deleteDepartments", Method.Post);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    restRequest.AddJsonBody(bodyContent);
+                    var response_saveDepartment = restClient.Execute(restRequest);
+                    var saveDepartment_Scriptcall = new TestScripts_deleteDepartments();
+                    if (response_saveDepartment.StatusCode == HttpStatusCode.OK)
+                    {
+                        var saveDepartment_request = JsonConvert.DeserializeObject<deleteDepartments_Response>(response_saveDepartment.Content);
+                        ApiResponse_deleteDepartments.Set_deleteDepartments(saveDepartment_request);
+                        if (saveDepartment_request.isSuccessful == true && saveDepartment_request.statusCode!=500)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_saveDepartment.Content);
+                            saveDepartment_Scriptcall.ValidInputValues();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_saveDepartment.Content);
+                            saveDepartment_Scriptcall.InValidReponse();
+                        }
+                        finalResult = saveDepartment_request;
+                    }
+                    else
+                    {
+                        var saveDepartment_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_saveDepartment.Content);
+                        ErrorHandler_setStudentstatus.Set_setstudentsStatus(saveDepartment_Errorrequest);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        string Alphabetpattern = @"([a-zA-Z]+)";
+                        string Null_testInput = @"^,$";
+                        string testInputs = @"^\s*$";
+                        string combinedInputValues_Special = $"{record.deptId},{record.statusCode}";
+                        var abc = Regex.IsMatch(record.deptId, Alphabetpattern);
+
+                        if (Regex.IsMatch(record.deptId, pattern))
+                        {
+                            Console.WriteLine("API Response: " + response_saveDepartment.Content);
+                            saveDepartment_Scriptcall.SpecialCharacter(record.deptId);
+                        }
+                        else if (Regex.IsMatch(record.deptId, testInputs))
+                        {
+                            Console.WriteLine("API Response: " + saveDepartment_Errorrequest.Message);
+                            saveDepartment_Scriptcall.Null_Values(record.deptId);
+                        }
+                        else if (Regex.IsMatch(record.deptId, Alphabetpattern))
+                        {
+                            Console.WriteLine("API Response: " + saveDepartment_Errorrequest.Message);
+                            saveDepartment_Scriptcall.ContainsAlphabetValue(record.deptId);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + saveDepartment_Errorrequest.Message);
+                            //    setStudentStatus_Scriptcall.Invalid_studentIds(record.id);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        //                                      ----------------------Notification----------------------
+        // 1- GetUserNotifications Endpoint Check
+        public bool GetUserNotifications()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/Notification/GetUserNotifications -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/Notification/GetUserNotifications", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_GetUserNotifications = restClient.Get(restRequest);
+                var GetUserNotifications_Scriptcall = new TestScripts_GetUserNotifications();
+                if (response_GetUserNotifications.StatusCode == HttpStatusCode.OK)
+                {
+                    // Deserialize as a List if the response is an array
+                    var getDepartment_request = JsonConvert.DeserializeObject<Root_GetUserNotification>(response_GetUserNotifications.Content);
+                    ApiResponse_GetUserNotification.Set_GetUserNotification(getDepartment_request);
+                    if (getDepartment_request.isSuccessful == true)
+                    {
+                        Console.WriteLine("API Response: " + response_GetUserNotifications.Content);
+                        GetUserNotifications_Scriptcall.ValidResponse();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_GetUserNotifications.Content);
+                    GetUserNotifications_Scriptcall.InValidReponse();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
+        }
+
+        // 2- ClearAllNotification Endpoint Check
+        public bool ClearAllNotification()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/Notification/ClearAllNotification -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/Notification/ClearAllNotification", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_ClearAllNotification = restClient.Get(restRequest);
+                var ClearAllNotification_Scriptcall = new TestScript_ClearAllNotification();
+                if (response_ClearAllNotification.StatusCode == HttpStatusCode.OK)
+                {
+                    // Deserialize as a List if the response is an array
+                    var getDepartment_request = JsonConvert.DeserializeObject<ClearAllNotification_Response>(response_ClearAllNotification.Content);
+                    ApiResponse_ClearAllNotification.Set_ClearAllNotification(getDepartment_request);
+                    if (getDepartment_request.isSuccessful == true)
+                    {
+                        Console.WriteLine("API Response: " + response_ClearAllNotification.Content);
+                        ClearAllNotification_Scriptcall.ValidResponse();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_ClearAllNotification.Content);
+                    ClearAllNotification_Scriptcall.InValidReponse();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
+        }
     }
 }
-
- 
