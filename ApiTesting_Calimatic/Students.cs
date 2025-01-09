@@ -3121,7 +3121,7 @@ namespace ApiTesting_Calimatic
         }
 
         // 4- GetNoticationCounts Endpoint Check
-        public bool GetNoticationCounts()
+        public bool GetNotificationCounts()
         {
             try
             {

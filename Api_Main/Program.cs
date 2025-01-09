@@ -194,7 +194,7 @@ var deleteDepartments_P = new ApiStudents().deleteDepartments();
 var VisitNotification_P = new ApiStudents().VisitNotification();
 
 // 4- GetNoticationCounts Endpoint
-var GetNoticationCounts_P = new ApiStudents().GetNoticationCounts();
+var GetNoticationCounts_P = new ApiStudents().GetNotificationCounts();
 
 // 5- GetUserActivityLogs Endpoint Check
 var GetUserActivityLogs_P = new ApiStudents().GetUserActivityLogs();
