@@ -99,6 +99,13 @@ using Commons.DTO_s.Notification.GetUserNotifications;
 using TestProject1.GetUserNotifications_TestScripts;
 using Commons.DTO_s.Notification.ClearAllNotification_Response;
 using TestProject1.Notification.ClearAllNotification_TestScript;
+using ApiTesting_Calimatic.Notification_RF;
+using Commons.DTO_s.Notification.VisitNotification;
+using TestProject1.Notification.VisitNotification_TestScripts;
+using TestProject1.Notification.GetNotificationCounts_TestScripts;
+using ApiTesting_Calimatic.Notification_RF.GetUserActivityLogs_RF;
+using Commons.DTO_s.Notification.GetUserActivityLogs;
+using TestProject1.Notification.GetUserActivityLogs_TestScripts;
 
 namespace ApiTesting_Calimatic
 {
@@ -3020,6 +3027,222 @@ namespace ApiTesting_Calimatic
                 Console.WriteLine("\nAPI Response : " + ex.Message);
             }
             return false;
+        }
+
+        // 3- VisitNotification Endpoint Check
+        public VisitNotification_Response VisitNotification()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Notification/VisitNotification -----------------\n");
+            var VisitNotification_RF = new VisitNotification_DataRead();
+            var getfile_VisitNotification = VisitNotification_RF.Getfile_VisitNotification();
+            VisitNotification_Response finalResult = null;
+
+            // If no records in Getfile_VisitNotification, you may want to handle that case.
+            if (getfile_VisitNotification == null || !getfile_VisitNotification.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_VisitNotification)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    var bodyContent = new
+                    {
+                        notificationId = record.notificationId
+
+                    };
+                    Console.WriteLine($"notificationId: {record.notificationId}");
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/Notification/VisitNotification", Method.Post);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    restRequest.AddJsonBody(bodyContent);
+                    var response_setStudentStatus = restClient.Execute(restRequest);
+                    var setStudentStatus_Scriptcall = new TestScripts_VisitNotification();
+                    if (response_setStudentStatus.StatusCode == HttpStatusCode.OK)
+                    {
+                        var EventDrop_request = JsonConvert.DeserializeObject<VisitNotification_Response>(response_setStudentStatus.Content);
+                        ApiResponse_VisitNotification.Set_VisitNotification(EventDrop_request);
+                        if (EventDrop_request.isSuccessful == true)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_setStudentStatus.Content);
+                            setStudentStatus_Scriptcall.ValidInputValues();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_setStudentStatus.Content);
+                            // setStudentStatus_Scriptcall.DummyResponse();
+                        }
+                        finalResult = EventDrop_request;
+                    }
+                    else
+                    {
+                        var setStudentStatus_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_setStudentStatus.Content);
+                        ErrorHandler_setStudentstatus.Set_setstudentsStatus(setStudentStatus_Errorrequest);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        string Alphabetpattern = @"([a-zA-Z]+)";
+                        string Null_testInput = @"^,$";
+                        string testInputs = @"^\s*$";
+                        var abc = Regex.IsMatch(record.notificationId, Alphabetpattern);
+
+                        if (Regex.IsMatch(record.notificationId, pattern))
+                        {
+                            Console.WriteLine("API Response: " + response_setStudentStatus.Content);
+                            setStudentStatus_Scriptcall.SpecialCharacter(record.notificationId);
+                        }
+                        else if (Regex.IsMatch(record.notificationId, testInputs))
+                        {
+                            Console.WriteLine("API Response: " + setStudentStatus_Errorrequest.Message);
+                            setStudentStatus_Scriptcall.Null_Values(record.notificationId);
+                        }
+                        else if (Regex.IsMatch(record.notificationId, Alphabetpattern))
+                        {
+                            Console.WriteLine("API Response: " + setStudentStatus_Errorrequest.Message);
+                            setStudentStatus_Scriptcall.ContainsAlphabetValue(record.notificationId);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + setStudentStatus_Errorrequest.Message);
+                            setStudentStatus_Scriptcall.InValidReponse();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 4- GetNoticationCounts Endpoint Check
+        public bool GetNoticationCounts()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/Notification/GetNoticationCounts -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/Notification/GetNoticationCounts", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_GetNoticationCounts = restClient.Get(restRequest);
+                var GetNoticationCounts_Scriptcall = new TestScripts_GetNoticationCounts();
+                if (response_GetNoticationCounts.StatusCode == HttpStatusCode.OK)
+                {
+                    // Deserialize as a List if the response is an array
+                    var getDepartment_request = JsonConvert.DeserializeObject<GetNoticationCounts_Response>(response_GetNoticationCounts.Content);
+                    ApiResponse_GetNoticationCounts.Set_GetNoticationCounts(getDepartment_request);
+                    if (getDepartment_request.isSuccessful == true)
+                    {
+                        Console.WriteLine("API Response: " + response_GetNoticationCounts.Content);
+                        GetNoticationCounts_Scriptcall.ValidResponse();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_GetNoticationCounts.Content);
+                    GetNoticationCounts_Scriptcall.InValidReponse();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
+        }
+
+        // 5- GetUserActivityLogs Endpoint Check
+        public Root_GetUserActivityLogs GetUserActivityLogs()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Notification/GetUserActivityLogs -----------------\n");
+            var GetUserActivityLogs_RF = new GetUserActivityLogs_DataRead();
+            var getfile_GetUserActivityLogs = GetUserActivityLogs_RF.Getfile_GetUserActivityLogs();
+            Root_GetUserActivityLogs finalResult = null;
+
+            // If no records in Getfile_GetUserActivityLogs, you may want to handle that case.
+            if (getfile_GetUserActivityLogs == null || !getfile_GetUserActivityLogs.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_GetUserActivityLogs)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"onlyTopFifteen: {record.onlyTopFifteen}");
+                    string queryString_GetUserActivityLogs = $"onlyTopFifteen={record.onlyTopFifteen}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/Notification/GetUserActivityLogs?{queryString_GetUserActivityLogs}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_GetUserActivityLogs = restClient.Execute(restRequest);
+                    var GetUserActivityLogs_Scriptcall = new TestScripts_GetUserActivityLogs();
+                    if (response_GetUserActivityLogs.StatusCode == HttpStatusCode.OK)
+                    {
+                        var EventDrop_request = JsonConvert.DeserializeObject<Root_GetUserActivityLogs>(response_GetUserActivityLogs.Content);
+                        ApiResponse_GetUserActivityLogs.Set_GetUserActivityLogs(EventDrop_request);
+                        if (EventDrop_request.isSuccessful == true)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_GetUserActivityLogs.Content);
+                            GetUserActivityLogs_Scriptcall.ValidInputValues();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_GetUserActivityLogs.Content);
+                            // setStudentStatus_Scriptcall.DummyResponse();
+                        }
+                        finalResult = EventDrop_request;
+                    }
+                    else
+                    {
+                        var setStudentStatus_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_GetUserActivityLogs.Content);
+                        ErrorHandler_setStudentstatus.Set_setstudentsStatus(setStudentStatus_Errorrequest);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        string Alphabetpattern = @"([a-zA-Z]+)";
+                        string Null_testInput = @"^,$";
+                        string testInputs = @"^\s*$";
+                        var abc = Regex.IsMatch(record.onlyTopFifteen, Alphabetpattern);
+
+                        if (Regex.IsMatch(record.onlyTopFifteen, pattern))
+                        {
+                            Console.WriteLine("API Response: " + response_GetUserActivityLogs.Content);
+                            GetUserActivityLogs_Scriptcall.SpecialCharacter(record.onlyTopFifteen);
+                        }
+                        else if (Regex.IsMatch(record.onlyTopFifteen, testInputs))
+                        {
+                            Console.WriteLine("API Response: " + setStudentStatus_Errorrequest.Message);
+                            GetUserActivityLogs_Scriptcall.Null_Values(record.onlyTopFifteen);
+                        }
+                        else if (Regex.IsMatch(record.onlyTopFifteen, Alphabetpattern))
+                        {
+                            Console.WriteLine("API Response: " + setStudentStatus_Errorrequest.Message);
+                            GetUserActivityLogs_Scriptcall.ContainsAlphabetValue(record.onlyTopFifteen);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + setStudentStatus_Errorrequest.Message);
+                            GetUserActivityLogs_Scriptcall.InValidReponse();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
         }
     }
 }

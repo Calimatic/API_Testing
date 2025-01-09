@@ -188,8 +188,16 @@ var deleteDepartments_P = new ApiStudents().deleteDepartments();
 //var notification_P = new ApiStudents().GetUserNotifications();
 
 // 2- ClearAllNotification Endpoint
-var ClearAllNotification_P = new ApiStudents().ClearAllNotification();
+//var ClearAllNotification_P = new ApiStudents().ClearAllNotification();
 
+// 3- VisitNotification Endpoint
+var VisitNotification_P = new ApiStudents().VisitNotification();
+
+// 4- GetNoticationCounts Endpoint
+var GetNoticationCounts_P = new ApiStudents().GetNoticationCounts();
+
+// 5- GetUserActivityLogs Endpoint Check
+var GetUserActivityLogs_P = new ApiStudents().GetUserActivityLogs();
 
 
 

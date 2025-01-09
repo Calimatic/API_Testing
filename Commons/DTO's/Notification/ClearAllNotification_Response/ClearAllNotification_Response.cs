@@ -24,4 +24,22 @@ namespace Commons.DTO_s.Notification.ClearAllNotification_Response
             Sets_ClearAllNotification = value;
         }
     }
+    // GetNoticationCounts_Response
+    public class GetNoticationCounts_Response
+    {
+        public int response { get; set; }
+        public bool isSuccessful { get; set; }
+        public int statusCode { get; set; }
+    }
+    public class ApiResponse_GetNoticationCounts
+    {
+        // Public property to store the Main_Response value
+        public static GetNoticationCounts_Response Sets_GetNoticationCounts { get; set; }
+
+        // Method to set the Main_Response value
+        public static void Set_GetNoticationCounts(GetNoticationCounts_Response value)
+        {
+            Sets_GetNoticationCounts = value;
+        }
+    }
 }
