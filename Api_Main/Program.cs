@@ -183,7 +183,7 @@ var saveDepartment_P = new ApiStudents().saveDepartments();
 var deleteDepartments_P = new ApiStudents().deleteDepartments();
 */
 
-//                                                 -----------------------Notification----------------------
+/*                                                -----------------------Notification----------------------
 // 1- GetUserNotifications Endpoint
 //var notification_P = new ApiStudents().GetUserNotifications();
 
@@ -198,11 +198,20 @@ var GetNoticationCounts_P = new ApiStudents().GetNotificationCounts();
 
 // 5- GetUserActivityLogs Endpoint Check
 var GetUserActivityLogs_P = new ApiStudents().GetUserActivityLogs();
+*/
 
+//                                      ---------------------- Company -------------------
+// 1- CompanyConfigs Endpoint
+var CompanyConfigs_P = new ApiStudents().CompanyConfigs();
 
+// 2- CompanyNameByUserName Endpoint
+var CompanyNameByUserName_P = new ApiStudents().CompanyNameByUserName();
 
+// 3- Menus Endpoint Check
+var Menus_P = new ApiStudents().Menus();
 
-
+// 4- franchises Endpoint Check
+var franchises_P = new ApiStudents().franchises();
 
 
 

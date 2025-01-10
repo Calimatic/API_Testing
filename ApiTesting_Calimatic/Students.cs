@@ -106,6 +106,16 @@ using TestProject1.Notification.GetNotificationCounts_TestScripts;
 using ApiTesting_Calimatic.Notification_RF.GetUserActivityLogs_RF;
 using Commons.DTO_s.Notification.GetUserActivityLogs;
 using TestProject1.Notification.GetUserActivityLogs_TestScripts;
+using Commons.DTO_s.Company.CompanyConfigs;
+using TestProject1.Company.CompanyConfigs_TestScripts;
+using ApiTesting_Calimatic.Company.CompanyConfigs_RF;
+using Commons.DTO_s.Company.CompanyNameByUserName;
+using ApiTesting_Calimatic.Company.CompanyNameByUserName_RF;
+using Commons.DTO_s.Company.Menus;
+using TestProject1.Company.Menus_TestScripts;
+using ApiTesting_Calimatic.Company.franchises_RF;
+using Commons.DTO_s.Company.franchises;
+using TestProject1.Company.franchises_TestScripts;
 
 namespace ApiTesting_Calimatic
 {
@@ -2950,7 +2960,7 @@ namespace ApiTesting_Calimatic
             return finalResult;
         }
 
-        //                                      ----------------------Notification----------------------
+        //                                      ---------------------- Notification ----------------------
         // 1- GetUserNotifications Endpoint Check
         public bool GetUserNotifications()
         {
@@ -3235,6 +3245,211 @@ namespace ApiTesting_Calimatic
                             Console.WriteLine("API Response: " + setStudentStatus_Errorrequest.Message);
                             GetUserActivityLogs_Scriptcall.InValidReponse();
                         }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        //                                     -------------------- Company --------------------
+        // 1- CompanyConfigs Endpoint Check
+        public Root_CompanyConfigs CompanyConfigs()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Company/CompanyConfigs -----------------\n");
+            var CompanyConfigs_RF = new CompanyConfig_DataRead();
+            var getfile_CompanyConfigs = CompanyConfigs_RF.Getfile_CompanyConfig();
+            Root_CompanyConfigs finalResult = null;
+
+            // If no records in Getfile_CompanyConfig, you may want to handle that case.
+            if (getfile_CompanyConfigs == null || !getfile_CompanyConfigs.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_CompanyConfigs)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"url: {record.url}");
+                    string queryString_CompanyConfigs = $"url={record.url}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/Company/CompanyConfigs?{queryString_CompanyConfigs}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_GetUserActivityLogs = restClient.Execute(restRequest);
+                    var GetUserActivityLogs_Scriptcall = new TestScripts_CompanyConfigs();
+                    if (response_GetUserActivityLogs.StatusCode == HttpStatusCode.OK)
+                    {
+                        var EventDrop_request = JsonConvert.DeserializeObject<Root_CompanyConfigs>(response_GetUserActivityLogs.Content);
+                        ApiResponse_CompanyConfigs.Set_CompanyConfigs(EventDrop_request);
+                        if (EventDrop_request.isSuccessful == true && EventDrop_request.response == null)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_GetUserActivityLogs.Content);
+                            GetUserActivityLogs_Scriptcall.ValidResponse();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_GetUserActivityLogs.Content);
+                            GetUserActivityLogs_Scriptcall.InValidReponse();
+                        }
+                        finalResult = EventDrop_request;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 2- CompanyNameByUserName Endpoint Check
+        public CompanyNameByUserName_Response CompanyNameByUserName()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Company/CompanyNameByUserName -----------------\n");
+            var CompanyNameByUserName_RF = new CompanyNameByUserName_DataRead();
+            var getfile_CompanyNameByUserName = CompanyNameByUserName_RF.Getfile_CompanyNameByUserName();
+            CompanyNameByUserName_Response finalResult = null;
+
+            // If no records in Getfile_CompanyNameByUserName, you may want to handle that case.
+            if (getfile_CompanyNameByUserName == null || !getfile_CompanyNameByUserName.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_CompanyNameByUserName)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"userName: {record.userName},url: {record.url}");
+                    string queryString_CompanyNameByUserName = $"userName: {record.userName}&url={record.url}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/Company/CompanyNameByUserName?{queryString_CompanyNameByUserName}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_GetUserActivityLogs = restClient.Execute(restRequest);
+                    var GetUserActivityLogs_Scriptcall = new TestScripts_CompanyConfigs();
+                    if (response_GetUserActivityLogs.StatusCode == HttpStatusCode.OK)
+                    {
+                        var EventDrop_request = JsonConvert.DeserializeObject<CompanyNameByUserName_Response>(response_GetUserActivityLogs.Content);
+                        ApiResponse_CompanyNameByUserName.Set_CompanyNameByUserName(EventDrop_request);
+                        if (EventDrop_request.isSuccessful == true)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_GetUserActivityLogs.Content);
+                            GetUserActivityLogs_Scriptcall.ValidResponse();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_GetUserActivityLogs.Content);
+                            GetUserActivityLogs_Scriptcall.InValidReponse();
+                        }
+                        finalResult = EventDrop_request;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 3- Menus Endpoint Check
+        public bool Menus()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/Company/Menus -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/Company/Menus", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_Menus = restClient.Get(restRequest);
+                var GetNoticationCounts_Scriptcall = new TestScripts_Menus();
+                if (response_Menus.StatusCode == HttpStatusCode.OK)
+                {
+                    // Deserialize as a List if the response is an array
+                    var Menus_request = JsonConvert.DeserializeObject<Root_Menus_Response>(response_Menus.Content);
+                    ApiResponse_Menus.Set_Menus(Menus_request);
+                    if (Menus_request.isSuccessful == true && Menus_request.response.Count > 0)
+                    {
+                        Console.WriteLine("API Response: " + response_Menus.Content);
+                        GetNoticationCounts_Scriptcall.ValidResponse();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_Menus.Content);
+                    GetNoticationCounts_Scriptcall.InValidReponse();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
+        }
+
+        // 4- franchises Endpoint Check
+        public Root_franchises franchises()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Company/franchises -----------------\n");
+            var franchises_RF = new franchises_DataRead();
+            var getfile_franchises = franchises_RF.Getfile_franchises();
+            Root_franchises finalResult = null;
+
+            // If no records in Getfile_CompanyConfig, you may want to handle that case.
+            if (getfile_franchises == null || !getfile_franchises.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_franchises)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"excludeMainBusiness: {record.excludeMainBusiness}");
+                    string queryString_franchises = $"excludeMainBusiness={record.excludeMainBusiness}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/Company/franchises?{queryString_franchises}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_franchises = restClient.Execute(restRequest);
+                    var GetUserActivityLogs_Scriptcall = new TestScripts_franchises();
+                    if (response_franchises.StatusCode == HttpStatusCode.OK)
+                    {
+                        var EventDrop_request = JsonConvert.DeserializeObject<Root_franchises>(response_franchises.Content);
+                        ApiResponse_franchises.Set_franchises(EventDrop_request);
+                        if (EventDrop_request.isSuccessful == true)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_franchises.Content);
+                            GetUserActivityLogs_Scriptcall.ValidResponse();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_franchises.Content);
+                            GetUserActivityLogs_Scriptcall.InValidReponse();
+                        }
+                        finalResult = EventDrop_request;
                     }
                 }
                 catch (Exception ex)
