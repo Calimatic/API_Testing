@@ -200,20 +200,30 @@ var GetNoticationCounts_P = new ApiStudents().GetNotificationCounts();
 var GetUserActivityLogs_P = new ApiStudents().GetUserActivityLogs();
 */
 
-//                                      ---------------------- Company -------------------
+//                                     ---------------------- Company -------------------
 // 1- CompanyConfigs Endpoint
 var CompanyConfigs_P = new ApiStudents().CompanyConfigs();
 
 // 2- CompanyNameByUserName Endpoint
 var CompanyNameByUserName_P = new ApiStudents().CompanyNameByUserName();
 
-// 3- Menus Endpoint Check
+// 3- Menus Endpoint
 var Menus_P = new ApiStudents().Menus();
 
-// 4- franchises Endpoint Check
+// 4- franchises Endpoint
 var franchises_P = new ApiStudents().franchises();
 
+// 5- Permisions Endpoint
+var Permisions_P = new ApiStudents().Permissions();
 
+// 6- saveBrandings Endpoint
+var saveBrandings_P = new ApiStudents().saveBrandings();
+
+// 7- StripeConnectUrl Endpoint
+var StripeConnectUrl_P = new ApiStudents().StripeConnectUrl();
+
+// 8- ResendActivationEmail Endpoint
+var ResendActivationEmail_P = new ApiStudents().ResendActivationEmail();
 
 
 //var testing = new PartnerEnroll_RF();
