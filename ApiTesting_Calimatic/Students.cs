@@ -126,6 +126,14 @@ using TestProject1.Company.StripeConnectUrl_TestScripts;
 using ApiTesting_Calimatic.Company.ResendActivationEmail_RF;
 using Commons.DTO_s.Company.ResendActivationEmail;
 using TestProject1.Company.ResendActivationEmail_TestScripts;
+using ApiTesting_Calimatic.Company.VerifyActivationEmail_RF;
+using Commons.DTO_s.Company.VerifyActivationEmail;
+using TestProject1.Company.VerifyActivationEmail_TestScripts;
+using ApiTesting_Calimatic.CompanyMenu_RF;
+using Commons.DTO_s.CompanyMenu;
+using TestProject1.CompanyMenu_TestScripts;
+using Commons.DTO_s.EventType;
+using TestProject1.EventType_list;
 
 namespace ApiTesting_Calimatic
 {
@@ -3690,6 +3698,187 @@ namespace ApiTesting_Calimatic
                 }
             }
             return finalResult;
+        }
+
+        // 9- VerifyActivationEmail Endpoint Check
+        public Root_VerifyActivationEmail VerifyActivationEmail()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Company/VerifyActivationEmail -----------------\n");
+            var VerifyActivationEmail_RF = new VerifyActivationEmail_DataRead();
+            var getfile_VerifyActivationEmail = VerifyActivationEmail_RF.Getfile_VerifyActivationEmail();
+            Root_VerifyActivationEmail finalResult = null;
+
+            // If no records in getfile_ResendActivationEmail, you may want to handle that case.
+            if (getfile_VerifyActivationEmail == null || !getfile_VerifyActivationEmail.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_VerifyActivationEmail)
+            {
+                try
+                {   
+                    Console.WriteLine("\nInput Value : ");
+                    var bodyContent = new
+                    {
+                        companyGuid = record.companyGuid,
+                        activationCode = record.activationCode
+                    };
+                    Console.WriteLine($"companyGuid: {record.companyGuid},activationCode: {record.activationCode}");
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/Company/VerifyActivationEmail", Method.Post);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    restRequest.AddJsonBody(bodyContent);
+                    var response_VerifyActivationEmail = restClient.Execute(restRequest);
+                    var ResendActivationEmail_Scriptcall = new TestScripts_VerifyActivationEmail();
+                    if (response_VerifyActivationEmail.StatusCode == HttpStatusCode.OK)
+                    {
+                        var VerifyActivationEmail_request = JsonConvert.DeserializeObject<Root_VerifyActivationEmail>(response_VerifyActivationEmail.Content);
+                        ApiResponse_VerifyActivationEmail.set_VerifyActivationEmail(VerifyActivationEmail_request);
+                        if (VerifyActivationEmail_request.isSuccessful == true && VerifyActivationEmail_request.response.message!= "No Organization found")
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_VerifyActivationEmail.Content);
+                            ResendActivationEmail_Scriptcall.ValidInputValues();
+                        }
+                        finalResult = VerifyActivationEmail_request;
+                    }
+                    else
+                    {
+                        var VerifyActivationEmail_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_VerifyActivationEmail.Content);
+                        ErrorHandler_setStudentstatus.Set_setstudentsStatus(VerifyActivationEmail_Errorrequest);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        string Alphabetpattern = @"([a-zA-Z]+)";
+                        string Null_testInput = @"^,$";
+                        string testInputs = @"^\s*$";
+                        var abc = Regex.IsMatch(record.companyGuid, Alphabetpattern);
+
+                        if (Regex.IsMatch(record.companyGuid, pattern))
+                        {
+                            Console.WriteLine("API Response: " + response_VerifyActivationEmail.Content);
+                            ResendActivationEmail_Scriptcall.SpecialCharacter(record.companyGuid);
+                        }
+                        else if (Regex.IsMatch(record.companyGuid, testInputs))
+                        {
+                            Console.WriteLine("API Response: " + VerifyActivationEmail_Errorrequest.Message);
+                            ResendActivationEmail_Scriptcall.Null_Values(record.companyGuid);
+                        }
+                        else if (Regex.IsMatch(record.companyGuid, Alphabetpattern))
+                        {
+                            Console.WriteLine("API Response: " + VerifyActivationEmail_Errorrequest.Message);
+                            ResendActivationEmail_Scriptcall.ContainsAlphabetValue(record.companyGuid);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + VerifyActivationEmail_Errorrequest.Message);
+                            ResendActivationEmail_Scriptcall.Numeric_InputValue(record.companyGuid);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 10- GetMenus Endpoint Check
+        public CompanyMenu_Response GetMenus()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/CompanyMenu/GetMenus -----------------\n");
+            var GetMenus_RF = new GetMenus_DataRead();
+            var getfile_GetMenus = GetMenus_RF.Getfile_GetMenus();
+            CompanyMenu_Response finalResult = null;
+
+            // If no records in Getfile_GetMenus, you may want to handle that case.
+            if (getfile_GetMenus == null || !getfile_GetMenus.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_GetMenus)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"userRoleId: {record.userRoleId} , userGuid: {record.userGuid}");
+                    string queryString_GetMenu = $"userRoleId={record.userRoleId}&userGuid={record.userGuid}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/CompanyMenu/GetMenus?{queryString_GetMenu}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_GetMenus = restClient.Execute(restRequest);
+                    var GetMenus_Scriptcall = new TestScripts_CompanyMenu();
+                    if (response_GetMenus.StatusCode == HttpStatusCode.OK)
+                    {
+                        var EventDrop_request = JsonConvert.DeserializeObject<CompanyMenu_Response>(response_GetMenus.Content);
+                        ApiResponse_CompanyMenu.set_CompanyMenu(EventDrop_request);
+                        if (EventDrop_request.isSuccessful == true)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_GetMenus.Content);
+                            GetMenus_Scriptcall.ValidResponse();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_GetMenus.Content);
+                            GetMenus_Scriptcall.InValidReponse();
+                        }
+                        finalResult = EventDrop_request;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        //                                               -------------------EventType-----------------
+        // 1- EventType/list
+        public bool EventType_list()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/EventType/list -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/EventType/list", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_EventType_list = restClient.Get(restRequest);
+                var EventType_list_Scriptcall = new TestScripts_GetMenus();
+                if (response_EventType_list.StatusCode == HttpStatusCode.OK)
+                {
+                    // Deserialize as a List if the response is an array
+                    var EventType_list_request = JsonConvert.DeserializeObject<Root_EventType_list_Response>(response_EventType_list.Content);
+                    ApiResponse_EventType_list.set_EventType_list(EventType_list_request);
+                    if (EventType_list_request.isSuccessful == true && EventType_list_request.statusCode == 200)
+                    {
+                        Console.WriteLine("API Response: " + response_EventType_list.Content);
+                        EventType_list_Scriptcall.ValidResponse();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_EventType_list.Content);
+                    EventType_list_Scriptcall.InValidReponse();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
         }
     }
 }

@@ -200,7 +200,7 @@ var GetNoticationCounts_P = new ApiStudents().GetNotificationCounts();
 var GetUserActivityLogs_P = new ApiStudents().GetUserActivityLogs();
 */
 
-//                                     ---------------------- Company -------------------
+/*                                     ---------------------- Company -------------------
 // 1- CompanyConfigs Endpoint
 var CompanyConfigs_P = new ApiStudents().CompanyConfigs();
 
@@ -224,6 +224,17 @@ var StripeConnectUrl_P = new ApiStudents().StripeConnectUrl();
 
 // 8- ResendActivationEmail Endpoint
 var ResendActivationEmail_P = new ApiStudents().ResendActivationEmail();
+
+// 9- VerifyActivationEmail Endpoint
+//var VerifyActivationEmail_P = new ApiStudents().VerifyActivationEmail();
+
+// 10- GetMenus Endpoint
+var GetMenus_P = new ApiStudents().GetMenus();
+*/
+
+//                              ------------------EventType----------------
+var EventType_list_P = new ApiStudents().EventType_list();
+
 
 
 //var testing = new PartnerEnroll_RF();
