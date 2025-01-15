@@ -134,6 +134,12 @@ using Commons.DTO_s.CompanyMenu;
 using TestProject1.CompanyMenu_TestScripts;
 using Commons.DTO_s.EventType;
 using TestProject1.EventType_list;
+using ApiTesting_Calimatic.FileUpload;
+using Commons.DTO_s.FileUpload;
+using TestProject1.FileUpload_TestScripts;
+using Commons.DTO_s.Profile;
+using Commons.DTO_s.Profile.GetEmailPreferences;
+using TestProject1.Profile_TestScripts.GetEmailPreferences_TestScripts;
 
 namespace ApiTesting_Calimatic
 {
@@ -3871,6 +3877,142 @@ namespace ApiTesting_Calimatic
                 {
                     Console.WriteLine("API Response: " + response_EventType_list.Content);
                     EventType_list_Scriptcall.InValidReponse();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
+        }
+
+        //                                              ----------------FileUpload------------------
+        // 1- FileUpload Endpoint Check
+        public FileUpload_Response FileUpload()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/FileUpload -----------------\n");
+            var FileUpload_RF = new FileUpload_DataRead();
+            var getfile_FileUpload = FileUpload_RF.Getfile_FileUpload();
+            FileUpload_Response finalResult = null;
+
+            // If no records in Getfile_FileUpload, you may want to handle that case.
+            if (getfile_FileUpload == null || !getfile_FileUpload.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_FileUpload)
+            {
+                try
+                {
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/FileUpload", Method.Post);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    //
+                    restRequest.AddFile("File", record.File);
+                    restRequest.AddParameter("CompanyGuid", record.CompanyGuid);
+                    //
+                    var response_FileUpload = restClient.Execute(restRequest);
+                    var FileUpload_Scriptcall = new TestScripts_FileUpload();
+                    if (response_FileUpload.StatusCode == HttpStatusCode.OK)
+                    {
+                        var FileUpload_request = JsonConvert.DeserializeObject<FileUpload_Response>(response_FileUpload.Content);
+                        ApiResponse_Fileupload.set_FileUpload(FileUpload_request);
+                        if (FileUpload_request.isSuccessful == true)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_FileUpload.Content);
+                            FileUpload_Scriptcall.ValidResponse();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_FileUpload.Content);
+                            FileUpload_Scriptcall.InValidReponse();
+                        }
+                        finalResult = FileUpload_request;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        //                                              ----------------Profile----------------
+        // 1- GetProfileBasicInfo Endpoint Check
+        public bool GetProfileBasicInfo()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/Profile/GetProfileBasicInfo -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/Profile/GetProfileBasicInfo", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_GetProfileBasicInfo = restClient.Get(restRequest);
+                var GetProfileBasicInfo_Scriptcall = new TestScripts_GetMenus();
+                if (response_GetProfileBasicInfo.StatusCode == HttpStatusCode.OK)
+                {
+                    // Deserialize as a List if the response is an array
+                    var EventType_list_request = JsonConvert.DeserializeObject<Root_GetProfileBasicInfo>(response_GetProfileBasicInfo.Content);
+                    ApiResponse_GetProfileBasicInfo.set_GetProfileBasicInfo(EventType_list_request);
+                    if (EventType_list_request.isSuccessful == true && EventType_list_request.statusCode == 200)
+                    {
+                        Console.WriteLine("API Response: " + response_GetProfileBasicInfo.Content);
+                        GetProfileBasicInfo_Scriptcall.ValidResponse();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_GetProfileBasicInfo.Content);
+                    GetProfileBasicInfo_Scriptcall.InValidReponse();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
+        }
+
+        // 2- GetEmailPreferences Endpoint Check
+        public bool GetEmailPreferences()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/Profile/GetEmailPreferences -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/Profile/GetEmailPreferences", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_GetEmailPreferences = restClient.Get(restRequest);
+                var GetEmailPreferences_Scriptcall = new TestScripts_GetEmailPreferences();
+                if (response_GetEmailPreferences.StatusCode == HttpStatusCode.OK)
+                {
+                    // Deserialize as a List if the response is an array
+                    var EventType_list_request = JsonConvert.DeserializeObject<GetEmailPreferences_Response>(response_GetEmailPreferences.Content);
+                    ApiResponse_GetEmailPreference.set_GetEmailPreferences(EventType_list_request);
+                    if (EventType_list_request.isSuccessful == true && EventType_list_request.statusCode == 200)
+                    {
+                        Console.WriteLine("API Response: " + response_GetEmailPreferences.Content);
+                        GetEmailPreferences_Scriptcall.ValidResponse();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_GetEmailPreferences.Content);
+                    GetEmailPreferences_Scriptcall.InValidReponse();
                 }
                 return true;
             }

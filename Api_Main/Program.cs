@@ -232,8 +232,23 @@ var ResendActivationEmail_P = new ApiStudents().ResendActivationEmail();
 var GetMenus_P = new ApiStudents().GetMenus();
 */
 
-//                              ------------------EventType----------------
+/*                              ------------------EventType----------------
 var EventType_list_P = new ApiStudents().EventType_list();
+*/
+
+
+//                                                ------------------FileUpload-----------------
+// 1- FileUpload Endpoint
+var FileUpload_P = new ApiStudents().FileUpload();
+
+//                                              -------------------- Profile -------------------
+// 2- GetProfileBasicInfo Endpoint
+var GetProfileBasicInfo_P = new ApiStudents().GetProfileBasicInfo();
+
+// 3- GetEmailPreferences Endpoint
+var GetEmailPreferences_P = new ApiStudents().GetEmailPreferences();
+
+
 
 
 
