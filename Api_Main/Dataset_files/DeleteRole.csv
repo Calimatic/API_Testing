@@ -1,0 +1,2 @@
+﻿id,roleName,userkey,roleActions,permissions,permissionsList
+1042,TestingRole,null,GET,"[4,5,6,7]","Get Classes Details Info, Get Events Details Info, Get Classes By Type Category, Get Events By Type Category"

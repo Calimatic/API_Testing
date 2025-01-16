@@ -237,7 +237,7 @@ var EventType_list_P = new ApiStudents().EventType_list();
 */
 
 
-//                                                ------------------FileUpload-----------------
+/*                                                ------------------FileUpload-----------------
 // 1- FileUpload Endpoint
 var FileUpload_P = new ApiStudents().FileUpload();
 
@@ -247,6 +247,22 @@ var GetProfileBasicInfo_P = new ApiStudents().GetProfileBasicInfo();
 
 // 3- GetEmailPreferences Endpoint
 var GetEmailPreferences_P = new ApiStudents().GetEmailPreferences();
+*/
+
+//                                               ------------------- PortalUserRoles ------------------
+// 1- GetRolesGrid Endpoint
+//var GetRolesGrid_P = new ApiStudents().GetRolesGird();
+
+// 2- GetUserAccessGird Endpoint
+//var GetUserAccessGird_P = new ApiStudents().GetUserAccessGird();
+
+// 3- AddUpdateRoles Endpoint
+var AddUpdateRoles_P = new ApiStudents().AddUpdateRoles();
+
+// 4- DeleteRole Endpoint
+var DeleteRole_P = new ApiStudents().DeleteRole();
+
+
 
 
 
