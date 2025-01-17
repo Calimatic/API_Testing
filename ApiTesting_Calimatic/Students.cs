@@ -150,6 +150,12 @@ using TestProject1.PortalUserRoles.AddUpdateRoles_TestScripts;
 using ApiTesting_Calimatic.PortalUserRoles.DeleteRole_RF;
 using Commons.DTO_s.PortalUserRoles.DeleteRole;
 using TestProject1.PortalUserRoles.DeleteRole_TestScripts;
+using ApiTesting_Calimatic.PortalUserRoles.AddUpdateRoleAccess_RF;
+using Commons.DTO_s.PortalUserRoles.AddUpdateRoleAccess;
+using TestProject1.PortalUserRoles.AddUpdateRoleAccess_TestScripts;
+using TestProject1.PortalUserRoles.DeleteRoleAccess_TestScripts;
+using Commons.DTO_s.PublishGuid;
+using TestProject1.GetPublishedGuid_TestScripts;
 
 namespace ApiTesting_Calimatic
 {
@@ -4288,5 +4294,225 @@ namespace ApiTesting_Calimatic
             }
             return finalResult;
         }
+
+        // 5- AddUpdateRoleAccess Endpoint Check
+        public Root_AddUpdateRoleAccess AddUpdateRoleAccess()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/PortalUserRoles/AddUpdateRoleAccess -----------------\n");
+            var AddUpdateRoleAccess_RF = new AddUpdateRoleAccess_DataRead();
+            var getfile_AddUpdateRoleAccess = AddUpdateRoleAccess_RF.Getfile_AddUpdateRoleAccess();
+            Root_AddUpdateRoleAccess finalResult = null;
+
+            // If no records in getfile_ResendActivationEmail, you may want to handle that case.
+            if (getfile_AddUpdateRoleAccess == null || !getfile_AddUpdateRoleAccess.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_AddUpdateRoleAccess)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                   // var deserializedObject = JsonConvert.DeserializeObject<dynamic>();
+                    var bodyContent = new
+                    {
+                        id = record.id,
+                        role = record.role,
+                        username = record.username,
+                        franchisesDropdown = JsonConvert.DeserializeObject<List<AddUpdateRoleAccess_InputValues>>(record.franchisesDropdown)
+
+                    };
+                    Console.WriteLine($"id: {record.id},role: {record.role},username: {record.username},franchisesDropdown: {record.franchisesDropdown}");
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/PortalUserRoles/AddUpdateRoleAccess", Method.Post);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    restRequest.AddJsonBody(bodyContent);
+                    var response_AddUpdateRoles = restClient.Execute(restRequest);
+                    var AddUpdateRoles_Scriptcall = new TestScripts_AddUpdateRoleAccess();
+                    if (response_AddUpdateRoles.StatusCode == HttpStatusCode.OK)
+                    {
+                        var AddUpdateRoles_request = JsonConvert.DeserializeObject<Root_AddUpdateRoleAccess>(response_AddUpdateRoles.Content);
+                        ApiResponse_AddUpdateRoleAccess.set_AddUpdateRoleAccess(AddUpdateRoles_request);
+                        if (AddUpdateRoles_request.isSuccessful == true && AddUpdateRoles_request.response.response == "User access saved successfully")
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_AddUpdateRoles.Content);
+                            AddUpdateRoles_Scriptcall.ValidInputValues();
+                        }
+                        finalResult = AddUpdateRoles_request;
+                    }
+                    else
+                    {
+                        var AddUpdateRoles_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_AddUpdateRoles.Content);
+                        ErrorHandler_setStudentstatus.Set_setstudentsStatus(AddUpdateRoles_Errorrequest);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        string Alphabetpattern = @"([a-zA-Z]+)";
+                        string Null_testInput = @"^,$";
+                        string testInputs = @"^\s*$";
+                        var abc = Regex.IsMatch(record.id, Alphabetpattern);
+
+                        if (Regex.IsMatch(record.id, pattern))
+                        {
+                            Console.WriteLine("API Response: " + response_AddUpdateRoles.Content);
+                            AddUpdateRoles_Scriptcall.SpecialCharacter(record.id);
+                        }
+                        else if (Regex.IsMatch(record.id, testInputs))
+                        {
+                            Console.WriteLine("API Response: " + AddUpdateRoles_Errorrequest.Message);
+                            AddUpdateRoles_Scriptcall.Null_Values(record.id);
+                        }
+                        else if (Regex.IsMatch(record.id, Alphabetpattern))
+                        {
+                            Console.WriteLine("API Response: " + AddUpdateRoles_Errorrequest.Message);
+                            AddUpdateRoles_Scriptcall.ContainsAlphabetValue(record.id);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + AddUpdateRoles_Errorrequest.Message);
+                            AddUpdateRoles_Scriptcall.Numeric_InputValue(record.id);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 6- DeleteRoleAccess Endpoint Check
+        public Root_AddUpdateRoleAccess DeleteRoleAccess()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/PortalUserRoles/DeleteRoleAccess -----------------\n");
+            var AddUpdateRoleAccess_RF = new AddUpdateRoleAccess_DataRead();
+            var getfile_AddUpdateRoleAccess = AddUpdateRoleAccess_RF.Getfile_AddUpdateRoleAccess();
+            Root_AddUpdateRoleAccess finalResult = null;
+
+            // If no records in getfile_ResendActivationEmail, you may want to handle that case.
+            if (getfile_AddUpdateRoleAccess == null || !getfile_AddUpdateRoleAccess.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_AddUpdateRoleAccess)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    var bodyContent = new
+                    {
+                        id = record.id,
+                        role = record.role,
+                        username = record.username,
+                        franchisesDropdown = JsonConvert.DeserializeObject<List<AddUpdateRoleAccess_InputValues>>(record.franchisesDropdown)
+
+                    };
+                    Console.WriteLine($"id: {record.id},role: {record.role},username: {record.username},franchisesDropdown: {record.franchisesDropdown}");
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/PortalUserRoles/DeleteRoleAccess", Method.Post);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    restRequest.AddJsonBody(bodyContent);
+                    var response_AddUpdateRoles = restClient.Execute(restRequest);
+                    var AddUpdateRoles_Scriptcall = new TestScripts_DeleteRoleAccess();
+                    if (response_AddUpdateRoles.StatusCode == HttpStatusCode.OK)
+                    {
+                        var AddUpdateRoles_request = JsonConvert.DeserializeObject<Root_AddUpdateRoleAccess>(response_AddUpdateRoles.Content);
+                        ApiResponse_AddUpdateRoleAccess.set_AddUpdateRoleAccess(AddUpdateRoles_request);
+                        if (AddUpdateRoles_request.isSuccessful == true && AddUpdateRoles_request.response.response == "Role access deleted successfully")
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_AddUpdateRoles.Content);
+                            AddUpdateRoles_Scriptcall.ValidInputValues();
+                        }
+                        finalResult = AddUpdateRoles_request;
+                    }
+                    else
+                    {
+                        var AddUpdateRoles_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_AddUpdateRoles.Content);
+                        ErrorHandler_setStudentstatus.Set_setstudentsStatus(AddUpdateRoles_Errorrequest);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        string Alphabetpattern = @"([a-zA-Z]+)";
+                        string Null_testInput = @"^,$";
+                        string testInputs = @"^\s*$";
+                        var abc = Regex.IsMatch(record.id, Alphabetpattern);
+
+                        if (Regex.IsMatch(record.id, pattern))
+                        {
+                            Console.WriteLine("API Response: " + response_AddUpdateRoles.Content);
+                            AddUpdateRoles_Scriptcall.SpecialCharacter(record.id);
+                        }
+                        else if (Regex.IsMatch(record.id, testInputs))
+                        {
+                            Console.WriteLine("API Response: " + AddUpdateRoles_Errorrequest.Message);
+                            AddUpdateRoles_Scriptcall.Null_Values(record.id);
+                        }
+                        else if (Regex.IsMatch(record.id, Alphabetpattern))
+                        {
+                            Console.WriteLine("API Response: " + AddUpdateRoles_Errorrequest.Message);
+                            AddUpdateRoles_Scriptcall.ContainsAlphabetValue(record.id);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + AddUpdateRoles_Errorrequest.Message);
+                            AddUpdateRoles_Scriptcall.Numeric_InputValue(record.id);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        //                                          ------------------- PublishGuid ----------------
+        // 1- GetPublishedGuid Endpoint Check
+        public bool GetPublishedGuid()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/PublishGuid/GetPublishedGuid -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/PublishGuid/GetPublishedGuid", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_GetRolesGird = restClient.Get(restRequest);
+                var GetRolesGird_Scriptcall = new TestScripts_GetPublishedGuid();
+                if (response_GetRolesGird.StatusCode == HttpStatusCode.OK)
+                {
+                    // Deserialize as a List if the response is an array
+                    var EventType_list_request = JsonConvert.DeserializeObject<Root_GetPublishedGuid_Response>(response_GetRolesGird.Content);
+                    ApiResponse_GetPublishedGuid.set_GetPublishedGuid(EventType_list_request);
+                    if (EventType_list_request.isSuccessful == true && EventType_list_request.statusCode == 200)
+                    {
+                        Console.WriteLine("API Response: " + response_GetRolesGird.Content);
+                        GetRolesGird_Scriptcall.ValidResponse();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_GetRolesGird.Content);
+                    GetRolesGird_Scriptcall.InValidReponse();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
+        }
+
     }
 }

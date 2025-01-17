@@ -251,10 +251,10 @@ var GetEmailPreferences_P = new ApiStudents().GetEmailPreferences();
 
 //                                               ------------------- PortalUserRoles ------------------
 // 1- GetRolesGrid Endpoint
-//var GetRolesGrid_P = new ApiStudents().GetRolesGird();
+var GetRolesGrid_P = new ApiStudents().GetRolesGird();
 
 // 2- GetUserAccessGird Endpoint
-//var GetUserAccessGird_P = new ApiStudents().GetUserAccessGird();
+var GetUserAccessGird_P = new ApiStudents().GetUserAccessGird();
 
 // 3- AddUpdateRoles Endpoint
 var AddUpdateRoles_P = new ApiStudents().AddUpdateRoles();
@@ -262,8 +262,15 @@ var AddUpdateRoles_P = new ApiStudents().AddUpdateRoles();
 // 4- DeleteRole Endpoint
 var DeleteRole_P = new ApiStudents().DeleteRole();
 
+// 5- AddUpdateRoleAccess
+var AddUpdateRoleAccess_P = new ApiStudents().AddUpdateRoleAccess();
 
+// 6- DeleteRoleAccess Endpoint
+var DeleteRoleAccess_P = new ApiStudents().DeleteRole();
 
+// 
+// 1- GetPublishedGuid Endpoint
+var GetPublishedGuid_P = new ApiStudents().GetPublishedGuid();
 
 
 
