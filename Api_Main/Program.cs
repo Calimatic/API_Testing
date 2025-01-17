@@ -266,7 +266,7 @@ var DeleteRole_P = new ApiStudents().DeleteRole();
 var AddUpdateRoleAccess_P = new ApiStudents().AddUpdateRoleAccess();
 
 // 6- DeleteRoleAccess Endpoint
-var DeleteRoleAccess_P = new ApiStudents().DeleteRole();
+var DeleteRoleAccess_P = new ApiStudents().DeleteRoleAccess();
 
 // 
 // 1- GetPublishedGuid Endpoint
