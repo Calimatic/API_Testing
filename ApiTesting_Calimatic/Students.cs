@@ -156,6 +156,12 @@ using TestProject1.PortalUserRoles.AddUpdateRoleAccess_TestScripts;
 using TestProject1.PortalUserRoles.DeleteRoleAccess_TestScripts;
 using Commons.DTO_s.PublishGuid;
 using TestProject1.GetPublishedGuid_TestScripts;
+using Commons.DTO_s.Board.Board_student;
+using TestProject1.Board.Board_student_TestSripts;
+using ApiTesting_Calimatic.Board.student_RF;
+using Commons.DTO_s.Board.getFilterTypeValue;
+using TestProject1.Board.getFilterTypeValue_TestScripts;
+using ApiTesting_Calimatic.Board.getFilterTypeValue_RF;
 
 namespace ApiTesting_Calimatic
 {
@@ -4514,5 +4520,226 @@ namespace ApiTesting_Calimatic
             return false;
         }
 
+
+        //                                          ----------------- Board ------------------
+        // 1- student Endpoint Check
+        public Root_Board_student_Response Board_Student()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Board/student -----------------\n");
+            var Board_student_RF = new Board_student_DataRead();
+            var getfile_Board_student = Board_student_RF.Getfile_Board_student();
+            Root_Board_student_Response finalResult = null;
+
+            // If no records in Getfile_GetMenus, you may want to handle that case.
+            if (getfile_Board_student == null || !getfile_Board_student.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_Board_student)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"FilterType: {record.FilterType} , OptionType: {record.OptionType}");
+                    string student_Board_student = $"FilterType={record.FilterType}&OptionType={record.OptionType}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/Board/student?{student_Board_student}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_Board_student = restClient.Execute(restRequest);
+                    var GetMenus_Scriptcall = new TestScripts_student();
+                    if (response_Board_student.StatusCode == HttpStatusCode.OK)
+                    {
+                        var Board_student_request = JsonConvert.DeserializeObject<Root_Board_student_Response>(response_Board_student.Content);
+                        ApiResponse_student.set_student(Board_student_request);
+                        if (Board_student_request.isSuccessful == true && Board_student_request.response.Count > 0)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_Board_student.Content);
+                            GetMenus_Scriptcall.ValidResponse();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_Board_student.Content);
+                            GetMenus_Scriptcall.InValidReponse();
+                        }
+                        finalResult = Board_student_request;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 2- staff Endpoint Check
+        public Root_Board_student_Response Board_staff()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Board/staff -----------------\n");
+            var Board_student_RF = new Board_student_DataRead();
+            var getfile_Board_student = Board_student_RF.Getfile_Board_student();
+            Root_Board_student_Response finalResult = null;
+
+            // If no records in Getfile_Board_student, you may want to handle that case.
+            if (getfile_Board_student == null || !getfile_Board_student.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_Board_student)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"FilterType: {record.FilterType} , OptionType: {record.OptionType}");
+                    string student_Board_student = $"FilterType={record.FilterType}&OptionType={record.OptionType}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/Board/staff?{student_Board_student}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_Board_student = restClient.Execute(restRequest);
+                    var GetMenus_Scriptcall = new TestScripts_student();
+                    if (response_Board_student.StatusCode == HttpStatusCode.OK)
+                    {
+                        var Board_student_request = JsonConvert.DeserializeObject<Root_Board_student_Response>(response_Board_student.Content);
+                        ApiResponse_student.set_student(Board_student_request);
+                        if (Board_student_request.isSuccessful == true && Board_student_request.response.Count > 0)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_Board_student.Content);
+                            GetMenus_Scriptcall.ValidResponse();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_Board_student.Content);
+                            GetMenus_Scriptcall.InValidReponse();
+                        }
+                        finalResult = Board_student_request;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 3- class Endpoint Check
+        public Root_Board_student_Response Board_Class()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Board/class -----------------\n");
+            var Board_student_RF = new Board_student_DataRead();
+            var getfile_Board_student = Board_student_RF.Getfile_Board_student();
+            Root_Board_student_Response finalResult = null;
+
+            // If no records in Getfile_Board_student, you may want to handle that case.
+            if (getfile_Board_student == null || !getfile_Board_student.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_Board_student)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"FilterType: {record.FilterType} , OptionType: {record.OptionType}");
+                    string student_Board_student = $"FilterType={record.FilterType}&OptionType={record.OptionType}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/Board/class?{student_Board_student}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_Board_student = restClient.Execute(restRequest);
+                    var GetMenus_Scriptcall = new TestScripts_student();
+                    if (response_Board_student.StatusCode == HttpStatusCode.OK)
+                    {
+                        var Board_student_request = JsonConvert.DeserializeObject<Root_Board_student_Response>(response_Board_student.Content);
+                        ApiResponse_student.set_student(Board_student_request);
+                        if (Board_student_request.isSuccessful == true && Board_student_request.response.Count > 0)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_Board_student.Content);
+                            GetMenus_Scriptcall.ValidResponse();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_Board_student.Content);
+                            GetMenus_Scriptcall.InValidReponse();
+                        }
+                        finalResult = Board_student_request;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 4- getFilterTypeValue Endpoint Check
+        public Root_getFilterTypeValue getFilterTypeValue()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Board/getFilterTypeValue -----------------\n");
+            var getFilterTypeValue_RF = new getFilterTypeValue_DataRead();
+            var getfile_getFilterTypeValue = getFilterTypeValue_RF.Getfile_getFilterTypeValue();
+            Root_getFilterTypeValue finalResult = null;
+
+            // If no records in Getfile_getFilterTypeValue, you may want to handle that case.
+            if (getfile_getFilterTypeValue == null || !getfile_getFilterTypeValue.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_getFilterTypeValue)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"FilterType: {record.FilterType} , IsClassBoard: {record.IsClassBoard}");
+                    string student_Board_student = $"FilterType={record.FilterType}&IsClassBoard={record.IsClassBoard}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/Board/getFilterTypeValue?{student_Board_student}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_Board_student = restClient.Execute(restRequest);
+                    var GetMenus_Scriptcall = new TestScripts_getFilterTypeValue();
+                    if (response_Board_student.StatusCode == HttpStatusCode.OK)
+                    {
+                        var Board_student_request = JsonConvert.DeserializeObject<Root_getFilterTypeValue>(response_Board_student.Content);
+                        ApiResponse_getFilterTypeValue.set_getFilterTypeValue(Board_student_request);
+                        if (Board_student_request.isSuccessful == true && Board_student_request.response.Count > 0)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_Board_student.Content);
+                            GetMenus_Scriptcall.ValidResponse();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_Board_student.Content);
+                            GetMenus_Scriptcall.InValidReponse();
+                        }
+                        finalResult = Board_student_request;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
     }
 }

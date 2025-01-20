@@ -240,8 +240,9 @@ var EventType_list_P = new ApiStudents().EventType_list();
 /*                                                ------------------FileUpload-----------------
 // 1- FileUpload Endpoint
 var FileUpload_P = new ApiStudents().FileUpload();
+*/
 
-//                                              -------------------- Profile -------------------
+/*                                              -------------------- Profile -------------------
 // 2- GetProfileBasicInfo Endpoint
 var GetProfileBasicInfo_P = new ApiStudents().GetProfileBasicInfo();
 
@@ -249,7 +250,7 @@ var GetProfileBasicInfo_P = new ApiStudents().GetProfileBasicInfo();
 var GetEmailPreferences_P = new ApiStudents().GetEmailPreferences();
 */
 
-//                                               ------------------- PortalUserRoles ------------------
+/*                                               ------------------- PortalUserRoles ------------------
 // 1- GetRolesGrid Endpoint
 var GetRolesGrid_P = new ApiStudents().GetRolesGird();
 
@@ -267,10 +268,29 @@ var AddUpdateRoleAccess_P = new ApiStudents().AddUpdateRoleAccess();
 
 // 6- DeleteRoleAccess Endpoint
 var DeleteRoleAccess_P = new ApiStudents().DeleteRoleAccess();
+*/
 
-// 
+/*                                              -----------------PublishGuid-------------------- 
 // 1- GetPublishedGuid Endpoint
 var GetPublishedGuid_P = new ApiStudents().GetPublishedGuid();
+*/
+
+//                      ---------------- Board ----------------
+// 1- student Endpoint
+//var Board_Student_P = new ApiStudents().Board_Student();
+
+// 2- staff Endpoint
+//var Board_staff_P = new ApiStudents().Board_staff();
+
+// 3- class Endpoint
+//var class_P = new ApiStudents().Board_Class();
+
+// 4- getFilterTypeValue Endpoint Check
+var getFilterTypeValue_P = new ApiStudents().getFilterTypeValue();
+
+
+
+
 
 
 
