@@ -162,6 +162,15 @@ using ApiTesting_Calimatic.Board.student_RF;
 using Commons.DTO_s.Board.getFilterTypeValue;
 using TestProject1.Board.getFilterTypeValue_TestScripts;
 using ApiTesting_Calimatic.Board.getFilterTypeValue_RF;
+using ApiTesting_Calimatic.classes.onlineclasses_RF;
+using Commons.DTO_s.classes.onlineclasses;
+using TestProject1.classes.onlineclasses_TestScripts;
+using ApiTesting_Calimatic.classes.joinclass_RF;
+using Commons.DTO_s.classes.joinclass;
+using TestProject1.classes.joinclass_TestScripts;
+using ApiTesting_Calimatic.classes.getCourseTypeClasses_RF;
+using Commons.DTO_s.classes.getCourseTypeClasses;
+using TestProject1.classes.getCourseTypeClasses_TestScripts;
 
 namespace ApiTesting_Calimatic
 {
@@ -4737,6 +4746,183 @@ namespace ApiTesting_Calimatic
                 catch (Exception ex)
                 {
                     Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        //                                         ----------------- Classes -----------------
+        // 1- online-classes Endpoint Check
+        public Root_onlineclasses_Response onlineclasses()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/classes/onlineclasses -----------------\n");
+            var onlineclasses_RF = new onlineclasses_DataRead();
+            var getfile_onlineclasses = onlineclasses_RF.Getfile_onlineclasses();
+            Root_onlineclasses_Response finalResult = null;
+
+            // If no records in Getfile_onlineclasses, you may want to handle that case.
+            if (getfile_onlineclasses == null || !getfile_onlineclasses.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_onlineclasses)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"studentId: {record.studentId}");
+                    string queryString_onlineclasses = $"studentId={record.studentId}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/Classes/online-classes?{queryString_onlineclasses}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_onlineclasses = restClient.Execute(restRequest);
+                    var onlineclasses_Scriptcall = new TestScripts_onlineclasses();
+                    if (response_onlineclasses.StatusCode == HttpStatusCode.OK)
+                    {
+                        var onlineclasses_request = JsonConvert.DeserializeObject<Root_onlineclasses_Response>(response_onlineclasses.Content);
+                        ApiResponse_onlineclasses.set_onlineclasses(onlineclasses_request);
+                        if (onlineclasses_request.isSuccessful == true && onlineclasses_request.response.Count > 0)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_onlineclasses.Content);
+                            onlineclasses_Scriptcall.ValidResponse();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_onlineclasses.Content);
+                            onlineclasses_Scriptcall.InValidReponse();
+                        }
+                        finalResult = onlineclasses_request;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 2- join-class Endpoint Check
+        public joinclass_Response joinclass()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Classes/join-class -----------------\n");
+            var joinclass_RF = new joinclass_DataRead();
+            var getfile_joinclass = joinclass_RF.Getfile_joinclass();
+            joinclass_Response finalResult = null;
+
+            // If no records in Getfile_joinclass, you may want to handle that case.
+            if (getfile_joinclass == null || !getfile_joinclass.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_joinclass)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    var bodyContent = new
+                    {
+                        classID = record.classID,
+                        studentName = record.studentName
+                    };
+                    Console.WriteLine($"classID: {record.classID},studentName: {record.studentName}");
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/Classes/join-class", Method.Post);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    restRequest.AddJsonBody(bodyContent);
+                    var response_joinclass = restClient.Execute(restRequest);
+                    var joinclass_Scriptcall = new TestScripts_joinclass();
+                    if (response_joinclass.StatusCode == HttpStatusCode.OK)
+                    {
+                        var AddUpdateRoles_request = JsonConvert.DeserializeObject<joinclass_Response>(response_joinclass.Content);
+                        ApiResponse_joinclass.set_joinclass(AddUpdateRoles_request);
+                        if (AddUpdateRoles_request.isSuccessful == true && AddUpdateRoles_request.statusCode == 200)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_joinclass.Content);
+                            joinclass_Scriptcall.ValidResponse();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_joinclass.Content);
+                            joinclass_Scriptcall.InValidReponse();
+                        }
+                        finalResult = AddUpdateRoles_request;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        // 3- getCourseTypeClasses Endpoint Check
+        public Root_getCourseTypeClasses_Response getCourseTypeClasses()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/Classes/getCourseTypeClasses -----------------\n");
+            var joinclass_RF = new getCourseTypeClasses_DataRead();
+            var getfile_joinclass = joinclass_RF.Getfile_getCourseTypeClasses();
+            Root_getCourseTypeClasses_Response finalResult = null;
+
+            // If no records in Getfile_getCourseTypeClasses, you may want to handle that case.
+            if (getfile_joinclass == null || !getfile_joinclass.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_joinclass)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    var bodyContent = new
+                    {
+                        courseTypeIds = JsonConvert.DeserializeObject<List<int>>(record.courseTypeIds)
+                    };
+                    Console.WriteLine($"courseTypeIds: {record.courseTypeIds}");
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/Classes/getCourseTypeClasses", Method.Post);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    restRequest.AddJsonBody(bodyContent);
+                    var response_getCourseTypeClasses = restClient.Execute(restRequest);
+                    var getCourseTypeClasses_Scriptcall = new TestScripts_getCourseTypeClasses();
+                    if (response_getCourseTypeClasses.StatusCode == HttpStatusCode.OK)
+                    {
+                        var AddUpdateRoles_request = JsonConvert.DeserializeObject<Root_getCourseTypeClasses_Response>(response_getCourseTypeClasses.Content);
+                        ApiResponse_getCourseTypeClasses.set_getcourseTypeClasses(AddUpdateRoles_request);
+                        if (AddUpdateRoles_request.isSuccessful == true && AddUpdateRoles_request.response.Count > 0)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_getCourseTypeClasses.Content);
+                            getCourseTypeClasses_Scriptcall.ValidResponse();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_getCourseTypeClasses.Content);
+                            getCourseTypeClasses_Scriptcall.InValidReponse();
+                        }
+                        finalResult = AddUpdateRoles_request;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var getCourseTypeClasses_Scriptcall = new TestScripts_getCourseTypeClasses();
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                    getCourseTypeClasses_Scriptcall.InValidReponse();
                 }
             }
             return finalResult;

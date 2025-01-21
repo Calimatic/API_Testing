@@ -275,22 +275,29 @@ var DeleteRoleAccess_P = new ApiStudents().DeleteRoleAccess();
 var GetPublishedGuid_P = new ApiStudents().GetPublishedGuid();
 */
 
-//                      ---------------- Board ----------------
+/*                      ---------------- Board ----------------
 // 1- student Endpoint
-//var Board_Student_P = new ApiStudents().Board_Student();
+var Board_Student_P = new ApiStudents().Board_Student();
 
 // 2- staff Endpoint
-//var Board_staff_P = new ApiStudents().Board_staff();
+var Board_staff_P = new ApiStudents().Board_staff();
 
 // 3- class Endpoint
-//var class_P = new ApiStudents().Board_Class();
+var class_P = new ApiStudents().Board_Class();
 
 // 4- getFilterTypeValue Endpoint Check
 var getFilterTypeValue_P = new ApiStudents().getFilterTypeValue();
+*/
 
+//                                  ------------------ Classes -------------------
+// 1- online-classes Endpoint
+//var onlineclasses_P = new ApiStudents().onlineclasses();
 
+// 2- join-class Endpoint 
+//var joinclass_P = new ApiStudents().joinclass();
 
-
+// 3- 
+var getCourseTypeClasses_P = new ApiStudents().getCourseTypeClasses();
 
 
 
