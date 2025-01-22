@@ -289,7 +289,7 @@ var class_P = new ApiStudents().Board_Class();
 var getFilterTypeValue_P = new ApiStudents().getFilterTypeValue();
 */
 
-//                                  ------------------ Classes -------------------
+/*                                  ------------------ Classes -------------------
 // 1- online-classes Endpoint
 //var onlineclasses_P = new ApiStudents().onlineclasses();
 
@@ -298,6 +298,22 @@ var getFilterTypeValue_P = new ApiStudents().getFilterTypeValue();
 
 // 3- 
 var getCourseTypeClasses_P = new ApiStudents().getCourseTypeClasses();
+*/
+
+/*                                  --------------- SISForm ---------------
+// 1- getStudentInformationList Endpoint
+//var getStudentInformationList_P = new ApiStudents().getStudentInformationList();
+
+// 2- createStudentInformationForm Endpoint
+var createStudentInformationForm_P = new ApiStudents().createStudentInformationForm();
+*/
+
+//                          ------------------ AdsOnManage ------------------
+// 1- getFeeList Endpoint
+//var getFeeList_P = new ApiStudents().getFeeList();
+
+// 2- getNewFee Endpoint
+var getNewFee_P = new ApiStudents().getNewFee();
 
 
 

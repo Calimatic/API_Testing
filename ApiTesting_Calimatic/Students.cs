@@ -171,6 +171,16 @@ using TestProject1.classes.joinclass_TestScripts;
 using ApiTesting_Calimatic.classes.getCourseTypeClasses_RF;
 using Commons.DTO_s.classes.getCourseTypeClasses;
 using TestProject1.classes.getCourseTypeClasses_TestScripts;
+using Commons.DTO_s.SISForm.getStudentInformationList;
+using TestProject1.SISForm.getStudentInformationList_TestScripts;
+using ApiTesting_Calimatic.SISForm.createStudentInformationForm_RF;
+using TestProject1.SISForm.createStudentInformationForm_TestScripts;
+using Commons.DTO_s.SISForm.createStudentInformationForm;
+using Commons.DTO_s.AddOnsManage.getFeeList;
+using TestProject1.AddOnsManage.getFeeList_TestScripts;
+using ApiTesting_Calimatic.AddOnsManage.getNewFee_RF;
+using Commons.DTO_s.AddOnsManage.getNewFee;
+using TestProject1.AddOnsManage.getNewFee_TestScripts;
 
 namespace ApiTesting_Calimatic
 {
@@ -2179,7 +2189,7 @@ namespace ApiTesting_Calimatic
         }
 
         // 5- IsCourseEnrolledByUser Endpoint Check
-        /*   public Root_GetPortalEnrolledCourses IsCourseEnrolledByUser()
+        public Root_GetPortalEnrolledCourses IsCourseEnrolledByUser()
            {
                Login();
                Console.WriteLine("----------------- /api/PaymentCommon/IsCourseEnrolledByUser -----------------\n");
@@ -2271,7 +2281,7 @@ namespace ApiTesting_Calimatic
                    }
                }
                return finalResult;
-           }*/
+           }
 
         // 6- GetStudentCoursesViewDetails Endpoint Check (PENDING) (MARKETPLACE ENDPOINT PENDING)
         public Root_GetStudentCoursesViewDetails GetStudentCoursesViewDetails()
@@ -4923,6 +4933,230 @@ namespace ApiTesting_Calimatic
                     var getCourseTypeClasses_Scriptcall = new TestScripts_getCourseTypeClasses();
                     Console.WriteLine("\nTest Script Error Message : " + ex.Message);
                     getCourseTypeClasses_Scriptcall.InValidReponse();
+                }
+            }
+            return finalResult;
+        }
+
+        //                                              ---------------- SISForm ----------------
+        // 1- getStudentInformationList Endpoint Check
+        public bool getStudentInformationList()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/SISForm/getStudentInformationList -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/SISForm/getStudentInformationList", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_GetRolesGird = restClient.Get(restRequest);
+                var GetRolesGird_Scriptcall = new TestScripts_getStudentInformationList();
+                if (response_GetRolesGird.StatusCode == HttpStatusCode.OK)
+                {
+                    // Deserialize as a List if the response is an array
+                    var EventType_list_request = JsonConvert.DeserializeObject<Root_getStudentInformationList_Response>(response_GetRolesGird.Content);
+                    ApiResponse_getStudentInformationList.set_getStudentInformationList(EventType_list_request);
+                    if (EventType_list_request.isSuccessful == true && EventType_list_request.response.Count > 0)
+                    {
+                        Console.WriteLine("API Response: " + response_GetRolesGird.Content);
+                        GetRolesGird_Scriptcall.ValidResponse();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_GetRolesGird.Content);
+                    GetRolesGird_Scriptcall.InValidReponse();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
+        }
+
+        // 2- createStudentInformationForm Endpoint Check
+        public createStudentInformationForm_Response createStudentInformationForm()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/SISForm/createStudentInformationForm -----------------\n");
+            var createStudentInformationForm_RF = new createStudentInformationForm_DataRead();
+            var getfile_createStudentInformationForm = createStudentInformationForm_RF.Getfile_createStudentInformationForm();
+            createStudentInformationForm_Response finalResult = null;
+
+            // If no records in Getfile_createStudentInformationForm, you may want to handle that case.
+            if (getfile_createStudentInformationForm == null || !getfile_createStudentInformationForm.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_createStudentInformationForm)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    var bodyContent = new
+                    {
+                        id = record.id,
+                        formName = record.formName,
+                        isActive = record.isActive,
+                        active = record.active,
+                        description = record.description
+                    };
+                    Console.WriteLine($"id: {record.id},formName: {record.formName},isActive: {record.isActive},active: {record.active},description: {record.description}");
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/SISForm/createStudentInformationForm", Method.Post);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    restRequest.AddJsonBody(bodyContent);
+                    var response_AddUpdateRoles = restClient.Execute(restRequest);
+                    var AddUpdateRoles_Scriptcall = new TestScripts_createStudentInformationForm();
+                    if (response_AddUpdateRoles.StatusCode == HttpStatusCode.OK)
+                    {
+                        var AddUpdateRoles_request = JsonConvert.DeserializeObject<createStudentInformationForm_Response>(response_AddUpdateRoles.Content);
+                        ApiResponse_createStudentInformationForm_Response.set_createStudentInformationForm(AddUpdateRoles_request);
+                        if (AddUpdateRoles_request.isSuccessful == true && AddUpdateRoles_request.statusCode == 200)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_AddUpdateRoles.Content);
+                            AddUpdateRoles_Scriptcall.ValidInputValues();
+                        }
+                        finalResult = AddUpdateRoles_request;
+                    }
+                    else
+                    {
+                        var AddUpdateRoles_Errorrequest = JsonConvert.DeserializeObject<ErrorHandle_PartnerEnroll>(response_AddUpdateRoles.Content);
+                        ErrorHandler_setStudentstatus.Set_setstudentsStatus(AddUpdateRoles_Errorrequest);
+                        string pattern = @"[%\^\*\'\[\]\(\)\!\@\?\&\+\$\~\`]";
+                        string Alphabetpattern = @"([a-zA-Z]+)";
+                        string Null_testInput = @"^,$";
+                        string testInputs = @"^\s*$";
+                        var abc = Regex.IsMatch(record.id, Alphabetpattern);
+
+                        if (Regex.IsMatch(record.id, pattern))
+                        {
+                            Console.WriteLine("API Response: " + response_AddUpdateRoles.Content);
+                            AddUpdateRoles_Scriptcall.SpecialCharacter(record.id);
+                        }
+                        else if (Regex.IsMatch(record.id, testInputs))
+                        {
+                            Console.WriteLine("API Response: " + AddUpdateRoles_Errorrequest.Message);
+                            AddUpdateRoles_Scriptcall.Null_Values(record.id);
+                        }
+                        else if (Regex.IsMatch(record.id, Alphabetpattern))
+                        {
+                            Console.WriteLine("API Response: " + AddUpdateRoles_Errorrequest.Message);
+                            AddUpdateRoles_Scriptcall.ContainsAlphabetValue(record.id);
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + AddUpdateRoles_Errorrequest.Message);
+                            AddUpdateRoles_Scriptcall.Numeric_InputValue(record.id);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
+                }
+            }
+            return finalResult;
+        }
+
+        //                                            --------------- AddOnsManage ---------------
+        // 1- getFeeList Endpoint Check
+        public bool getFeeList()
+        {
+            try
+            {
+                Login();
+                Console.WriteLine("----------------- /api/AddOnsManage/getFeeList -----------------\n");
+                var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                var restRequest = new RestRequest($"/api/AddOnsManage/getFeeList", Method.Get);
+                restRequest.AddHeader("Accept", "application/json");
+                restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                restRequest.RequestFormat = DataFormat.Json;
+                var response_getFeeList = restClient.Get(restRequest);
+                var getFeeList_Scriptcall = new TestScripts_getFeeList();
+                if (response_getFeeList.StatusCode == HttpStatusCode.OK)
+                {
+                    // Deserialize as a List if the response is an array
+                    var EventType_list_request = JsonConvert.DeserializeObject<Root_getFeeList_Response>(response_getFeeList.Content);
+                    Apiresponse_getFeeList.set_getFeeList(EventType_list_request);
+                    if (EventType_list_request.isSuccessful == true && EventType_list_request.response.Count > 0)
+                    {
+                        Console.WriteLine("API Response: " + response_getFeeList.Content);
+                        getFeeList_Scriptcall.ValidResponse();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("API Response: " + response_getFeeList.Content);
+                    getFeeList_Scriptcall.InValidReponse();
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("\nAPI Response : " + ex.Message);
+            }
+            return false;
+        }
+
+        // 2- getNewFee Endpoint Check
+        public Root_getNewFee_Response getNewFee()
+        {
+            Login();
+            Console.WriteLine("----------------- /api/AddOnsManage/getNewFee -----------------\n");
+            var getNewFee_RF = new getNewFee_DataRead();
+            var getfile_getNewFee = getNewFee_RF.Getfile_getNewFee();
+            Root_getNewFee_Response finalResult = null;
+
+            // If no records in Getfile_getNewFee, you may want to handle that case.
+            if (getfile_getNewFee == null || !getfile_getNewFee.Any())
+            {
+                Console.WriteLine("No records found.");
+                // Return null or handle as appropriate
+                return finalResult;
+            }
+            foreach (var record in getfile_getNewFee)
+            {
+                try
+                {
+                    Console.WriteLine("\nInput Value : ");
+                    Console.WriteLine($"studentFeeId: {record.studentFeeId}");
+                    string queryString_onlineclasses = $"studentFeeId={record.studentFeeId}";
+                    var restClient = new RestClient("https://angular-api.calibermatrix.com");
+                    var restRequest = new RestRequest($"api/AddOnsManage/getNewFee?{queryString_onlineclasses}", Method.Get);
+                    restRequest.AddHeader("Accept", "application/json");
+                    restRequest.AddHeader("Authorization", $"Bearer {bearerToken}");
+                    restRequest.RequestFormat = DataFormat.Json;
+                    var response_getNewFee = restClient.Execute(restRequest);
+                    var onlineclasses_getNewFee = new TestScripts_getNewFee();
+                    if (response_getNewFee.StatusCode == HttpStatusCode.OK)
+                    {
+                        var onlineclasses_request = JsonConvert.DeserializeObject<Root_getNewFee_Response>(response_getNewFee.Content);
+                        ApiResponse_getNewFee.set_getNewFee(onlineclasses_request);
+                        if (onlineclasses_request.isSuccessful == true && onlineclasses_request.statusCode == 200)
+                        {
+                            Console.WriteLine("API Response: \n\n" + response_getNewFee.Content);
+                            onlineclasses_getNewFee.ValidResponse();
+                        }
+                        else
+                        {
+                            Console.WriteLine("API Response: " + response_getNewFee.Content);
+                            onlineclasses_getNewFee.InValidReponse();
+                        }
+                        finalResult = onlineclasses_request;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("\nTest Script Error Message : " + ex.Message);
                 }
             }
             return finalResult;
